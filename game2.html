@@ -1,0 +1,1013 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>AEIOU Library Challenge｜圖書館分類挑戰</title>
+  <style>
+    :root{
+      --paper:#fffdf7;
+      --ink:#243247;
+      --blue:#3f6f9f;
+      --blue-dark:#284e75;
+      --gold:#f3bd54;
+      --green:#75ad8e;
+      --red:#d96868;
+      --purple:#8b76b8;
+      --shadow:0 12px 30px rgba(34,50,71,.14);
+      --radius:20px;
+    }
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;
+      min-height:100vh;
+      color:var(--ink);
+      font-family:"Microsoft JhengHei","PingFang TC",system-ui,-apple-system,sans-serif;
+      background:
+        radial-gradient(circle at 10% 10%,rgba(243,189,84,.18),transparent 22rem),
+        linear-gradient(180deg,#eaf4fb 0,#f8f3e8 55%,#e9ddc6 100%);
+    }
+    button{font:inherit}
+    .app{
+      width:min(1100px,100%);
+      min-height:100vh;
+      margin:auto;
+      padding:18px clamp(14px,3vw,32px) 28px;
+    }
+    .topbar{
+      display:grid;
+      grid-template-columns:1fr auto;
+      gap:14px;
+      align-items:center;
+      margin-bottom:14px;
+    }
+    h1{
+      margin:0;
+      font-size:clamp(1.55rem,4vw,2.6rem);
+      line-height:1.15;
+      color:var(--blue-dark);
+    }
+    .subtitle{
+      margin:6px 0 0;
+      font-size:clamp(.9rem,2.5vw,1.05rem);
+      color:#52667d;
+    }
+    .score-box{
+      min-width:116px;
+      padding:10px 14px;
+      border:2px solid rgba(63,111,159,.2);
+      border-radius:16px;
+      background:rgba(255,255,255,.82);
+      box-shadow:0 6px 18px rgba(40,78,117,.1);
+      text-align:center;
+    }
+    .score-box span{display:block;font-size:.78rem;color:#64758a}
+    .score-box strong{font-size:1.35rem;color:var(--blue-dark)}
+    .library{
+      position:relative;
+      min-height:220px;
+      overflow:hidden;
+      border:5px solid #fff8e9;
+      border-radius:26px;
+      background:linear-gradient(#bfe0f0 0 55%,#d2b58c 55% 100%);
+      box-shadow:var(--shadow);
+      isolation:isolate;
+    }
+    .window{
+      position:absolute;
+      left:5%;
+      top:18px;
+      width:24%;
+      height:108px;
+      border:8px solid #f5f0de;
+      background:linear-gradient(#88c5e4 0 62%,#95c983 62%);
+      box-shadow:inset 0 0 0 2px #9d8060;
+    }
+    .window::before,.window::after{
+      content:"";
+      position:absolute;
+      background:#f5f0de;
+    }
+    .window::before{width:6px;height:100%;left:50%;transform:translateX(-50%)}
+    .window::after{height:6px;width:100%;top:50%;transform:translateY(-50%)}
+    .shelf{
+      position:absolute;
+      right:4%;
+      top:18px;
+      width:43%;
+      height:145px;
+      padding:11px 10px;
+      border:10px solid #7b5439;
+      background:#a7744f;
+      display:grid;
+      grid-template-rows:1fr 1fr;
+      gap:12px;
+      box-shadow:0 10px 0 rgba(75,49,31,.18);
+    }
+    .shelf-row{
+      display:flex;
+      align-items:end;
+      gap:5px;
+      border-bottom:8px solid #6d452e;
+      padding:0 4px;
+    }
+    .book{
+      flex:1;
+      min-width:8px;
+      border-radius:3px 3px 0 0;
+      background:var(--c);
+      height:var(--h);
+      box-shadow:inset 3px 0 rgba(255,255,255,.25);
+    }
+    .desk{
+      position:absolute;
+      left:23%;
+      bottom:18px;
+      width:45%;
+      height:55px;
+      border-radius:9px 9px 3px 3px;
+      background:#9b693f;
+      box-shadow:0 8px 0 #684329;
+    }
+    .desk::before,.desk::after{
+      content:"";
+      position:absolute;
+      bottom:-34px;
+      width:12px;
+      height:36px;
+      background:#684329;
+    }
+    .desk::before{left:12%}
+    .desk::after{right:12%}
+    .lamp{
+      position:absolute;
+      left:31%;
+      bottom:73px;
+      width:50px;
+      height:72px;
+    }
+    .lamp::before{
+      content:"";
+      position:absolute;
+      left:23px;top:18px;
+      width:5px;height:44px;background:#475668;
+    }
+    .lamp::after{
+      content:"";
+      position:absolute;
+      left:8px;top:3px;
+      width:38px;height:25px;
+      border-radius:20px 20px 5px 5px;
+      background:var(--gold);
+      transform:rotate(-12deg);
+    }
+    .laptop{
+      position:absolute;
+      left:43%;
+      bottom:75px;
+      width:72px;
+      height:45px;
+      border:5px solid #354659;
+      border-radius:5px;
+      background:#ccecf6;
+    }
+    .laptop::after{
+      content:"";
+      position:absolute;
+      left:-10px;
+      bottom:-11px;
+      width:82px;
+      height:7px;
+      border-radius:0 0 10px 10px;
+      background:#354659;
+    }
+    .sign{
+      position:absolute;
+      left:6%;
+      bottom:18px;
+      padding:8px 12px;
+      border-radius:10px;
+      background:#fff;
+      color:var(--red);
+      font-weight:800;
+      box-shadow:0 4px 10px rgba(0,0,0,.12);
+      transform:rotate(-2deg);
+    }
+    .game-panel{
+      position:relative;
+      z-index:2;
+      margin-top:-6px;
+      padding:clamp(16px,3vw,26px);
+      border-radius:0 0 26px 26px;
+      background:rgba(255,253,247,.96);
+      box-shadow:var(--shadow);
+    }
+
+    .review-status{
+      display:none;
+      margin:0 0 12px;
+      padding:9px 14px;
+      border-radius:12px;
+      background:#fff0c9;
+      color:#76531f;
+      text-align:center;
+      font-weight:800;
+      animation:pop .3s ease;
+    }
+    .review-status.show{display:block}
+
+    .progress-wrap{
+      display:grid;
+      grid-template-columns:1fr auto;
+      gap:10px;
+      align-items:center;
+      margin-bottom:15px;
+    }
+    .progress{
+      height:12px;
+      overflow:hidden;
+      border-radius:999px;
+      background:#e3e8ee;
+    }
+    .progress > div{
+      width:0;
+      height:100%;
+      border-radius:inherit;
+      background:linear-gradient(90deg,var(--green),var(--gold));
+      transition:width .35s ease;
+    }
+    #progressText{font-weight:700;color:#5c6e82;font-size:.9rem}
+    .question-card{
+      min-height:190px;
+      display:grid;
+      place-items:center;
+      padding:22px;
+      border:2px dashed rgba(63,111,159,.35);
+      border-radius:var(--radius);
+      background:#fff;
+      text-align:center;
+    }
+    .welcome-icon{font-size:3.2rem;line-height:1}
+    .question-cn{
+      margin:0;
+      font-size:clamp(1.08rem,3vw,1.35rem);
+      line-height:1.7;
+      font-weight:800;
+    }
+    .question-en{
+      margin:10px 0 0;
+      font-size:clamp(.94rem,2.4vw,1.05rem);
+      line-height:1.6;
+      color:#52667d;
+    }
+    .hint{
+      margin:12px 0 0;
+      color:#6c7d91;
+      font-size:.9rem;
+    }
+    .main-actions{
+      display:flex;
+      justify-content:center;
+      gap:12px;
+      margin:18px 0;
+    }
+    .primary,.next-btn,.restart-btn{
+      min-height:50px;
+      border:0;
+      border-radius:14px;
+      padding:12px 22px;
+      color:white;
+      background:linear-gradient(135deg,var(--blue),var(--blue-dark));
+      box-shadow:0 7px 0 #1c3c5a;
+      font-weight:800;
+      cursor:pointer;
+      touch-action:manipulation;
+      transition:transform .12s ease,box-shadow .12s ease;
+    }
+    .primary:active,.next-btn:active,.restart-btn:active{
+      transform:translateY(4px);
+      box-shadow:0 3px 0 #1c3c5a;
+    }
+    .primary:disabled,.next-btn:disabled{
+      opacity:.55;
+      cursor:not-allowed;
+      transform:none;
+    }
+    .categories{
+      display:grid;
+      grid-template-columns:repeat(5,minmax(0,1fr));
+      gap:10px;
+      margin-top:6px;
+    }
+    .category-btn{
+      min-height:84px;
+      padding:10px 6px;
+      border:2px solid transparent;
+      border-radius:16px;
+      background:#edf4f9;
+      color:var(--blue-dark);
+      box-shadow:0 5px 0 #c7d5e1;
+      font-weight:900;
+      cursor:pointer;
+      touch-action:manipulation;
+      transition:transform .15s ease,background .15s ease,border-color .15s ease;
+    }
+    .category-btn span{
+      display:block;
+      margin-top:4px;
+      font-size:.72rem;
+      font-weight:700;
+      color:#66798e;
+    }
+    .category-btn:hover,.category-btn:focus-visible{
+      transform:translateY(-3px);
+      border-color:var(--blue);
+      outline:none;
+    }
+    .category-btn.correct{
+      background:#dff3e5;
+      border-color:var(--green);
+      box-shadow:0 5px 0 #8dbda0;
+    }
+    .category-btn.wrong{
+      background:#fbe2e2;
+      border-color:var(--red);
+      box-shadow:0 5px 0 #d79a9a;
+      animation:shake .28s linear;
+    }
+    .category-btn:disabled{cursor:default}
+    .category-btn.touching{
+      transform:translateY(2px) scale(.98);
+      filter:brightness(.96);
+    }
+    button{
+      -webkit-tap-highlight-color:transparent;
+      user-select:none;
+      -webkit-user-select:none;
+    }
+    .feedback{
+      min-height:48px;
+      margin:16px 0 0;
+      display:grid;
+      place-items:center;
+      text-align:center;
+      font-weight:800;
+      line-height:1.5;
+    }
+    .feedback.good{color:#2f7c50}
+    .feedback.bad{color:#ae4242}
+    .result{
+      display:none;
+      padding:26px;
+      border-radius:var(--radius);
+      background:#fff8dc;
+      text-align:center;
+      box-shadow:inset 0 0 0 2px rgba(243,189,84,.45);
+    }
+    .result.show{display:block;animation:pop .35s ease}
+    .result h2{margin:0;color:var(--blue-dark);font-size:clamp(1.5rem,4vw,2.2rem)}
+    .result-score{font-size:clamp(2.8rem,10vw,5rem);font-weight:900;color:var(--purple);line-height:1.1;margin:12px 0}
+    .result p{margin:8px 0 18px;line-height:1.6}
+    .legend{
+      margin-top:18px;
+      padding:14px 16px;
+      border-radius:16px;
+      background:rgba(255,255,255,.72);
+      color:#5a6b7e;
+      font-size:.86rem;
+      line-height:1.6;
+      text-align:center;
+    }
+    .hidden{display:none!important}
+    @keyframes shake{
+      25%{transform:translateX(-5px)}
+      50%{transform:translateX(5px)}
+      75%{transform:translateX(-3px)}
+    }
+    @keyframes pop{
+      0%{transform:scale(.92);opacity:0}
+      100%{transform:scale(1);opacity:1}
+    }
+
+    .top-actions{display:flex;align-items:center;gap:8px}
+    .sound-btn{
+      width:44px;height:44px;display:grid;place-items:center;
+      border:2px solid rgba(63,111,159,.2);border-radius:14px;
+      background:rgba(255,255,255,.9);box-shadow:0 5px 0 #c7d5e1;
+      color:var(--blue-dark);font-size:1.15rem;cursor:pointer;
+      touch-action:manipulation;
+    }
+    .sound-btn:active{transform:translateY(3px);box-shadow:0 2px 0 #c7d5e1}
+    .question-card{position:relative;overflow:hidden}
+    .question-card.correct-effect{
+      animation:correctCard .72s ease;border-color:var(--green);
+      box-shadow:0 0 0 8px rgba(117,173,142,.14),0 16px 35px rgba(58,125,82,.22);
+    }
+    .question-card.wrong-effect{
+      animation:wrongCard .52s ease;border-color:var(--red);
+      box-shadow:0 0 0 8px rgba(217,104,104,.12),0 16px 35px rgba(174,66,66,.2);
+    }
+    .effect-badge{
+      position:absolute;inset:0;z-index:5;display:grid;place-items:center;
+      pointer-events:none;font-size:clamp(4rem,15vw,8rem);opacity:0;
+    }
+    .effect-badge.show-correct{animation:badgeCorrect .82s ease forwards}
+    .effect-badge.show-wrong{animation:badgeWrong .68s ease forwards}
+    .particle{
+      position:fixed;z-index:9999;pointer-events:none;
+      font-size:clamp(1rem,4vw,1.8rem);
+      animation:particleFly var(--duration,900ms) ease-out forwards;
+      transform:translate(-50%,-50%);
+    }
+    .screen-flash{position:fixed;inset:0;z-index:9998;pointer-events:none;opacity:0}
+    .screen-flash.correct{background:rgba(117,173,142,.2);animation:flash .38s ease}
+    .screen-flash.wrong{background:rgba(217,104,104,.18);animation:flash .38s ease}
+    @keyframes correctCard{
+      0%{transform:scale(1)}
+      35%{transform:scale(1.035) rotate(-.6deg)}
+      65%{transform:scale(1.02) rotate(.5deg)}
+      100%{transform:scale(1)}
+    }
+    @keyframes wrongCard{
+      0%,100%{transform:translateX(0)}
+      20%{transform:translateX(-9px) rotate(-.5deg)}
+      40%{transform:translateX(9px) rotate(.5deg)}
+      60%{transform:translateX(-6px)}
+      80%{transform:translateX(6px)}
+    }
+    @keyframes badgeCorrect{
+      0%{opacity:0;transform:scale(.2) rotate(-20deg)}
+      35%{opacity:1;transform:scale(1.2) rotate(8deg)}
+      70%{opacity:1;transform:scale(.95)}
+      100%{opacity:0;transform:scale(1.25)}
+    }
+    @keyframes badgeWrong{
+      0%{opacity:0;transform:scale(.3)}
+      30%{opacity:1;transform:scale(1.15) rotate(-8deg)}
+      55%{transform:scale(1) rotate(8deg)}
+      100%{opacity:0;transform:scale(1.2)}
+    }
+    @keyframes particleFly{
+      0%{opacity:1;transform:translate(-50%,-50%) scale(.6) rotate(0deg)}
+      100%{opacity:0;transform:translate(calc(-50% + var(--x)),calc(-50% + var(--y))) scale(1.25) rotate(var(--r))}
+    }
+    @keyframes flash{
+      0%{opacity:0}35%{opacity:1}100%{opacity:0}
+    }
+
+    @media (max-width:760px){
+      .app{padding:12px 10px 20px}
+      .topbar{grid-template-columns:1fr auto}
+      .top-actions{gap:6px}
+      .sound-btn{width:40px;height:40px}
+      .score-box{min-width:94px;padding:8px 10px}
+      .library{min-height:190px}
+      .shelf{width:48%;height:125px;right:2%}
+      .window{width:27%;height:92px;left:3%}
+      .desk{left:17%;width:50%;bottom:16px}
+      .lamp{left:22%;bottom:71px;transform:scale(.86)}
+      .laptop{left:43%;bottom:72px;transform:scale(.88)}
+      .sign{font-size:.78rem;left:3%;bottom:14px}
+      .categories{grid-template-columns:repeat(2,minmax(0,1fr))}
+      .category-btn:last-child{grid-column:1/-1}
+      .category-btn{min-height:68px}
+      .question-card{min-height:220px;padding:18px 14px}
+    }
+    @media (max-width:430px){
+      h1{font-size:1.42rem}
+      .subtitle{font-size:.8rem}
+      .score-box strong{font-size:1.1rem}
+      .library{min-height:165px}
+      .shelf{height:105px;border-width:7px;padding:7px;gap:7px}
+      .shelf-row{border-bottom-width:6px}
+      .window{height:78px}
+      .desk{height:45px}
+      .lamp{bottom:60px;transform:scale(.72)}
+      .laptop{bottom:61px;transform:scale(.74)}
+      .game-panel{padding:14px}
+      .categories{gap:8px}
+      .category-btn{font-size:.91rem}
+      .main-actions{margin:14px 0}
+      .primary,.next-btn,.restart-btn{width:100%}
+    }
+    @media (prefers-reduced-motion:reduce){
+      *{scroll-behavior:auto!important;animation:none!important;transition:none!important}
+    }
+  </style>
+</head>
+<body>
+  <main class="app">
+    <header class="topbar">
+      <div>
+        <h1>AEIOU Library Challenge</h1>
+        <p class="subtitle">圖書館情境分類挑戰｜Read, think, and classify!</p>
+      </div>
+      <div class="top-actions">
+        <button id="soundBtn" class="sound-btn" type="button" aria-label="關閉音效" title="Sound on/off">🔊</button>
+        <div class="score-box" aria-live="polite">
+          <span>目前得分 Score</span>
+          <strong id="scoreDisplay">0 / 10</strong>
+        </div>
+      </div>
+    </header>
+
+    <section class="library" aria-label="圖書館模擬情境">
+      <div class="window"></div>
+      <div class="shelf" aria-hidden="true">
+        <div class="shelf-row">
+          <i class="book" style="--c:#d96868;--h:72%"></i>
+          <i class="book" style="--c:#f3bd54;--h:90%"></i>
+          <i class="book" style="--c:#75ad8e;--h:80%"></i>
+          <i class="book" style="--c:#8b76b8;--h:95%"></i>
+          <i class="book" style="--c:#4f91c4;--h:68%"></i>
+          <i class="book" style="--c:#e9956f;--h:86%"></i>
+        </div>
+        <div class="shelf-row">
+          <i class="book" style="--c:#8b76b8;--h:76%"></i>
+          <i class="book" style="--c:#4f91c4;--h:92%"></i>
+          <i class="book" style="--c:#d96868;--h:82%"></i>
+          <i class="book" style="--c:#75ad8e;--h:67%"></i>
+          <i class="book" style="--c:#f3bd54;--h:88%"></i>
+          <i class="book" style="--c:#e9956f;--h:73%"></i>
+        </div>
+      </div>
+      <div class="desk"></div>
+      <div class="lamp"></div>
+      <div class="laptop"></div>
+      <div class="sign">SHHH... Quiet Zone</div>
+    </section>
+
+    <section class="game-panel">
+      <div id="gameArea">
+        <div id="reviewStatus" class="review-status" aria-live="polite"></div>
+        <div class="progress-wrap">
+          <div class="progress" aria-label="遊戲進度">
+            <div id="progressBar"></div>
+          </div>
+          <span id="progressText">0 / 10</span>
+        </div>
+
+        <article class="question-card" id="questionCard" aria-live="polite">
+          <div id="effectBadge" class="effect-badge" aria-hidden="true"></div>
+          <div>
+            <div class="welcome-icon">📚</div>
+            <p class="question-cn">點選「抽取問題」開始挑戰！</p>
+            <p class="question-en">Select “Draw a Question” to begin.</p>
+            <p class="hint">請判斷每個圖書館情境屬於哪一個 AEIOU 分類。答錯的題目會再次出現，直到全部答對。</p>
+          </div>
+        </article>
+
+        <div class="main-actions">
+          <button id="drawBtn" class="primary" type="button">🎴 抽取問題 Draw a Question</button>
+          <button id="nextBtn" class="next-btn hidden" type="button">下一題 Next Question ➜</button>
+        </div>
+
+        <div class="categories" id="categoryButtons" aria-label="AEIOU 分類選項">
+          <button class="category-btn" type="button" data-category="Activities" disabled>
+            Activities<span>活動</span>
+          </button>
+          <button class="category-btn" type="button" data-category="Environments" disabled>
+            Environments<span>環境</span>
+          </button>
+          <button class="category-btn" type="button" data-category="Interactions" disabled>
+            Interactions<span>互動</span>
+          </button>
+          <button class="category-btn" type="button" data-category="Objects" disabled>
+            Objects<span>物件</span>
+          </button>
+          <button class="category-btn" type="button" data-category="Users" disabled>
+            Users<span>使用者</span>
+          </button>
+        </div>
+
+        <div id="feedback" class="feedback" aria-live="assertive"></div>
+      </div>
+
+      <section class="result" id="resultPanel" aria-live="polite">
+        <h2>Challenge Complete! 挑戰完成</h2>
+        <div class="result-score" id="finalScore">0 / 10</div>
+        <p id="resultMessage"></p>
+        <button id="restartBtn" class="restart-btn" type="button">↻ 再玩一次 Play Again</button>
+      </section>
+
+      <div class="legend">
+        AEIOU = Activities 活動・Environments 環境・Interactions 互動・Objects 物件・Users 使用者
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const questions = [
+      {
+        category: "Activities",
+        cn: "讀者在自習區安靜閱讀與做筆記，使用筆電撰寫報告。",
+        en: "Readers quietly read and take notes in the study area, and use laptops to write reports."
+      },
+      {
+        category: "Activities",
+        cn: "館員辦理借還書、上架新書，並帶領新生導覽。",
+        en: "Librarians check books in and out, place new books on shelves, and guide new students around the library."
+      },
+      {
+        category: "Environments",
+        cn: "自習區：單人座位、檯燈與插座充足，設有安靜標示與時鐘。",
+        en: "Study area: It has individual seats, enough desk lamps and power outlets, quiet signs, and clocks."
+      },
+      {
+        category: "Environments",
+        cn: "兒童閱覽區：彩色地墊、低矮書架、故事角，牆面張貼主題書展海報。",
+        en: "Children’s reading area: It has colorful floor mats, low bookshelves, a story corner, and themed book fair posters on the walls."
+      },
+      {
+        category: "Interactions",
+        cn: "讀者與館員：讀者詢問館藏位置與館際互借流程，館員提供檢索與申請協助。",
+        en: "Readers and librarians: Readers ask where materials are and how interlibrary loans work, and librarians help them search and apply."
+      },
+      {
+        category: "Interactions",
+        cn: "讀者彼此：在小組討論室以小聲討論分工並共享資料。",
+        en: "Readers with one another: They quietly discuss tasks and share information in a group discussion room."
+      },
+      {
+        category: "Objects",
+        cn: "設備與資源：館藏書籍、期刊、電子資料庫、影印機與自助借還機。",
+        en: "Equipment and resources: Library books, journals, electronic databases, photocopiers, and self-service check-out machines."
+      },
+      {
+        category: "Objects",
+        cn: "學習工具：耳機、充電線、書架擋板、螢幕閱讀器與助讀放大鏡。",
+        en: "Learning tools: Headphones, charging cables, shelf dividers, screen readers, and reading magnifiers."
+      },
+      {
+        category: "Users",
+        cn: "一般讀者：大學生與自學者，長時間使用自習區與電子資源。",
+        en: "General readers: University students and independent learners who use study areas and electronic resources for long periods."
+      },
+      {
+        category: "Users",
+        cn: "館方人員：參考館員與系統管理員，負責讀者服務、館藏管理與設備維護。",
+        en: "Library staff: Reference librarians and system administrators who are responsible for reader services, collection management, and equipment maintenance."
+      }
+    ];
+
+    const categoryZh = {
+      Activities: "活動",
+      Environments: "環境",
+      Interactions: "互動",
+      Objects: "物件",
+      Users: "使用者"
+    };
+
+    const drawBtn = document.getElementById("drawBtn");
+    const nextBtn = document.getElementById("nextBtn");
+    const restartBtn = document.getElementById("restartBtn");
+    const questionCard = document.getElementById("questionCard");
+    const buttons = [...document.querySelectorAll(".category-btn")];
+    const feedback = document.getElementById("feedback");
+    const scoreDisplay = document.getElementById("scoreDisplay");
+    const progressBar = document.getElementById("progressBar");
+    const progressText = document.getElementById("progressText");
+    const gameArea = document.getElementById("gameArea");
+    const resultPanel = document.getElementById("resultPanel");
+    const finalScore = document.getElementById("finalScore");
+    const resultMessage = document.getElementById("resultMessage");
+    const reviewStatus = document.getElementById("reviewStatus");
+
+    let deck = [];
+    let retryQueue = [];
+    let mastered = new Set();
+    let currentIndex = -1;
+    let score = 0;
+    let answered = false;
+    let reviewRound = 0;
+
+    const soundBtn = document.getElementById("soundBtn");
+
+    let soundEnabled = true;
+    let audioContext = null;
+
+    function getAudioContext() {
+      try {
+        if (!audioContext) {
+          const AudioCtx = window.AudioContext || window.webkitAudioContext;
+          if (AudioCtx) audioContext = new AudioCtx();
+        }
+        if (audioContext && audioContext.state === "suspended") {
+          const resumeResult = audioContext.resume();
+          if (resumeResult && typeof resumeResult.catch === "function") {
+            resumeResult.catch(() => {});
+          }
+        }
+        return audioContext;
+      } catch (error) {
+        console.warn("Audio is unavailable on this device.", error);
+        return null;
+      }
+    }
+
+    function playTone(frequency, start, duration, type = "sine", volume = 0.08) {
+      if (!soundEnabled) return;
+      const ctx = getAudioContext();
+      if (!ctx) return;
+      try {
+        const oscillator = ctx.createOscillator();
+      const gain = ctx.createGain();
+      oscillator.type = type;
+      oscillator.frequency.setValueAtTime(frequency, ctx.currentTime + start);
+      gain.gain.setValueAtTime(0.001, ctx.currentTime + start);
+      gain.gain.exponentialRampToValueAtTime(volume, ctx.currentTime + start + 0.02);
+      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + start + duration);
+      oscillator.connect(gain);
+      gain.connect(ctx.destination);
+        oscillator.start(ctx.currentTime + start);
+        oscillator.stop(ctx.currentTime + start + duration + 0.03);
+      } catch (error) {
+        console.warn("Sound effect could not be played.", error);
+      }
+    }
+
+    function playCorrectSound() {
+      playTone(523.25, 0, .16, "sine", .08);
+      playTone(659.25, .11, .18, "sine", .09);
+      playTone(783.99, .23, .28, "triangle", .10);
+    }
+
+    function playWrongSound() {
+      playTone(220, 0, .20, "sawtooth", .052);
+      playTone(164.81, .13, .30, "sawtooth", .046);
+    }
+
+    function flashScreen(type) {
+      const flash = document.createElement("div");
+      flash.className = `screen-flash ${type}`;
+      document.body.appendChild(flash);
+      flash.addEventListener("animationend", () => flash.remove());
+    }
+
+    function burstParticles(anchor, type) {
+      const rect = anchor.getBoundingClientRect();
+      const centerX = rect.left + rect.width / 2;
+      const centerY = rect.top + rect.height / 2;
+      const icons = type === "correct"
+        ? ["⭐","✨","🎉","📚","✅","🌟"]
+        : ["💭","❌","📖","🔍","😵"];
+      const count = type === "correct" ? 18 : 9;
+
+      for (let i = 0; i < count; i++) {
+        const particle = document.createElement("span");
+        const angle = (Math.PI * 2 * i / count) + Math.random() * .35;
+        const distance = (type === "correct" ? 95 : 65) + Math.random() * 85;
+        particle.className = "particle";
+        particle.textContent = icons[Math.floor(Math.random() * icons.length)];
+        particle.style.left = `${centerX}px`;
+        particle.style.top = `${centerY}px`;
+        particle.style.setProperty("--x", `${Math.cos(angle) * distance}px`);
+        particle.style.setProperty("--y", `${Math.sin(angle) * distance - 25}px`);
+        particle.style.setProperty("--r", `${Math.random() * 360 - 180}deg`);
+        particle.style.setProperty("--duration", `${700 + Math.random() * 450}ms`);
+        document.body.appendChild(particle);
+        particle.addEventListener("animationend", () => particle.remove());
+      }
+    }
+
+    function showBadge(type) {
+      const badge = document.getElementById("effectBadge");
+      if (!badge) return;
+      badge.textContent = type === "correct" ? "🎉" : "😵";
+      badge.className = `effect-badge ${type === "correct" ? "show-correct" : "show-wrong"}`;
+      badge.addEventListener("animationend", () => {
+        badge.className = "effect-badge";
+        badge.textContent = "";
+      }, { once: true });
+    }
+
+    function runAnswerEffect(type, button) {
+      try {
+        questionCard.classList.remove("correct-effect", "wrong-effect");
+        void questionCard.offsetWidth;
+        questionCard.classList.add(type === "correct" ? "correct-effect" : "wrong-effect");
+        flashScreen(type);
+        burstParticles(button, type);
+        showBadge(type);
+        if (type === "correct") playCorrectSound();
+        else playWrongSound();
+        setTimeout(() => questionCard.classList.remove("correct-effect", "wrong-effect"), 850);
+      } catch (error) {
+        console.warn("Visual effect was skipped.", error);
+      }
+    }
+
+
+    function shuffle(items) {
+      const copy = [...items];
+      for (let i = copy.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [copy[i], copy[j]] = [copy[j], copy[i]];
+      }
+      return copy;
+    }
+
+    function resetButtonStates() {
+      buttons.forEach(btn => {
+        btn.disabled = false;
+        btn.classList.remove("correct", "wrong");
+      });
+    }
+
+    function showQuestion() {
+      answered = false;
+      feedback.textContent = "";
+      feedback.className = "feedback";
+      resetButtonStates();
+
+      const item = deck[currentIndex];
+      questionCard.innerHTML = `
+        <div id="effectBadge" class="effect-badge" aria-hidden="true"></div>
+        <div>
+          <p class="question-cn">${item.cn}</p>
+          <p class="question-en">${item.en}</p>
+          <p class="hint">Which AEIOU category does this situation belong to?</p>
+        </div>
+      `;
+
+      progressText.textContent = `已掌握 ${mastered.size} / ${questions.length}`;
+      progressBar.style.width = `${(mastered.size / questions.length) * 100}%`;
+
+      if (reviewRound > 0) {
+        reviewStatus.textContent = `🔁 錯題複習第 ${reviewRound} 輪｜Review Round ${reviewRound}`;
+        reviewStatus.classList.add("show");
+      } else {
+        reviewStatus.classList.remove("show");
+        reviewStatus.textContent = "";
+      }
+
+      drawBtn.classList.add("hidden");
+      nextBtn.classList.add("hidden");
+      nextBtn.textContent = "下一題 Next Question ➜";
+    }
+
+    function startGame() {
+      deck = shuffle(questions.map((item, index) => ({ ...item, id: index })));
+      retryQueue = [];
+      mastered = new Set();
+      currentIndex = 0;
+      score = 0;
+      answered = false;
+      reviewRound = 0;
+      scoreDisplay.textContent = `0 / ${questions.length}`;
+      progressText.textContent = `已掌握 0 / ${questions.length}`;
+      progressBar.style.width = "0%";
+      reviewStatus.classList.remove("show");
+      reviewStatus.textContent = "";
+      resultPanel.classList.remove("show");
+      gameArea.classList.remove("hidden");
+      showQuestion();
+    }
+
+    function answerQuestion(selected, selectedButton) {
+      if (answered) return;
+      answered = true;
+
+      const current = deck[currentIndex];
+      const isCorrect = selected === current.category;
+
+      buttons.forEach(btn => {
+        btn.disabled = true;
+        if (btn.dataset.category === current.category) btn.classList.add("correct");
+      });
+
+      if (isCorrect) {
+        if (!mastered.has(current.id)) {
+          mastered.add(current.id);
+          score = mastered.size;
+        }
+        selectedButton.classList.add("correct");
+        feedback.innerHTML = `🎉 <strong>Correct!</strong> This is ${current.category}（${categoryZh[current.category]}）.<br>答對了！目前已掌握 ${mastered.size} / ${questions.length} 題。`;
+        feedback.className = "feedback good";
+        runAnswerEffect("correct", selectedButton);
+      } else {
+        retryQueue.push(current);
+        selectedButton.classList.add("wrong");
+        feedback.innerHTML = `💡 <strong>This question will return!</strong> The correct answer is ${current.category}（${categoryZh[current.category]}）.<br>這題已加入錯題複習，稍後會再次出現。`;
+        feedback.className = "feedback bad";
+        runAnswerEffect("wrong", selectedButton);
+      }
+
+      scoreDisplay.textContent = `${score} / ${questions.length}`;
+      progressText.textContent = `已掌握 ${mastered.size} / ${questions.length}`;
+      progressBar.style.width = `${(mastered.size / questions.length) * 100}%`;
+
+      nextBtn.classList.remove("hidden");
+
+      if (currentIndex === deck.length - 1 && retryQueue.length > 0) {
+        nextBtn.textContent = "🔁 開始錯題複習 Review Mistakes";
+      } else if (currentIndex === deck.length - 1 && mastered.size === questions.length) {
+        nextBtn.textContent = "查看滿分結果 See Final Score";
+      } else {
+        nextBtn.textContent = "下一題 Next Question ➜";
+      }
+
+      nextBtn.focus();
+    }
+
+    function advanceGame() {
+      if (currentIndex < deck.length - 1) {
+        currentIndex += 1;
+        showQuestion();
+        return;
+      }
+
+      if (retryQueue.length > 0) {
+        deck = shuffle(retryQueue);
+        retryQueue = [];
+        currentIndex = 0;
+        reviewRound += 1;
+        showQuestion();
+        feedback.textContent = "";
+        questionCard.scrollIntoView({ behavior: "smooth", block: "center" });
+        return;
+      }
+
+      if (mastered.size === questions.length) {
+        showResult();
+      }
+    }
+
+    function showResult() {
+      gameArea.classList.add("hidden");
+      resultPanel.classList.add("show");
+      finalScore.textContent = `${questions.length} / ${questions.length}`;
+      resultMessage.textContent = reviewRound > 0
+        ? `Excellent! You corrected every mistake and mastered all AEIOU categories. 你完成了 ${reviewRound} 輪錯題複習，最後獲得滿分！`
+        : "Perfect on the first round! You are an AEIOU Library Master! 第一輪就全部答對，獲得滿分！";
+      restartBtn.focus();
+    }
+
+    function bindTap(element, handler) {
+      let lastTouchTime = 0;
+
+      element.addEventListener("touchstart", () => {
+        element.classList.add("touching");
+      }, { passive: true });
+
+      element.addEventListener("touchcancel", () => {
+        element.classList.remove("touching");
+      }, { passive: true });
+
+      element.addEventListener("touchend", event => {
+        element.classList.remove("touching");
+        if (element.disabled) return;
+        lastTouchTime = Date.now();
+        event.preventDefault();
+        handler(event);
+      }, { passive: false });
+
+      element.addEventListener("click", event => {
+        if (Date.now() - lastTouchTime < 700) return;
+        if (element.disabled) return;
+        handler(event);
+      });
+    }
+
+    bindTap(soundBtn, () => {
+      soundEnabled = !soundEnabled;
+      soundBtn.textContent = soundEnabled ? "🔊" : "🔇";
+      soundBtn.setAttribute("aria-label", soundEnabled ? "關閉音效" : "開啟音效");
+      if (soundEnabled) {
+        playTone(659.25, 0, .12, "sine", .06);
+      }
+    });
+
+    bindTap(drawBtn, () => {
+      startGame();
+      getAudioContext();
+    });
+
+    bindTap(nextBtn, () => {
+      advanceGame();
+      if (!gameArea.classList.contains("hidden")) {
+        try {
+          questionCard.scrollIntoView({ behavior: "smooth", block: "center" });
+        } catch (error) {
+          questionCard.scrollIntoView();
+        }
+      }
+    });
+
+    buttons.forEach(btn => {
+      bindTap(btn, () => answerQuestion(btn.dataset.category, btn));
+    });
+
+    bindTap(restartBtn, () => {
+      resultPanel.classList.remove("show");
+      startGame();
+      try {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      } catch (error) {
+        window.scrollTo(0, 0);
+      }
+    });
+  </script>
+</body>
+</html>

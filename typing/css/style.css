@@ -1,0 +1,165 @@
+/* 中英文輸入練習暨測驗系統 — 橄欖金 / 卡其配色（純 CSS，不使用原系統圖檔） */
+:root{
+  --olive-d:#6c5f24;
+  --olive:#857636;
+  --olive-l:#a99a55;
+  --khaki:#d4cb8f;
+  --khaki-d:#c6bc7b;
+  --khaki-l:#e6dfb4;
+  --paper:#fffdf3;
+  --ink:#3a3317;
+  --red:#c62828;
+  --green:#2e7d32;
+  --cn-font:"MingLiU","PMingLiU","細明體","Noto Serif TC","Microsoft JhengHei",serif;
+  --en-font:Consolas,"Courier New",monospace;
+}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%}
+body{font-family:"Microsoft JhengHei","微軟正黑體","Noto Sans TC",sans-serif;color:var(--ink);background:var(--khaki)}
+button,select,input{font:inherit}
+[hidden]{display:none!important}
+
+/* ── 頁首：虛線帶 + 白色標題列 ── */
+.band{height:16px;background:
+  radial-gradient(circle,#f5f0d8 1.7px,transparent 2.2px) 6px 50%/13px 13px repeat-x,
+  var(--olive)}
+.brand{background:#fff;display:flex;align-items:center;gap:18px;padding:12px 30px 10px;border-bottom:7px solid var(--olive-d)}
+.logo{width:58px;height:46px;border:5px solid var(--olive);border-radius:14px 14px 14px 4px;display:grid;place-items:center;
+  font-weight:900;font-size:22px;color:var(--olive);box-shadow:2px 3px 4px rgba(0,0,0,.25);background:#fff}
+.brand h1{margin:0;font-size:36px;font-weight:900;letter-spacing:.14em;color:var(--olive);
+  text-shadow:2px 2px 0 #fff,3px 4px 4px rgba(0,0,0,.35)}
+.brand .sub{margin-left:auto;align-self:flex-end;font-size:20px;font-weight:700;letter-spacing:.1em;color:var(--olive);
+  text-shadow:1px 2px 3px rgba(0,0,0,.3)}
+.hd.small .brand{padding:6px 20px 5px;border-bottom-width:5px}
+.hd.small .logo{width:40px;height:32px;border-width:4px;font-size:15px;border-radius:10px 10px 10px 3px}
+.hd.small h1{font-size:24px}
+.hd.small .sub{font-size:15px}
+.hd.small .band{height:10px;background-size:10px 10px,auto}
+
+/* ── 頁尾 ── */
+.ft{background:#fff;border-top:7px solid var(--olive-d)}
+.ft .row{display:flex;align-items:flex-end;justify-content:space-between;padding:6px 30px 4px}
+.ft .keys{display:flex;gap:6px}
+.ft .keys i{width:26px;height:20px;border-radius:6px;background:var(--olive);display:block}
+.ft .en{font-style:italic;font-weight:700;color:var(--olive);text-shadow:1px 1px 2px rgba(0,0,0,.25)}
+.ft .cn{font-weight:900;font-size:18px;letter-spacing:.12em;color:var(--olive-d)}
+
+/* ── 首頁 ── */
+.page{display:flex;flex-direction:column;min-height:100vh}
+.stage{flex:1;position:relative;overflow:hidden;padding:26px 30px 40px}
+.watermark{position:absolute;inset:0;display:grid;place-items:center;pointer-events:none;
+  font:900 clamp(120px,22vw,300px)/1 Arial Black,Arial,sans-serif;letter-spacing:.08em;color:var(--khaki-d);
+  text-shadow:-2px -2px 2px rgba(255,255,255,.35),4px 5px 6px rgba(0,0,0,.18);user-select:none}
+.stage>*:not(.watermark){position:relative}
+.tabs{display:flex;gap:8px;justify-content:center;margin-bottom:22px}
+.tabs button{border:3px solid var(--olive);background:var(--khaki-l);color:var(--olive-d);font-size:20px;font-weight:700;
+  padding:8px 34px;border-radius:12px 12px 0 0;cursor:pointer}
+.tabs button.on{background:var(--olive);color:#fff}
+.panel{display:none;max-width:980px;margin:0 auto}
+.panel.on{display:block}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:24px}
+.card{background:rgba(255,253,243,.93);border:3px solid var(--olive);border-radius:10px;padding:0 22px 22px;
+  box-shadow:4px 5px 0 rgba(108,95,36,.35)}
+.card h2{margin:0 -22px 16px;padding:10px 22px;background:var(--olive);color:#fff;font-size:22px;letter-spacing:.12em;border-radius:5px 5px 0 0}
+.card label{display:flex;align-items:center;gap:10px;margin:10px 0;font-weight:700}
+.card label>span{width:4.5em}
+.card select,.card input,.field input,.field select{flex:1;padding:6px 8px;border:2px solid var(--olive-l);border-radius:6px;background:#fff}
+.card .meta{font-size:18px;margin:6px 0 14px}
+.card .meta b{color:var(--olive-d)}
+.btn{display:inline-block;border:0;border-radius:8px;background:linear-gradient(#998a45,var(--olive-d));color:#fff;
+  font-weight:700;font-size:18px;padding:9px 22px;cursor:pointer;text-decoration:none;box-shadow:0 3px 0 #4b421a}
+.btn:hover{filter:brightness(1.1)}
+.btn:active{transform:translateY(2px);box-shadow:0 1px 0 #4b421a}
+.btn.ghost{background:#fff;color:var(--olive-d);border:2px solid var(--olive);box-shadow:none}
+.btn.small{font-size:15px;padding:5px 14px}
+.btn.block{width:100%;margin-top:10px}
+.btn-row{display:flex;gap:10px}
+.btn-row .btn{flex:1}
+.note{text-align:center;color:var(--olive-d);font-weight:700}
+.box{background:rgba(255,253,243,.93);border:3px solid var(--olive);border-radius:10px;padding:20px 24px;max-width:520px;margin:0 auto;
+  box-shadow:4px 5px 0 rgba(108,95,36,.35)}
+.box h2{margin-top:0;color:var(--olive-d)}
+.field{display:flex;align-items:center;gap:10px;margin:12px 0;font-weight:700}
+.field>span{width:4em}
+.who-bar{display:flex;align-items:center;gap:14px;justify-content:center;font-size:19px;margin-bottom:18px;font-weight:700}
+code.addr{background:#fff;border:2px dashed var(--olive);padding:4px 10px;border-radius:6px;font-size:20px}
+
+table.grid{width:100%;border-collapse:collapse;background:#fff;font-size:15px}
+table.grid th{background:var(--olive);color:#fff;padding:6px 8px;white-space:nowrap;position:sticky;top:0}
+table.grid td{border-bottom:1px solid var(--khaki-d);padding:5px 8px;text-align:center;white-space:nowrap}
+table.grid tr:nth-child(even) td{background:#faf7e6}
+.over{color:var(--red)!important;font-weight:900}
+.over-tip{color:var(--red);font-weight:900}
+#overTip{font-size:22px;text-align:center;border:3px solid var(--red);border-radius:8px;padding:8px;background:#fff0f0}
+/* 錯誤率 10%（含）以上：整頁字體紅字 */
+.over-page,.over-page *{color:var(--red)!important}
+.over-page .btn{color:#fff!important}
+.over-page .btn.ghost{color:var(--red)!important;border-color:var(--red)}
+.over-page .win-title,.over-page .timer{background:var(--red)}
+.over-page .win-title *,.over-page .timer *{color:#fff!important}
+tr.over-row td{color:var(--red)!important;font-weight:700}
+.muted{color:#7d7650}
+
+/* ── 考試畫面（雙視窗） ── */
+.exam-page{display:flex;flex-direction:column;height:100vh;overflow:hidden}
+.infobar{display:flex;align-items:center;gap:18px;flex-wrap:wrap;padding:7px 18px;background:var(--khaki-l);border-bottom:3px solid var(--olive);font-size:16px}
+.infobar b{color:var(--olive-d);font-size:17px}
+.infobar .grow{flex:1}
+.timer{background:var(--olive-d);color:#fff;border-radius:8px;padding:3px 12px}
+.timer b{color:#fff;font:700 24px/1.1 var(--en-font)}
+.timer.warn{background:var(--red);animation:blink 1s steps(2) infinite}
+.timer.waiting b{font-size:15px}
+@keyframes blink{50%{opacity:.6}}
+.wins{flex:1;display:flex;flex-direction:column;gap:10px;padding:10px 14px 12px;min-height:0}
+.win{flex:1;display:flex;flex-direction:column;min-height:0;border:3px solid var(--olive-d);border-radius:6px;background:#000;box-shadow:3px 4px 0 rgba(108,95,36,.3);overflow:hidden}
+.win-title{background:linear-gradient(var(--olive-l),var(--olive));color:#fff;font-weight:700;padding:3px 12px;letter-spacing:.15em;display:flex;justify-content:space-between}
+/* 打字區：黑底白字，字級可由「字級」按鈕調整（--fs） */
+.exam-page{--fs:24px}
+.source,.win textarea{flex:1;margin:0;padding:10px 14px 10px 0;overflow:auto;font-size:var(--fs);line-height:1.75;white-space:pre;tab-size:4;background:#000;color:#fff}
+.chn .source,.chn .win textarea{font-family:var(--cn-font)}
+.eng .source,.eng .win textarea{font-family:var(--en-font)}
+.fsz{display:inline-flex;gap:4px;align-items:center}
+.fsz button{border:2px solid var(--olive);background:#fff;color:var(--olive-d);font-weight:700;border-radius:6px;padding:1px 8px;cursor:pointer}
+.source .line{display:flex;border-radius:4px}
+.source .no{flex:0 0 48px;text-align:right;padding-right:.8em;color:#777;font-family:var(--en-font);font-size:14px;line-height:inherit;align-self:center;user-select:none}
+.source .tx{white-space:pre}
+.source .eol{color:#555;font-size:.7em;padding-left:2px;user-select:none}
+.source .line.cur{background:#1f3a66}
+.source .line.ok .tx{color:#7CFC7C}
+.source .line.bad .tx{color:#ff6b6b}
+.source .line.part2{box-shadow:inset 0 2px 0 #888;background-image:repeating-linear-gradient(90deg,#999 0 8px,transparent 8px 14px);background-size:100% 2px;background-repeat:no-repeat}
+/* 兩個視窗底部留白，讓最後幾行也能捲到與輸入行相同的高度 */
+.source,.win textarea{padding-bottom:70vh}
+.source{overflow:hidden}
+.win textarea{overflow-x:auto;overflow-y:hidden}
+.win textarea{border:0;outline:0;resize:none;padding-left:16px;caret-color:#fff}
+.source{padding-left:16px}
+/* Tab 寬度＝標準段首縮排：中文 4 個半形（＝2 個全形）、英文 5 個半形 */
+.chn .win textarea,.chn .source{tab-size:4;-moz-tab-size:4}
+.eng .win textarea,.eng .source{tab-size:5;-moz-tab-size:5}
+.win textarea:disabled{background:#111!important}
+.win textarea:disabled{background:#eee9d0}
+.exam .practice-only{display:none}
+
+.overlay{position:fixed;inset:0;background:rgba(58,51,23,.55);display:grid;place-items:center;z-index:10}
+.dialog{background:var(--paper);border:4px solid var(--olive-d);border-radius:12px;padding:22px 30px;width:min(640px,92vw);max-height:92vh;overflow:auto;box-shadow:0 10px 30px rgba(0,0,0,.4)}
+.dialog h2{margin:0 0 12px;color:var(--olive-d);letter-spacing:.1em;border-bottom:3px solid var(--olive);padding-bottom:6px}
+.dialog ol{line-height:1.8;padding-left:1.4em}
+.dialog table{width:100%;border-collapse:collapse;font-size:19px;margin:8px 0}
+.dialog td{padding:6px 10px;border-bottom:1px solid var(--khaki-d)}
+.dialog td:last-child{text-align:right;font-weight:700}
+.dialog .big td{font-size:26px}
+.dialog .actions{display:flex;gap:10px;justify-content:center;margin-top:16px}
+.send-ok{color:var(--green);font-weight:900}
+.send-fail{color:var(--red);font-weight:900}
+.toast{position:fixed;top:14px;left:50%;transform:translateX(-50%);background:var(--red);color:#fff;padding:10px 20px;border-radius:8px;font-weight:700;z-index:20}
+pre.typed{white-space:pre-wrap;background:#fff;border:1px solid var(--khaki-d);padding:10px;max-height:50vh;overflow:auto;font-family:var(--cn-font);font-size:17px}
+
+/* ── 教師頁 ── */
+.teacher .stage{padding:18px 24px}
+.tbar{display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin:10px 0}
+.tbar label{display:flex;align-items:center;gap:6px;font-weight:700}
+.tbar select,.tbar input{padding:4px 8px;border:2px solid var(--olive-l);border-radius:6px}
+.tpanel{background:rgba(255,253,243,.95);border:3px solid var(--olive);border-radius:10px;padding:14px 18px;margin-bottom:16px}
+.tpanel h2{margin:0 0 8px;font-size:20px;color:var(--olive-d)}
+.table-wrap{max-height:60vh;overflow:auto;border:2px solid var(--olive)}

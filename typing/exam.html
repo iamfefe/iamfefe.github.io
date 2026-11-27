@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>輸入測驗 - 中英文輸入練習暨測驗系統</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body class="exam-page">
+<header class="hd small">
+  <div class="band"></div>
+  <div class="brand"><div class="logo">鍵</div><h1 id="pageTitle">中文輸入測驗</h1><div class="sub" id="modeLabel"></div></div>
+</header>
+
+<div class="infobar">
+  <span>考生 <b id="who"></b></span>
+  <span>試卷 <b id="paperId"></b></span>
+  <span>測驗 <b id="testNo"></b></span>
+  <span class="fsz">字級 <button id="fsDown" title="縮小字">A−</button><b id="fsVal">18</b>pt<button id="fsUp" title="放大字">A＋</button></span>
+  <span class="grow"></span>
+  <span><span id="cntLabel">已輸入</span> <b id="cnt">0</b></span>
+  <span class="practice-only">錯誤 <b id="errs">0</b></span>
+  <span class="timer" id="timerBox">剩餘時間 <b id="timer">10:00</b></span>
+  <button class="btn small" id="submitBtn" disabled>交卷</button>
+</div>
+
+<div class="wins">
+  <div class="win">
+    <div class="win-title"><span>試卷內容</span><span id="partLabel"></span></div>
+    <div class="source" id="source"></div>
+  </div>
+  <div class="win">
+    <div class="win-title"><span>輸入視窗</span><span id="lineLabel"></span></div>
+    <textarea id="input" wrap="off" spellcheck="false" autocomplete="off" autocorrect="off" autocapitalize="off" disabled></textarea>
+  </div>
+</div>
+
+<div class="overlay" id="startOverlay">
+  <div class="dialog">
+    <h2 id="ruleTitle">測驗說明</h2>
+    <ol id="rules"></ol>
+    <div class="actions">
+      <button class="btn" id="startBtn">開始測驗</button>
+      <a class="btn ghost" href="index.html" id="backLink">返回</a>
+    </div>
+  </div>
+</div>
+
+<div class="overlay" id="resultOverlay" hidden>
+  <div class="dialog">
+    <h2>測驗結果</h2>
+    <table id="resultTable"></table>
+    <p class="over-tip" id="overTip" hidden>錯誤率超過10%，成績歸零請注意。</p>
+    <p id="sendStatus"></p>
+    <div class="actions">
+      <button class="btn" id="resendBtn" hidden>重新傳送成績</button>
+      <a class="btn ghost" href="index.html" id="homeLink">回首頁</a>
+    </div>
+  </div>
+</div>
+
+<script src="js/questions-data.js"></script>
+<script src="js/common.js"></script>
+<script src="js/scorer.js"></script>
+<script src="js/exam.js"></script>
+</body>
+</html>

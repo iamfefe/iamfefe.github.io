@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>中英文輸入練習暨測驗系統</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body class="page">
+<header class="hd">
+  <div class="band"></div>
+  <div class="brand"><div class="logo">鍵</div><h1>中英文輸入練習暨測驗系統</h1><div class="sub">輸入能力訓練與檢測</div></div>
+</header>
+
+<main class="stage">
+  <div class="watermark">KEY IN</div>
+  <div class="tabs">
+    <button data-tab="practice">在家練習</button>
+    <button data-tab="exam">教室考試</button>
+  </div>
+
+  <!-- 在家練習 -->
+  <section id="practice" class="panel">
+    <div class="cards">
+      <div class="card" data-lang="chn">
+        <h2>中文輸入</h2>
+        <label><span>試卷</span><select class="paper"></select></label>
+        <label><span>測驗</span><select class="test"><option value="1">測驗一</option><option value="2">測驗二</option></select></label>
+        <label><span>時間</span><select class="min"></select></label>
+        <button class="btn block go">開始練習</button>
+      </div>
+      <div class="card" data-lang="eng">
+        <h2>英文輸入</h2>
+        <label><span>試卷</span><select class="paper"></select></label>
+        <label><span>測驗</span><select class="test"><option value="1">測驗一</option><option value="2">測驗二</option></select></label>
+        <label><span>時間</span><select class="min"></select></label>
+        <button class="btn block go">開始練習</button>
+      </div>
+    </div>
+    <p class="note">練習成績只會存在這台電腦，不會傳送給老師。</p>
+    <div class="tpanel" id="historyBox" hidden>
+      <h2>最近練習紀錄</h2>
+      <div class="table-wrap"><table class="grid" id="history"></table></div>
+    </div>
+  </section>
+
+  <!-- 教室考試 -->
+  <section id="exam" class="panel">
+    <div class="box" id="examOffline" hidden>
+      <h2>請連線到教師電腦</h2>
+      <p>考試模式必須從教師電腦開啟，成績才能自動傳送。</p>
+      <p>請在瀏覽器網址列輸入老師提供的網址，例如：</p>
+      <p style="text-align:center"><code class="addr">http://192.168.x.x:8080</code></p>
+    </div>
+
+    <form class="box" id="examLogin" hidden autocomplete="off">
+      <h2>考生登入</h2>
+      <label class="field"><span>班級</span><input name="cls" required maxlength="10" placeholder="例如 301"></label>
+      <label class="field"><span>座號</span><input name="seat" required maxlength="4" inputmode="numeric" pattern="\d+" placeholder="例如 05"></label>
+      <label class="field"><span>姓名</span><input name="name" required maxlength="20"></label>
+      <button class="btn block">確定</button>
+    </form>
+
+    <div id="examChoose" hidden>
+      <div class="who-bar">考生：<span id="whoText"></span><button class="btn ghost small" id="logout">更換考生</button></div>
+      <div class="cards">
+        <div class="card" data-lang="chn">
+          <h2>中文輸入測驗</h2>
+          <div class="meta">試卷 <b class="paperId">—</b>　時間 <b class="mins">—</b> 分鐘</div>
+          <div class="btn-row"><button class="btn" data-test="1">測驗一</button><button class="btn" data-test="2">測驗二</button></div>
+        </div>
+        <div class="card" data-lang="eng">
+          <h2>英文輸入測驗</h2>
+          <div class="meta">試卷 <b class="paperId">—</b>　時間 <b class="mins">—</b> 分鐘</div>
+          <div class="btn-row"><button class="btn" data-test="1">測驗一</button><button class="btn" data-test="2">測驗二</button></div>
+        </div>
+      </div>
+      <p class="note">試卷與時間由老師設定。測驗結束後成績會自動傳送到教師電腦。</p>
+    </div>
+  </section>
+</main>
+
+<footer class="ft">
+  <div class="band"></div>
+  <div class="row">
+    <div><div class="keys"><i></i><i></i><i></i><i></i><i></i></div><div class="en">Keyboarding Practice &amp; Test</div></div>
+    <div class="cn">中英文輸入練習暨測驗系統</div>
+  </div>
+</footer>
+
+<script src="js/questions-data.js"></script>
+<script src="js/common.js"></script>
+<script src="js/index.js"></script>
+</body>
+</html>

@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Modern UI Team Card / by Fefe</title>
+    <style>
+        /* 1. 支援深淺色模式 (Dark/Light Mode) */
+        :root {
+            /* 預設支援亮暗模式，JS 會動態修改這個值 */
+            color-scheme: dark;
+
+            /* 定義變數：light-dark(亮色模式顏色, 暗色模式顏色) */
+            --text-main: light-dark(#1d1d1f, #f5f5f7);
+            --text-sub: light-dark(#515154, #a1a1a6);
+
+
+            /* 毛玻璃卡片與按鈕的背景色/邊框 */
+            --card-bg: light-dark(rgba(255, 255, 255, 0.7), rgba(30, 30, 30, 0.2));
+            --card-border: light-dark(rgba(255, 255, 255, 0.6), rgba(255, 255, 255, 0.1));
+            --btn-bg: light-dark(#000000, #ffffff);
+            --btn-text: light-dark(#ffffff, #000000);
+
+        }
+
+        /* 基礎排版設定 */
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: light-dark(#f0f0f0, #121212);
+            overflow: hidden;
+            transition: background-color 0.3s ease;
+            /* 讓背景切換時有柔和的過渡動畫 */
+        }
+
+        .video-bg-container {
+            position: fixed;
+            /* 固定在畫面上，網頁往下滾影片也不會跑掉 */
+            top: 0;
+            left: 0;
+            width: 100vw;
+            /* 寬度 100% 視窗寬 */
+            height: 100vh;
+            /* 高度 100% 視窗高 */
+            z-index: -100;
+            /* 確保它在所有東西的最底層 (圖層放到最後面) */
+            overflow: hidden;
+        }
+
+        /* 影片本身：負責填滿與維持比例 */
+        .video-bg-container video {
+            width: 100%;
+            height: 100%;
+
+            /* 🌟 核心魔法在這裡：object-fit: cover; 
+       這會讓影片像背景圖片一樣，自動裁切並填滿整個畫面，絕對不會被拉長或壓扁！ */
+            object-fit: cover;
+            filter: brightness(0.5);
+
+        }
+
+        /* --- 新增：右上角主題切換按鈕的樣式 --- */
+        .theme-toggle {
+            position: absolute;
+            top: 20px;
+            right: 100px;
+            padding: 8px 16px;
+            background: var(--card-bg);
+            color: var(--text-main);
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 14px;
+            border-radius: 20px;
+            border: 1px solid var(--card-border);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            z-index: 10;
+            transition: transform 0.2s ease;
+
+        }
+
+        .theme-toggle a {
+            text-decoration: none;
+        }
+
+
+        .theme-toggle:hover {
+
+            transform: scale(1.05);
+            text-decoration: solid;
+        }
+
+        /* 漸層動態背景 */
+        .background-blobs {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            filter: blur(60px);
+        }
+
+        .blob-1 {
+            position: absolute;
+            top: -10%;
+            left: -10%;
+            width: 50vw;
+            height: 50vw;
+            /* background: linear-gradient(-35deg, rgb(255, 154, 158, 0.7) 0%, var(--btn-text) 100%); */
+            background: linear-gradient(-35deg, rgb(255, 154, 158, 0.7) 0%, var(--btn-text) 100%);
+            border-radius: 50%;
+
+        }
+
+        .blob-2 {
+            position: absolute;
+            bottom: -20%;
+            right: -10%;
+            width: 60vw;
+            height: 60vw;
+            background: linear-gradient(120deg, rgba(161, 196, 253, 0.7) 0%, var(--btn-text) 100%);
+
+            border-radius: 50%;
+        }
+
+        /* 2. 毛玻璃質感設計 (Glassmorphism) */
+        .glass-card {
+            width: 500px;
+            padding: 40px 30px;
+            border-radius: 24px;
+            background: var(--card-bg);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border: 1px solid var(--card-border);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.05);
+            text-align: center;
+            color: var(--text-main);
+            z-index: 1;
+        }
+
+        .glass-card h1 {
+            margin: 0 0 10px 0;
+            font-size: 40px;
+            font-weight: 700;
+        }
+
+        .glass-card p {
+            margin: 0 0 25px 0;
+            color: var(--text-sub);
+            font-size: 25px;
+            line-height: 1.5;
+        }
+
+        .avatars {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 30px;
+        }
+
+        .avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            /* background: light-dark(#e0e0e0, #444); */
+            border: 2px solid var(--card-border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: var(--text-sub);
+        }
+
+        .av1 {
+            background-image: url("https://picsum.photos/80/80");
+        }
+
+        .av2 {
+            background-image: url("https://picsum.photos/80/80");
+        }
+
+        .av3 {
+            background-image: url("https://picsum.photos/80/80");
+        }
+
+        /* 3. 互動彈出視窗按鈕 */
+        .action-btn {
+            background-color: var(--btn-bg);
+            color: var(--btn-text);
+            border: none;
+            padding: 12px 24px;
+            font-size: 16px;
+            font-weight: 600;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+
+        .action-btn:hover {
+            transform: scale(1.05);
+        }
+
+        /* 4. 原生 Popover 彈出視窗 */
+        #secret-popover {
+            margin: auto;
+            padding: 30px;
+            border: 1px solid var(--card-border);
+            border-radius: 16px;
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            color: var(--text-main);
+            text-align: center;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        #secret-popover::backdrop {
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(4px);
+        }
+
+        /* 1. 先定義一個名為 "popIn" 的進場動畫 (從透明、微縮小 -> 變成完全顯示) */
+        @keyframes popIn {
+            0% {
+                opacity: 0;
+                transform: scale(0.9) translateY(20px);
+                /* 稍微縮小並往下沉 */
+            }
+
+            100% {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+                /* 恢復正常大小與位置 */
+            }
+        }
+
+        /* 2. 只有當 popover 處於「打開狀態」時，才執行這個動畫 */
+        [popover]:popover-open {
+            /* 播放 popIn 動畫，持續 0.4 秒，使用滑順的減速效果 (ease-out) */
+            animation: popIn 0.4s ease-out;
+        }
+
+        .qr-placeholder {
+            width: 120px;
+            height: 120px;
+            margin: 20px auto 0;
+            background: linear-gradient(45deg, #1d1d1f, #515154);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 12px;
+        }
+
+        .glass-card h1 {
+            transition: all 0.5s ease;
+            animation: titfloat 5s infinite;
+        }
+
+        @keyframes titfloat {
+            0% {
+                transform: scale(1);
+                text-shadow: 0 0 5px yellow,
+                    0 0 10px rgb(255, 154, 158),
+                    0 0 20px rgb(161, 196, 253);
+            }
+
+            50% {
+                transform: scale(1.1);
+                text-shadow: 0 0 10px yellow,
+                    0 0 20px rgb(255, 154, 158),
+                    0 0 60px rgb(73, 66, 177);
+            }
+
+            100% {
+                transform: scale(1);
+                text-shadow: 0 0 5px yellow,
+                    0 0 10px rgb(255, 154, 158),
+                    0 0 20px rgb(161, 196, 253);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="video-bg-container">
+        <video id="bgv" autoplay loop muted playsinline>
+            <source src="movie.mp4" type="video/mp4">
+            您的瀏覽器不支援 HTML5 影片。
+        </video>
+    </div>
+    <div class="theme-toggle">
+        <!-- <audio id="bgm" src="music.mp3"></audio> -->
+
+        <a href="#" id="theme-light" onclick="document.documentElement.style.colorScheme = 'light';">🌞Light</a> /
+        <a href="#" id="theme-dark" onclick="document.documentElement.style.colorScheme = 'dark';">🌛Dark</a>
+        <!-- / 🎶 <a href="#" onclick="document.getElementById('bgm').play();">▶️</a>
+        <a href="#" onclick="document.getElementById('bgm').pause();">⏸️</a> -->
+
+        / 🎶 <a href="#" onclick="document.getElementById('bgv').muted=false;">▶️</a>
+        <a href="#" onclick="document.getElementById('bgv').muted=true;">⏸️</a>
+
+    </div>
+
+    <div class="background-blobs">
+        <div class="blob-1"></div>
+        <div class="blob-2"></div>
+    </div>
+
+    <div class="glass-card">
+        <h1>[English Team Name]</h1>
+        <p>[Chinese Team Name]</p>
+
+        <div class="avatars">
+            <div class="avatar av1">Member A</div>
+            <div class="avatar av2">Member B</div>
+            <div class="avatar av3">Member C</div>
+        </div>
+
+        <button class="action-btn" popovertarget="secret-popover">Follow Us</button>
+    </div>
+
+    <div id="secret-popover" popover>
+        <h2>Hello there! 🚀</h2>
+        <p>Welcome to our project!<br>Scan the QR code below to follow us on Instagram.</p>
+        <div class="qr-placeholder">QR Code</div>
+    </div>
+
+
+</body>
+
+</html>

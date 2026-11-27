@@ -1,0 +1,1185 @@
+<!doctype html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width,initial-scale=1,viewport-fit=cover"
+    />
+    <title>Word 快速鍵配對大挑戰</title>
+    <style>
+      :root {
+        --bg: #0b1020;
+        --panel: #151d34;
+        --panel2: #1c2745;
+        --text: #f7f9ff;
+        --muted: #aeb9d6;
+        --accent: #ffd84d;
+        --accent2: #73e0ff;
+        --good: #55e39b;
+        --bad: #ff6b7c;
+        --shadow: 0 18px 50px rgba(0, 0, 0, 0.32);
+      }
+      * {
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        margin: 0;
+        min-height: 100%;
+        font-family:
+          "Microsoft JhengHei", "Noto Sans TC", system-ui, sans-serif;
+        background:
+          radial-gradient(
+            circle at 15% 10%,
+            rgba(115, 224, 255, 0.16),
+            transparent 28%
+          ),
+          radial-gradient(
+            circle at 85% 15%,
+            rgba(255, 216, 77, 0.14),
+            transparent 27%
+          ),
+          linear-gradient(160deg, #080c18, #111a31 60%, #0b1020);
+        color: var(--text);
+      }
+      button {
+        font: inherit;
+      }
+      body {
+        min-height: 100vh;
+        overflow-x: hidden;
+      }
+      .app {
+        width: min(1080px, calc(100% - 28px));
+        margin: auto;
+        padding: 18px 0 34px;
+      }
+      .topbar {
+        display: flex;
+        gap: 12px;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 16px;
+      }
+      .brand {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+        font-weight: 900;
+        letter-spacing: 0.5px;
+      }
+      .logo {
+        display: grid;
+        place-items: center;
+        width: 42px;
+        height: 42px;
+        border-radius: 13px;
+        background: var(--accent);
+        color: #111827;
+        box-shadow: 0 8px 24px rgba(255, 216, 77, 0.25);
+        font-size: 22px;
+      }
+      .tools {
+        display: flex;
+        gap: 8px;
+      }
+      .icon-btn {
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        background: rgba(255, 255, 255, 0.07);
+        color: var(--text);
+        border-radius: 12px;
+        padding: 9px 12px;
+        cursor: pointer;
+      }
+      .icon-btn:hover {
+        background: rgba(255, 255, 255, 0.12);
+      }
+      .screen {
+        display: none;
+      }
+      .screen.active {
+        display: block;
+        animation: fadeIn 0.35s ease;
+      }
+      .hero {
+        min-height: 72vh;
+        display: grid;
+        place-items: center;
+      }
+      .hero-card,
+      .game-card,
+      .result-card {
+        width: 100%;
+        background: linear-gradient(
+          180deg,
+          rgba(28, 39, 69, 0.97),
+          rgba(18, 26, 48, 0.97)
+        );
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 28px;
+        box-shadow: var(--shadow);
+      }
+      .hero-card {
+        padding: clamp(28px, 6vw, 64px);
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+      }
+      .hero-card:before,
+      .hero-card:after {
+        content: "";
+        position: absolute;
+        border-radius: 50%;
+        filter: blur(1px);
+        opacity: 0.6;
+      }
+      .hero-card:before {
+        width: 220px;
+        height: 220px;
+        background: rgba(115, 224, 255, 0.12);
+        left: -70px;
+        top: -70px;
+      }
+      .hero-card:after {
+        width: 180px;
+        height: 180px;
+        background: rgba(255, 216, 77, 0.12);
+        right: -50px;
+        bottom: -60px;
+      }
+      .kicker {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 8px 14px;
+        border-radius: 999px;
+        background: rgba(115, 224, 255, 0.1);
+        border: 1px solid rgba(115, 224, 255, 0.25);
+        color: #c9f5ff;
+        font-weight: 800;
+      }
+      h1 {
+        font-size: clamp(34px, 7vw, 64px);
+        line-height: 1.08;
+        margin: 18px 0 14px;
+      }
+      .hero p {
+        max-width: 720px;
+        margin: 0 auto 24px;
+        color: var(--muted);
+        font-size: clamp(16px, 2.2vw, 20px);
+        line-height: 1.8;
+      }
+      .feature-row {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 12px;
+        max-width: 700px;
+        margin: 25px auto;
+      }
+      .feature {
+        padding: 15px;
+        border-radius: 18px;
+        background: rgba(255, 255, 255, 0.055);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+      }
+      .feature b {
+        display: block;
+        font-size: 24px;
+        color: var(--accent);
+      }
+      .primary {
+        border: 0;
+        border-radius: 16px;
+        background: linear-gradient(135deg, var(--accent), #ffb82e);
+        color: #172033;
+        font-weight: 900;
+        padding: 15px 28px;
+        min-width: 190px;
+        cursor: pointer;
+        box-shadow: 0 12px 30px rgba(255, 191, 46, 0.24);
+        transition:
+          0.18s transform,
+          0.18s filter;
+      }
+      .primary:hover {
+        transform: translateY(-2px);
+        filter: brightness(1.03);
+      }
+      .secondary {
+        border: 1px solid rgba(255, 255, 255, 0.14);
+        border-radius: 16px;
+        background: rgba(255, 255, 255, 0.07);
+        color: var(--text);
+        font-weight: 800;
+        padding: 14px 22px;
+        cursor: pointer;
+      }
+      .secondary:hover {
+        background: rgba(255, 255, 255, 0.12);
+      }
+      .game-card {
+        padding: clamp(18px, 4vw, 36px);
+        position: relative;
+        overflow: hidden;
+      }
+      .hud {
+        display: grid;
+        grid-template-columns: 1fr auto auto;
+        gap: 12px;
+        align-items: center;
+      }
+      .progress-wrap {
+        height: 12px;
+        background: rgba(255, 255, 255, 0.08);
+        border-radius: 999px;
+        overflow: hidden;
+      }
+      .progress {
+        height: 100%;
+        width: 0;
+        background: linear-gradient(90deg, var(--accent2), var(--accent));
+        border-radius: 999px;
+        transition: width 0.3s ease;
+      }
+      .stat {
+        padding: 9px 12px;
+        border-radius: 13px;
+        background: rgba(255, 255, 255, 0.065);
+        font-weight: 900;
+        white-space: nowrap;
+      }
+      .question-meta {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 10px;
+        margin-top: 24px;
+      }
+      .category {
+        padding: 7px 11px;
+        border-radius: 999px;
+        background: rgba(115, 224, 255, 0.11);
+        color: #c9f5ff;
+        font-size: 14px;
+        font-weight: 900;
+      }
+      .qnum {
+        color: var(--muted);
+        font-weight: 800;
+      }
+      .prompt {
+        margin: 22px 0 10px;
+        color: var(--muted);
+        font-size: 16px;
+      }
+      .question {
+        min-height: 104px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        font-size: clamp(27px, 5vw, 48px);
+        font-weight: 900;
+        line-height: 1.35;
+        padding: 12px;
+      }
+      .question .keycap {
+        font-size: 0.82em;
+      }
+      .answers {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 14px;
+        margin-top: 22px;
+      }
+      .answer {
+        min-height: 86px;
+        border: 1px solid rgba(255, 255, 255, 0.11);
+        border-radius: 20px;
+        background: rgba(255, 255, 255, 0.065);
+        color: var(--text);
+        padding: 14px 16px;
+        cursor: pointer;
+        font-weight: 900;
+        font-size: clamp(17px, 2.5vw, 22px);
+        transition:
+          0.16s transform,
+          0.16s background,
+          0.16s border-color;
+        position: relative;
+      }
+      .answer:hover:not(:disabled) {
+        transform: translateY(-2px);
+        background: rgba(255, 255, 255, 0.105);
+        border-color: rgba(255, 216, 77, 0.45);
+      }
+      .answer:disabled {
+        cursor: default;
+      }
+      .answer.correct {
+        background: rgba(85, 227, 155, 0.17);
+        border-color: var(--good);
+        animation: pop 0.36s ease;
+      }
+      .answer.wrong {
+        background: rgba(255, 107, 124, 0.15);
+        border-color: var(--bad);
+        animation: shake 0.38s ease;
+      }
+      .num {
+        position: absolute;
+        left: 12px;
+        top: 10px;
+        width: 24px;
+        height: 24px;
+        border-radius: 8px;
+        background: rgba(255, 255, 255, 0.09);
+        display: grid;
+        place-items: center;
+        color: var(--muted);
+        font-size: 12px;
+      }
+      .keycap {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 5px;
+        padding: 0.24em 0.5em;
+        border-radius: 10px;
+        background: #f7f9ff;
+        color: #151d34;
+        box-shadow:
+          inset 0 -4px 0 #cfd6e8,
+          0 5px 12px rgba(0, 0, 0, 0.18);
+        font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+        white-space: nowrap;
+      }
+      .tip {
+        margin-top: 18px;
+        text-align: center;
+        color: var(--muted);
+        font-size: 13px;
+      }
+      .feedback {
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        display: grid;
+        place-items: center;
+        opacity: 0;
+      }
+      .feedback.show {
+        animation: feedback 0.82s ease;
+      }
+      .feedback-bubble {
+        min-width: 200px;
+        text-align: center;
+        padding: 18px 24px;
+        border-radius: 22px;
+        background: rgba(7, 11, 22, 0.9);
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        box-shadow: var(--shadow);
+      }
+      .feedback-icon {
+        font-size: 52px;
+        line-height: 1;
+      }
+      .feedback-text {
+        font-size: 24px;
+        font-weight: 950;
+        margin-top: 6px;
+      }
+      .feedback-sub {
+        color: var(--muted);
+        margin-top: 4px;
+        font-weight: 700;
+      }
+      .combo {
+        position: fixed;
+        left: 50%;
+        top: 16%;
+        transform: translateX(-50%);
+        font-weight: 1000;
+        font-size: clamp(28px, 6vw, 56px);
+        color: var(--accent);
+        text-shadow: 0 5px 25px rgba(255, 216, 77, 0.45);
+        pointer-events: none;
+        z-index: 20;
+        animation: combo 0.9s ease forwards;
+      }
+      .confetti {
+        position: fixed;
+        left: 50%;
+        top: 44%;
+        width: 9px;
+        height: 16px;
+        border-radius: 3px;
+        z-index: 19;
+        pointer-events: none;
+        animation: confetti 900ms ease-out forwards;
+      }
+      .result-card {
+        padding: clamp(24px, 5vw, 52px);
+        text-align: center;
+      }
+      .score-ring {
+        width: 190px;
+        height: 190px;
+        margin: 10px auto 22px;
+        border-radius: 50%;
+        display: grid;
+        place-items: center;
+        background: conic-gradient(
+          var(--accent) calc(var(--score) * 1%),
+          rgba(255, 255, 255, 0.08) 0
+        );
+        position: relative;
+      }
+      .score-ring:before {
+        content: "";
+        position: absolute;
+        inset: 15px;
+        border-radius: 50%;
+        background: #151d34;
+      }
+      .score-big {
+        position: relative;
+        font-size: 52px;
+        font-weight: 1000;
+        line-height: 1;
+      }
+      .score-big small {
+        display: block;
+        font-size: 15px;
+        color: var(--muted);
+        margin-top: 7px;
+      }
+      .result-title {
+        font-size: clamp(28px, 5vw, 44px);
+        margin: 6px 0;
+      }
+      .result-msg {
+        color: var(--muted);
+        font-size: 18px;
+      }
+      .result-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 12px;
+        max-width: 720px;
+        margin: 24px auto;
+      }
+      .result-stat {
+        background: rgba(255, 255, 255, 0.06);
+        border-radius: 18px;
+        padding: 16px;
+      }
+      .result-stat b {
+        display: block;
+        font-size: 28px;
+        color: var(--accent2);
+      }
+      .actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        justify-content: center;
+        margin: 22px 0;
+      }
+      .review {
+        text-align: left;
+        margin-top: 24px;
+      }
+      .review h3 {
+        font-size: 22px;
+      }
+      .review-list {
+        display: grid;
+        gap: 10px;
+      }
+      .review-item {
+        display: grid;
+        grid-template-columns: minmax(120px, 0.8fr) 1.2fr;
+        gap: 12px;
+        align-items: center;
+        padding: 13px 15px;
+        border-radius: 16px;
+        background: rgba(255, 255, 255, 0.055);
+        border: 1px solid rgba(255, 255, 255, 0.07);
+      }
+      .review-item .act {
+        font-weight: 800;
+      }
+      .empty-good {
+        padding: 18px;
+        border-radius: 16px;
+        background: rgba(85, 227, 155, 0.1);
+        color: #bff6d9;
+        font-weight: 900;
+      }
+      .modal {
+        position: fixed;
+        inset: 0;
+        background: rgba(4, 7, 15, 0.76);
+        display: none;
+        place-items: center;
+        padding: 18px;
+        z-index: 30;
+      }
+      .modal.show {
+        display: grid;
+      }
+      .modal-card {
+        width: min(900px, 100%);
+        max-height: 88vh;
+        overflow: auto;
+        background: #151d34;
+        border-radius: 24px;
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        box-shadow: var(--shadow);
+        padding: 22px;
+      }
+      .modal-head {
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        align-items: center;
+        position: sticky;
+        top: -22px;
+        background: #151d34;
+        padding: 20px 0 12px;
+        z-index: 2;
+      }
+      .modal-head h2 {
+        margin: 0;
+      }
+      .cheat-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+      }
+      .cheat {
+        padding: 12px;
+        border-radius: 14px;
+        background: rgba(255, 255, 255, 0.055);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+      }
+      .cheat span:last-child {
+        text-align: right;
+        font-weight: 750;
+      }
+      .sr-only {
+        position: absolute !important;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        white-space: nowrap;
+        border: 0;
+      }
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(8px);
+        }
+        to {
+          opacity: 1;
+          transform: none;
+        }
+      }
+      @keyframes pop {
+        50% {
+          transform: scale(1.035);
+        }
+      }
+      @keyframes shake {
+        0%,
+        100% {
+          transform: translateX(0);
+        }
+        25% {
+          transform: translateX(-7px);
+        }
+        50% {
+          transform: translateX(7px);
+        }
+        75% {
+          transform: translateX(-4px);
+        }
+      }
+      @keyframes feedback {
+        0% {
+          opacity: 0;
+          transform: scale(0.84);
+        }
+        18%,
+        70% {
+          opacity: 1;
+          transform: scale(1);
+        }
+        100% {
+          opacity: 0;
+          transform: scale(1.05);
+        }
+      }
+      @keyframes combo {
+        0% {
+          opacity: 0;
+          transform: translate(-50%, 14px) scale(0.7);
+        }
+        25%,
+        70% {
+          opacity: 1;
+          transform: translate(-50%, 0) scale(1);
+        }
+        100% {
+          opacity: 0;
+          transform: translate(-50%, -20px) scale(1.08);
+        }
+      }
+      @keyframes confetti {
+        to {
+          transform: translate(var(--x), var(--y)) rotate(var(--r));
+          opacity: 0;
+        }
+      }
+      @media (max-width: 700px) {
+        .app {
+          width: min(100% - 18px, 1080px);
+          padding-top: 9px;
+        }
+        .brand-text {
+          display: none;
+        }
+        .answers {
+          grid-template-columns: 1fr;
+        }
+        .answer {
+          min-height: 70px;
+        }
+        .feature-row {
+          grid-template-columns: 1fr;
+        }
+        .feature {
+          display: flex;
+          justify-content: center;
+          gap: 10px;
+          align-items: center;
+        }
+        .feature b {
+          font-size: 20px;
+        }
+        .hud {
+          grid-template-columns: 1fr auto;
+        }
+        .hud .stat:last-child {
+          grid-column: 2;
+        }
+        .progress-wrap {
+          grid-column: 1/-1;
+          grid-row: 2;
+        }
+        .result-grid {
+          grid-template-columns: 1fr;
+        }
+        .review-item {
+          grid-template-columns: 1fr;
+        }
+        .cheat-grid {
+          grid-template-columns: 1fr;
+        }
+        .hero-card {
+          border-radius: 22px;
+        }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        *,
+        *:before,
+        *:after {
+          animation-duration: 0.01ms !important;
+          animation-iteration-count: 1 !important;
+          transition-duration: 0.01ms !important;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="app">
+      <div class="topbar">
+        <div class="brand">
+          <div class="logo">⌨</div>
+          <span class="brand-text">Word 快速鍵配對大挑戰</span>
+        </div>
+        <div class="tools">
+          <button
+            class="icon-btn"
+            id="soundBtn"
+            type="button"
+            aria-pressed="true"
+          >
+            🔊 音效
+          </button>
+          <button class="icon-btn" id="fullBtn" type="button">⛶ 全螢幕</button>
+        </div>
+      </div>
+
+      <section id="startScreen" class="screen active hero">
+        <div class="hero-card">
+          <div class="kicker">⚡ MEMORY MATCH · WORD</div>
+          <h1>快速鍵<br />配對大挑戰</h1>
+          <p>
+            每局隨機抽出 25 題，題目會在「功能 → 快速鍵」與「快速鍵 →
+            功能」之間切換。答對會有連擊動畫，答錯會立即顯示正解，最後還能只練錯題。
+          </p>
+          <div class="feature-row">
+            <div class="feature"><b>25</b><span>隨機題目</span></div>
+            <div class="feature"><b>100</b><span>滿分</span></div>
+            <div class="feature"><b>1–4</b><span>鍵盤也能作答</span></div>
+          </div>
+          <button class="primary" id="startBtn" type="button">
+            開始挑戰 🚀
+          </button>
+        </div>
+      </section>
+
+      <section id="gameScreen" class="screen">
+        <div class="game-card" id="gameCard">
+          <div class="hud">
+            <div class="progress-wrap" aria-label="答題進度">
+              <div class="progress" id="progress"></div>
+            </div>
+            <div class="stat">⭐ <span id="score">0</span></div>
+            <div class="stat">🔥 <span id="streak">0</span></div>
+          </div>
+          <div class="question-meta">
+            <span class="category" id="category">編輯類</span>
+            <span class="qnum" id="qnum">第 1 / 25 題</span>
+          </div>
+          <div class="prompt" id="prompt">請選出正確配對</div>
+          <div class="question" id="question"></div>
+          <div class="answers" id="answers"></div>
+          <div class="tip">提示：電腦可直接按數字鍵 1～4 作答</div>
+          <div class="feedback" id="feedback" aria-live="polite">
+            <div class="feedback-bubble">
+              <div class="feedback-icon" id="feedbackIcon"></div>
+              <div class="feedback-text" id="feedbackText"></div>
+              <div class="feedback-sub" id="feedbackSub"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="resultScreen" class="screen">
+        <div class="result-card">
+          <div class="score-ring" id="scoreRing" style="--score: 0">
+            <div class="score-big">
+              <span id="finalScore">0</span><small>/ 100 分</small>
+            </div>
+          </div>
+          <h2 class="result-title" id="resultTitle">挑戰完成！</h2>
+          <div class="result-msg" id="resultMsg"></div>
+          <div class="result-grid">
+            <div class="result-stat">
+              <b id="correctStat">0 / 25</b>答對題數
+            </div>
+            <div class="result-stat"><b id="comboStat">0</b>最高連擊</div>
+            <div class="result-stat"><b id="timeStat">0:00</b>完成時間</div>
+          </div>
+          <div class="actions">
+            <button class="primary" id="againBtn" type="button">
+              再玩 25 題
+            </button>
+            <button class="secondary" id="wrongBtn" type="button">
+              只練錯題
+            </button>
+            <button class="secondary" id="resultCheatBtn" type="button">
+              查看全部快速鍵
+            </button>
+          </div>
+          <div class="review">
+            <h3>錯題複習</h3>
+            <div class="review-list" id="reviewList"></div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <script>
+      const MASTER = [
+        { key: "Ctrl + X", action: "剪下", category: "編輯類" },
+        {
+          key: "Ctrl + C",
+          action: "複製",
+          category: "編輯類",
+          note: "附檔另註：Ctrl + 移動",
+        },
+        { key: "Ctrl + V", action: "貼上", category: "編輯類" },
+        { key: "Ctrl + 拉", action: "中心放大", category: "編輯類" },
+        { key: "Shift + 拉", action: "等比例放大", category: "編輯類" },
+        { key: "Ctrl + Y", action: "重複", category: "編輯類", note: "F4" },
+        { key: "Ctrl + B", action: "粗體", category: "編輯類" },
+        { key: "Ctrl + I", action: "斜體", category: "編輯類" },
+        { key: "Ctrl + U", action: "底線", category: "編輯類" },
+        { key: "Ctrl + ,", action: "，", category: "編輯類" },
+        { key: "Ctrl + .", action: "。", category: "編輯類" },
+        { key: "Ctrl + A", action: "全選", category: "編輯類" },
+        { key: "Ctrl + F", action: "尋找", category: "編輯類" },
+        { key: "Ctrl + H", action: "取代", category: "編輯類" },
+        { key: "Ctrl + 滑鼠點選", action: "不連續選取", category: "編輯類" },
+        { key: "Shift + 滑鼠點選", action: "連續選取", category: "編輯類" },
+        { key: "Ctrl + Shift + C", action: "複製格式", category: "編輯類" },
+        { key: "Ctrl + Shift + V", action: "貼上格式", category: "編輯類" },
+        { key: "Ctrl + Shift + >", action: "選取字變大", category: "編輯類" },
+        { key: "Ctrl + Shift + <", action: "選取字變小", category: "編輯類" },
+        {
+          key: "Shift + Enter",
+          action: "強制換行",
+          category: "編輯類",
+          note: "Alt + Enter Excel",
+        },
+        { key: "Ctrl + N", action: "開新檔案", category: "檔案類" },
+        { key: "Ctrl + O", action: "開啟舊檔", category: "檔案類" },
+        { key: "Ctrl + P", action: "列印", category: "檔案類" },
+        {
+          key: "Ctrl + S",
+          action: "存檔",
+          category: "檔案類",
+          note: "F12 另存新檔",
+        },
+        { key: "Ctrl + Z", action: "復原", category: "檔案類" },
+        { key: "Tab", action: "格子間移動", category: "表格類" },
+        { key: "F9", action: "目錄及函數更新", category: "更新" },
+      ];
+
+      const $ = (s) => document.querySelector(s);
+      const $$ = (s) => [...document.querySelectorAll(s)];
+      const shuffle = (arr) => {
+        const a = [...arr];
+        for (let i = a.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [a[i], a[j]] = [a[j], a[i]];
+        }
+        return a;
+      };
+      const escapeHtml = (str) =>
+        String(str).replace(
+          /[&<>"']/g,
+          (m) =>
+            ({
+              "&": "&amp;",
+              "<": "&lt;",
+              ">": "&gt;",
+              '"': "&quot;",
+              "'": "&#039;",
+            })[m],
+        );
+      const keyHtml = (key) => `<span class="keycap">${escapeHtml(key)}</span>`;
+
+      let questions = [],
+        index = 0,
+        score = 0,
+        streak = 0,
+        bestStreak = 0,
+        wrongItems = [];
+      let locked = false,
+        soundOn = true,
+        startTime = 0,
+        practiceMode = false;
+      let audioCtx = null;
+
+      function tone(type) {
+        if (!soundOn) return;
+        try {
+          audioCtx ||= new (window.AudioContext || window.webkitAudioContext)();
+          const o = audioCtx.createOscillator(),
+            g = audioCtx.createGain();
+          o.connect(g);
+          g.connect(audioCtx.destination);
+          const now = audioCtx.currentTime;
+          if (type === "good") {
+            o.frequency.setValueAtTime(520, now);
+            o.frequency.exponentialRampToValueAtTime(820, now + 0.11);
+            g.gain.setValueAtTime(0.08, now);
+            g.gain.exponentialRampToValueAtTime(0.001, now + 0.2);
+            o.start(now);
+            o.stop(now + 0.21);
+          } else {
+            o.frequency.setValueAtTime(190, now);
+            o.frequency.exponentialRampToValueAtTime(120, now + 0.16);
+            g.gain.setValueAtTime(0.07, now);
+            g.gain.exponentialRampToValueAtTime(0.001, now + 0.22);
+            o.start(now);
+            o.stop(now + 0.23);
+          }
+        } catch (e) {}
+      }
+
+      function showScreen(id) {
+        $$(".screen").forEach((s) => s.classList.remove("active"));
+        $(id).classList.add("active");
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }
+
+      function makeQuestion(item) {
+        const askKey = Math.random() < 0.5;
+        const answer = askKey ? item.key : item.action;
+        const pool = MASTER.map((x) => (askKey ? x.key : x.action)).filter(
+          (x) => x !== answer,
+        );
+        const choices = shuffle([
+          answer,
+          ...shuffle([...new Set(pool)]).slice(0, 3),
+        ]);
+        return { item, askKey, answer, choices };
+      }
+
+      function startGame(source = MASTER, isPractice = false) {
+        practiceMode = isPractice;
+        const count = isPractice ? source.length : Math.min(25, source.length);
+        questions = shuffle(source).slice(0, count).map(makeQuestion);
+        index = 0;
+        score = 0;
+        streak = 0;
+        bestStreak = 0;
+        wrongItems = [];
+        locked = false;
+        startTime = Date.now();
+        $("#score").textContent = "0";
+        $("#streak").textContent = "0";
+        showScreen("#gameScreen");
+        renderQuestion();
+      }
+
+      function renderQuestion() {
+        locked = false;
+        const q = questions[index];
+        const total = questions.length;
+        $("#progress").style.width = `${(index / total) * 100}%`;
+        $("#category").textContent = q.item.category;
+        $("#qnum").textContent = `第 ${index + 1} / ${total} 題`;
+        if (q.askKey) {
+          $("#prompt").textContent = "這個功能要搭配哪個快速鍵？";
+          $("#question").textContent = `「${q.item.action}」`;
+        } else {
+          $("#prompt").textContent = "這組快速鍵代表哪個功能？";
+          $("#question").innerHTML = keyHtml(q.item.key);
+        }
+        const box = $("#answers");
+        box.innerHTML = "";
+        q.choices.forEach((choice, i) => {
+          const btn = document.createElement("button");
+          btn.type = "button";
+          btn.className = "answer";
+          btn.dataset.choice = choice;
+          btn.setAttribute("aria-label", `選項 ${i + 1}：${choice}`);
+          btn.innerHTML = `<span class="num">${i + 1}</span>${q.askKey ? keyHtml(choice) : escapeHtml(choice)}`;
+          btn.addEventListener("click", () => answer(choice, btn));
+          box.appendChild(btn);
+        });
+      }
+
+      function answer(choice, btn) {
+        if (locked) return;
+        locked = true;
+        const q = questions[index];
+        const correct = choice === q.answer;
+        const buttons = $$("#answers .answer");
+        buttons.forEach((b) => {
+          b.disabled = true;
+          if (b.dataset.choice === q.answer) b.classList.add("correct");
+        });
+        if (correct) {
+          score += practiceMode ? 0 : 4;
+          streak++;
+          bestStreak = Math.max(bestStreak, streak);
+          $("#score").textContent = score;
+          $("#streak").textContent = streak;
+          tone("good");
+          showFeedback(true, q);
+          burstConfetti(streak >= 3 ? 24 : 12);
+          if (streak > 0 && streak % 5 === 0) showCombo(streak);
+        } else {
+          btn.classList.add("wrong");
+          streak = 0;
+          $("#streak").textContent = "0";
+          tone("bad");
+          wrongItems.push(q.item);
+          showFeedback(false, q);
+        }
+        $("#progress").style.width =
+          `${((index + 1) / questions.length) * 100}%`;
+        setTimeout(
+          () => {
+            index++;
+            if (index < questions.length) renderQuestion();
+            else finishGame();
+          },
+          correct ? 900 : 1400,
+        );
+      }
+
+      function showFeedback(good, q) {
+        $("#feedbackIcon").textContent = good ? "🎉" : "💡";
+        $("#feedbackText").textContent = good ? "配對成功！" : "再記一次！";
+        const note = q.item.note ? ` · ${q.item.note}` : "";
+        $("#feedbackSub").textContent =
+          `${q.item.key} ＝ ${q.item.action}${note}`;
+        const f = $("#feedback");
+        f.classList.remove("show");
+        void f.offsetWidth;
+        f.classList.add("show");
+      }
+
+      function showCombo(n) {
+        const el = document.createElement("div");
+        el.className = "combo";
+        el.textContent = `🔥 ${n} COMBO!`;
+        document.body.appendChild(el);
+        setTimeout(() => el.remove(), 950);
+      }
+
+      function burstConfetti(n = 14) {
+        const colors = ["#ffd84d", "#73e0ff", "#55e39b", "#ff6b7c", "#ffffff"];
+        for (let i = 0; i < n; i++) {
+          const c = document.createElement("i");
+          c.className = "confetti";
+          c.style.background = colors[i % colors.length];
+          c.style.setProperty("--x", `${(Math.random() - 0.5) * 420}px`);
+          c.style.setProperty("--y", `${90 + Math.random() * 280}px`);
+          c.style.setProperty("--r", `${Math.random() * 720 - 360}deg`);
+          c.style.transform = `translate(${(Math.random() - 0.5) * 40}px,0)`;
+          document.body.appendChild(c);
+          setTimeout(() => c.remove(), 950);
+        }
+      }
+
+      function finishGame() {
+        const elapsed = Math.max(
+          1,
+          Math.round((Date.now() - startTime) / 1000),
+        );
+        const mins = Math.floor(elapsed / 60),
+          secs = String(elapsed % 60).padStart(2, "0");
+        const total = questions.length;
+        const correct = total - wrongItems.length;
+        const final = practiceMode
+          ? Math.round((correct / total) * 100)
+          : score;
+        $("#finalScore").textContent = final;
+        $("#scoreRing").style.setProperty("--score", final);
+        $("#correctStat").textContent = `${correct} / ${total}`;
+        $("#comboStat").textContent = bestStreak;
+        $("#timeStat").textContent = `${mins}:${secs}`;
+        let title = "再挑戰一次！",
+          msg = "把錯題記熟，下次分數一定會更高。";
+        if (final === 100) {
+          title = "滿分高手！🏆";
+          msg = "25 題全部配對成功，快速鍵已經很熟了！";
+        } else if (final >= 88) {
+          title = "鍵盤達人！⚡";
+          msg = "表現很穩，再複習幾個易混淆的組合就更完整。";
+        } else if (final >= 72) {
+          title = "越來越熟了！✨";
+          msg = "已經掌握大部分，建議直接練一次錯題。";
+        } else if (final >= 60) {
+          title = "基礎建立中！💪";
+          msg = "先看錯題，再挑戰一局，很快會有進步。";
+        }
+        if (practiceMode) {
+          title = "錯題練習完成！";
+          msg = `這輪錯題練習答對 ${correct} / ${total} 題。`;
+        }
+        $("#resultTitle").textContent = title;
+        $("#resultMsg").textContent = msg;
+        renderReview();
+        $("#wrongBtn").disabled = wrongItems.length === 0;
+        $("#wrongBtn").style.opacity = wrongItems.length === 0 ? ".45" : "1";
+        showScreen("#resultScreen");
+      }
+
+      function renderReview() {
+        const box = $("#reviewList");
+        box.innerHTML = "";
+        const unique = [
+          ...new Map(
+            wrongItems.map((x) => [x.key + "|" + x.action, x]),
+          ).values(),
+        ];
+        if (!unique.length) {
+          box.innerHTML = `<div class="empty-good">🎯 沒有錯題！這一輪全部答對。</div>`;
+          return;
+        }
+        unique.forEach((x) => {
+          const row = document.createElement("div");
+          row.className = "review-item";
+          row.innerHTML = `<div>${keyHtml(x.key)}</div><div class="act">${escapeHtml(x.action)}${x.note ? ` <span style="color:var(--muted);font-weight:600">（${escapeHtml(x.note)}）</span>` : ""}</div>`;
+          box.appendChild(row);
+        });
+      }
+
+      function openCheat() {
+        const grid = $("#cheatGrid");
+        if (!grid.children.length) {
+          MASTER.forEach((x) => {
+            const el = document.createElement("div");
+            el.className = "cheat";
+            el.innerHTML = `<span>${keyHtml(x.key)}</span><span>${escapeHtml(x.action)}${x.note ? `<br><small style="color:var(--muted)">${escapeHtml(x.note)}</small>` : ""}</span>`;
+            grid.appendChild(el);
+          });
+        }
+        $("#cheatModal").classList.add("show");
+      }
+
+      $("#startBtn").addEventListener("click", () => startGame());
+      $("#againBtn").addEventListener("click", () => startGame());
+      $("#wrongBtn").addEventListener("click", () => {
+        const unique = [
+          ...new Map(
+            wrongItems.map((x) => [x.key + "|" + x.action, x]),
+          ).values(),
+        ];
+        if (unique.length) startGame(unique, true);
+      });
+      $("#cheatBtn").addEventListener("click", openCheat);
+      $("#resultCheatBtn").addEventListener("click", openCheat);
+      $("#closeCheat").addEventListener("click", () =>
+        $("#cheatModal").classList.remove("show"),
+      );
+      $("#cheatModal").addEventListener("click", (e) => {
+        if (e.target === $("#cheatModal"))
+          $("#cheatModal").classList.remove("show");
+      });
+      $("#soundBtn").addEventListener("click", () => {
+        soundOn = !soundOn;
+        $("#soundBtn").textContent = soundOn ? "🔊 音效" : "🔇 靜音";
+        $("#soundBtn").setAttribute("aria-pressed", String(soundOn));
+      });
+      $("#fullBtn").addEventListener("click", async () => {
+        try {
+          if (!document.fullscreenElement)
+            await document.documentElement.requestFullscreen();
+          else await document.exitFullscreen();
+        } catch (e) {}
+      });
+      document.addEventListener("keydown", (e) => {
+        if ($("#cheatModal").classList.contains("show")) {
+          if (e.key === "Escape") $("#cheatModal").classList.remove("show");
+          return;
+        }
+        if (!$("#gameScreen").classList.contains("active") || locked) return;
+        const n = Number(e.key);
+        if (n >= 1 && n <= 4) {
+          const btn = $$("#answers .answer")[n - 1];
+          if (btn) btn.click();
+        }
+      });
+    </script>
+  </body>
+</html>

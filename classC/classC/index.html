@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>電腦軟體應用丙級｜互動式網站教材</title>
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<header class="topbar">
+  <div class="brand">🖥️ 電腦軟體應用丙級<span class="sub">Office 2021・109 年启用试题・老師給你的練習網站</span></div>
+  <div class="progressbox">實作進度 <span id="allProgress">0%</span>
+    <div class="pbar"><div id="allBar"></div></div></div>
+</header>
+<nav id="nav"></nav>
+
+<main>
+
+<!-- ================= 首頁 ================= -->
+<section id="home" class="page active">
+  <div class="hero">
+    <h1>四步驟過檢定：檔案總管 → 目錄製作 → 合併列印 → 文書處理</h1>
+    <p class="slogan">刷題是提供練習，成績以公正考試（筆試）記錄為主。每個步驟照筆記打勾，進度存在瀏覽器裡。</p>
+  </div>
+  <div class="steps4">
+    <a class="stepcard s1" href="#step1"><span class="badge">Step 1</span><h3>📁 檔案總管</h3><p>排序、搜尋、分類、存 PDF</p><div class="mini-prog" id="mini-step1"></div></a>
+    <a class="stepcard s2" href="#step2"><span class="badge">Step 2</span><h3>📑 目錄製作</h3><p>分節、頁碼、目錄、圖目錄</p><div class="mini-prog" id="mini-step2"></div></a>
+    <a class="stepcard s3" href="#step3"><span class="badge">Step 3</span><h3>✉️ 合併列印</h3><p>清單、篩選、標籤、完成合併</p><div class="mini-prog" id="mini-step3"></div></a>
+    <a class="stepcard s4" href="#step4"><span class="badge">Step 4</span><h3>📝 Word 文書處理</h3><p>打字、取代、段落、欄</p><div class="mini-prog" id="mini-step4"></div></a>
+  </div>
+  <div class="quicklinks">
+    <a class="qk" href="https://drive.google.com/drive/folders/1QQ7yeKVGdbhuNHWDWxdv_MANwkpFg9Jh?usp=sharing" target="_blank" rel="noopener">🕹️ 實作任務上傳區</a>
+    <a class="qk" href="#exam">🧾 檢定考什麼</a>
+    <a class="qk" href="#links">🧰 軟體與練習系統</a>
+    <a class="qk" href="#tips">🔎 檢查小細節</a>
+    <a class="qk" href="#rules">📏 課堂規定</a>
+  </div>
+</section>
+
+<!-- ================= 檢定考什麼 ================= -->
+<section id="exam" class="page">
+  <h2>檢定考什麼？</h2>
+  <div class="cards2">
+    <div class="excard"><h3>📖 學科測試</h3><ul>
+      <li>筆試 <b>80 題單選題</b>（電腦概論、應用軟體使用、系統軟體使用、資訊安全及共同科目）</li>
+      <li>每題 <b>1.25 分</b>，滿分 100 分，<b>答錯不倒扣</b></li>
+      <li>時間：<b>100 分鐘</b></li>
+    </ul></div>
+    <div class="excard"><h3>⌨️ 術科測試</h3><ul>
+      <li>上機實作，共 <b>15 個題組</b></li>
+      <li>涵蓋<b>檔案管理、文書處理、目錄製作與合併列印</b></li>
+      <li>時間：<b>120 分鐘</b></li>
+    </ul></div>
+  </div>
+  <p>🔗 <a href="https://owinform.wdasec.gov.tw/" target="_blank" rel="noopener">技能檢定測試參考資料 ↗</a></p>
+
+  <h2>學科包含內容</h2>
+  <img class="shot" src="https://hackmd.io/_uploads/SkUVqqQYMl.png" alt="學科包含內容" loading="lazy">
+
+  <h2>術科四大部（gogo123 學習順序）</h2>
+  <div class="partgrid">
+    <div class="partcard"><span class="badge">第一部份</span><h3>檔案管理</h3>
+      <ul>
+        <li>題組 1~12：主資料夾「檔案名稱→小到大」，子資料夾「檔案大小→大到小」</li>
+        <li>題組 13~15：主資料夾「檔案名稱→大到小」，子資料夾「檔案大小→小到大」</li>
+      </ul><a href="#step1">→ 看 Step1 筆記</a></div>
+    <div class="partcard"><span class="badge">第二部份</span><h3>目錄製作</h3>
+      <ul>
+        <li>重點題組：一、六、十一、二（2 欄式）</li>
+        <li>注意列印設定（每張紙 2 頁）</li>
+      </ul><a href="#step2">→ 看 Step2 筆記</a></div>
+    <div class="partcard"><span class="badge">第三部份</span><h3>合併列印</h3>
+      <ul>
+        <li>只有 <b>5 種題型</b>，題組一～五便是代表</li>
+        <li><b>題組七、十一是特例</b>（篩選做法），須特別注意</li>
+      </ul><a href="#step3">→ 看 Step3 筆記</a></div>
+    <div class="partcard"><span class="badge">第四部份</span><h3>文書處理</h3>
+      <ul>
+        <li>每題組四小题：01 版面設定、02 文字處理、03 圖片處理、04 表格處理</li>
+        <li>頁首/頁尾：中文新細明體、英文 Times New Roman</li>
+      </ul><a href="#step4">→ 看 Step4 筆記</a></div>
+  </div>
+  <h3>文書處理 15 題組 × 4 小题 影片索引</h3>
+  <div class="tablewrap"><table id="videoTable"></table></div>
+  <p class="small">點任一格直接開該題 YouTube 影片；連結失效時請回
+  <a href="https://gogo123.com.tw/%e9%9b%bb%e8%85%a6%e8%bb%9f%e9%ab%94%e6%87%89%e7%94%a8%e4%b8%99%e7%b4%9a-office-2021%e3%80%90109%e5%b9%b4%e5%95%9f%e7%94%a8%e8%a9%a6%e9%a1%8c%e3%80%91/" target="_blank" rel="noopener">gogo123 電腦軟體應用丙級 Office 2021 ↗</a></p>
+</section>
+
+<!-- ================= 軟體與連結 ================= -->
+<section id="links" class="page">
+  <h2>課堂工具下載</h2>
+  <div class="linkgrid">
+    <a class="lk" href="https://github.com/geovens/gInk/releases/" target="_blank" rel="noopener"><b>gInk</b><span>螢幕手寫批注</span></a>
+    <a class="lk" href="https://learn.microsoft.com/en-us/sysinternals/downloads/zoomit" target="_blank" rel="noopener"><b>ZoomIt</b><span>局部放大</span></a>
+    <a class="lk" href="https://cdn.wacom.com/u/productsupport/drivers/win/professional/WacomTablet_6.4.3-1.exe" target="_blank" rel="noopener"><b>Wacom 驅動</b><span>繪板驅動</span></a>
+    <a class="lk" href="https://meet.google.com/ink-avsn-cjc" target="_blank" rel="noopener"><b>Meet</b><span>線上教室</span></a>
+    <a class="lk" href="https://github.com/bfritscher/carnac/releases/" target="_blank" rel="noopener"><b>Carnac</b><span>顯示按鍵</span></a>
+    <a class="lk" href="https://drive.google.com/drive/folders/1NK5syoTObp9CoRBVca7nd9J-cqg89_vS?usp=sharing" target="_blank" rel="noopener"><b>Broadcast</b><span>廣播軟體</span></a>
+    <a class="lk" href="https://drive.google.com/file/d/1l-e7q8t9H6rWkI62OWcjuQd7W262SwMa/view?usp=drive_link" target="_blank" rel="noopener"><b>PDF 合併</b><span>合併工具</span></a>
+    <a class="lk" href="https://drive.google.com/file/d/182appLpjFZeMc07laEUFYQeRjv6ufy0j/view?usp=sharing" target="_blank" rel="noopener"><b>FTP</b><span>上傳練習</span></a>
+  </div>
+  <h2>線上學習與練習</h2>
+  <div class="linkgrid big">
+    <a class="lk" href="https://gogo123.com.tw/%e9%9b%bb%e8%85%a6%e8%bb%9f%e9%ab%94%e6%87%89%e7%94%a8%e4%b8%99%e7%b4%9a-office-2021%e3%80%90109%e5%b9%b4%e5%95%9f%e7%94%a8%e8%a9%a6%e9%a1%8c%e3%80%91/" target="_blank" rel="noopener"><b>🚩 推薦：gogo123 教學影片</b><span>丙級 Office 2021 全套解題</span></a>
+    <a class="lk" href="https://www.youtube.com/@gogo-we8tb/playlists" target="_blank" rel="noopener"><b>gogo123 YouTube 頻道</b><span>數位資訊學會播放清單</span></a>
+    <a class="lk" href="http://203.72.100.60/dpweb/fefe/gogo421/" target="_blank" rel="noopener"><b>學科練習 gogo421</b><span>校內練習系統</span></a>
+    <a class="lk" href="https://onlinetest.tw/etest/bestcontent.asp?examid=t118002" target="_blank" rel="noopener"><b>學科練習系統</b><span>線上模擬</span></a>
+    <a class="lk" href="https://viptest.gotop.com.tw/gotopExamStudent/#/login" target="_blank" rel="noopener"><b>🚩 碁峰學科考試系統</b><span>模擬考必刷</span></a>
+    <a class="lk" href="https://www.clvsc.tyc.edu.tw/p/404-1000-2010.php?Lang=zh-tw" target="_blank" rel="noopener"><b>軟體安裝</b><span>練習環境安裝檔</span></a>
+  </div>
+  <h2>參考答案與考題資源</h2>
+  <div class="vidrow" id="pdfAns"></div>
+  <p class="small">⮩ 勞委會官網題庫下載頁面 → 見 <a href="https://gogo123.com.tw/%e9%9b%bb%e8%85%a6%e8%bb%9f%e9%ab%94%e6%87%89%e7%94%a8%e4%b8%99%e7%b4%9a-office-2021%e3%80%90109%e5%b9%b4%e5%95%9f%e7%94%a8%e8%a9%a6%e9%a1%8c%e3%80%91/" target="_blank" rel="noopener">gogo123 頁面</a></p>
+</section>
+
+<!-- ================= Step 1 ================= -->
+<section id="step1" class="page">
+  <h2>Step 1｜檔案總管</h2>
+  <div class="vidrow" id="vids-step1"></div>
+  <p class="small">逐項完成後打勾；全部完成代表這份考題會做了。</p>
+  <div class="ckwrap" id="ck-step1"></div>
+  <div class="warn">⚠️ 分題訣竅：第二小題可用<b>類型</b>分類；<b>題組 5、6 用大小</b>做分類。貼上順序一定要正確！最後別忘了<b>存 1-1.pdf</b>。</div>
+</section>
+
+<!-- ================= Step 2 ================= -->
+<section id="step2" class="page">
+  <h2>Step 2｜目錄製作</h2>
+  <div class="vidrow" id="vids-step2"></div>
+  <div class="ckwrap" id="ck-step2"></div>
+  <div class="warn">⚠️ 易錯點：
+    <ul>
+      <li>分節符號用<b>「下一頁」</b>，「目」字前面和下一頁的前面各插一個。</li>
+      <li>第 2 節頁尾要<b>取消「連結到前一節」</b>再刪封面頁碼。</li>
+      <li>第 2 節頁碼 <code>i、ii、iii</code>、第 3 節 <code>1、2、3</code>；<b>題組十一要加 - 號（半形）</b>。</li>
+      <li>大綱階層：<b>游標停在第一層標題中間</b>，只要點在上面就好，再選「所有類似格式的文字」。</li>
+      <li>圖片編號第二張要<b>複製「圖1：」再右鍵更新功能變數</b>。</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ================= Step 3 ================= -->
+<section id="step3" class="page">
+  <h2>Step 3｜合併列印</h2>
+  <div class="vidrow" id="vids-step3"></div>
+  <div class="ckwrap" id="ck-step3"></div>
+  <div class="warn">⚠️ 特例記起來：
+    <ul>
+      <li><b>題組七</b>：篩選「地址 ＞ 基隆市中山區，＜ 基隆市中正區」。</li>
+      <li><b>題組十一</b>：名稱排序後取消屬於 SuperVGA，再按名稱遞增（或篩選名稱小於 SuperVGA）。</li>
+      <li><b>題組四、九、十四</b>：選取整個表格 → 版面配置的「前」輸入 <code>0</code>，主文件內容才會完整顯示。</li>
+      <li>沒資料的要刪掉；完成後先「另存原始文件」再「完成與合併」另存結果文件。</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ================= Step 4 ================= -->
+<section id="step4" class="page">
+  <h2>Step 4｜Word 文書處理</h2>
+  <div class="vidrow" id="vids-step4"></div>
+  <h3>準備動作</h3>
+  <div class="ckwrap" id="ck-step4a"></div>
+  <h3>文書編輯</h3>
+  <div class="ckwrap" id="ck-step4b"></div>
+  <h3>欄</h3>
+  <div class="ckwrap" id="ck-step4c"></div>
+  <div class="monkeybox">
+    <img class="shot" src="https://hackmd.io/_uploads/SJrx0i_-xg.jpg" alt="取代口訣示意" loading="lazy">
+    <div class="mnemonic">
+      <h3>取代三步口訣</h3>
+      <p><code class="blue">^p → ***</code>（屁猩）→ <code class="blue">****** → ^p</code>（猩猩屁）→ <code class="blue">*** → 空</code>（星空）</p>
+      <p class="small">六顆星先變成 ^p，三顆星再清掉——順序不能錯。</p>
+    </div>
+  </div>
+  <div class="warn">⚠️ 全形半形：標點、數字、空格都要照題目（<code class="orange">Shift＋空白鍵</code>可切換全半形）；很多英文字時先一起打好會比較快。</div>
+</section>
+
+<!-- ================= 檢查小細節 ================= -->
+<section id="tips" class="page">
+  <h2>檢查小細節</h2>
+  <ul class="checktips">
+    <li>選取大綱時，記得<b>只要點在上面就好</b>。</li>
+    <li>插入圖片編號時，要<b>點在圖片上</b>，複製下面的格式；第二個要用<b>複製</b>，然後<b>右鍵更新</b>。</li>
+  </ul>
+  <h2>頁首頁尾字型速查表</h2>
+  <table>
+    <tr><th>題次</th><th>中文字型</th><th>英文/數字</th><th>字級</th></tr>
+    <tr><td>第 1 小題</td><td colspan="3" class="none">沒有頁首頁尾</td></tr>
+    <tr><td>第 2 小題</td><td>標楷體</td><td>Arial</td><td>14</td></tr>
+    <tr><td>第 3 小題</td><td>新細明體</td><td>Arial</td><td>10</td></tr>
+    <tr><td>第 4 小題</td><td>新細明體</td><td>Times New Roman</td><td>10</td></tr>
+  </table>
+  <div class="note">📌 文書處理頁首/頁尾預設：中文「新細明體」、英文「Times New Roman」，照題目為準。</div>
+  <h2>🎯 快捷鍵小測驗</h2>
+  <div id="quiz"></div>
+</section>
+
+<!-- ================= 課堂規定 ================= -->
+<section id="rules" class="page">
+  <h2>課堂規定</h2>
+  <div class="rulecards">
+    <div class="rulecard"><span>🖌️</span><p><b>刷題是提供練習</b>，成績以公正考試（筆試）記錄為主。</p></div>
+    <div class="rulecard"><span>💺</span><p>照<b>術科座位</b>安排入座；組長平時成績滿分，但需協助檢查。</p></div>
+    <div class="rulecard"><span>📚</span><p><b>未達標準需補考</b>，未達留校加強。</p></div>
+  </div>
+  <h2>過關清單（全學期）</h2>
+  <div class="ckwrap" id="ck-terms"></div>
+</section>
+
+</main>
+<footer>電腦軟體應用丙級互動教材｜教學影片主要參考 <a href="https://gogo123.com.tw/%e9%9b%bb%e8%85%a6%e8%bb%9f%e9%ab%94%e6%87%89%e7%94%a8%e4%b8%99%e7%b4%9a-office-2021%e3%80%90109%e5%b9%b4%e5%95%9f%e7%94%a8%e8%a9%a6%e9%a1%8c%e3%80%91/" target="_blank" rel="noopener">GOGO123 知識分享網站</a>（林文恭團隊）</footer>
+<script src="assets/data.js"></script>
+<script src="assets/app.js"></script>
+</body>
+</html>

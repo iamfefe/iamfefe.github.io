@@ -1,0 +1,1449 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AEIOU 空間偵探：圖書館大搜查！</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Fredoka:wght@300..700&family=Noto+Sans+TC:wght@400;700;900&display=swap"
+        rel="stylesheet">
+
+    <style>
+        body {
+            font-family: 'Fredoka', 'Noto Sans TC', sans-serif;
+            background-color: #F7F5EB;
+            /* 溫馨溫暖的偵探信封紙背景 */
+            background-image: radial-gradient(#cbd5e1 1px, transparent 1px);
+            background-size: 24px 24px;
+        }
+
+        /* 擬手繪厚重陰影 (Neo-brutalisim Style) */
+        .detective-shadow {
+            box-shadow: 6px 6px 0px 0px rgba(15, 23, 42, 1);
+        }
+
+        .detective-shadow-sm {
+            box-shadow: 3px 3px 0px 0px rgba(15, 23, 42, 1);
+        }
+
+        .detective-shadow-btn {
+            box-shadow: 4px 4px 0px 0px rgba(15, 23, 42, 1);
+            transition: all 0.1s ease;
+        }
+
+        .detective-shadow-btn:active {
+            transform: translate(3px, 3px);
+            box-shadow: 1px 1px 0px 0px rgba(15, 23, 42, 1);
+        }
+
+        /* AEIOU 專屬維度色票設計 */
+        .color-A {
+            background-color: #FCA5A5;
+            border-color: #EF4444;
+            color: #7F1D1D;
+        }
+
+        /* 紅色-活動 */
+        .color-E {
+            background-color: #6EE7B7;
+            border-color: #10B981;
+            color: #064E3B;
+        }
+
+        /* 綠色-環境 */
+        .color-I {
+            background-color: #C7D2FE;
+            border-color: #6366F1;
+            color: #312E81;
+        }
+
+        /* 藍紫色-互動 */
+        .color-O {
+            background-color: #FDE047;
+            border-color: #F59E0B;
+            color: #78350F;
+        }
+
+        /* 黃色-物件 */
+        .color-U {
+            background-color: #93C5FD;
+            border-color: #3B82F6;
+            color: #1E3A8A;
+        }
+
+        /* 天藍-使用者 */
+
+        /* 呼吸跳動的放大鏡 */
+        @keyframes pulse-magnifier {
+
+            0%,
+            100% {
+                transform: scale(1) rotate(0deg);
+                filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.1));
+            }
+
+            50% {
+                transform: scale(1.15) rotate(10deg);
+                filter: drop-shadow(0 10px 15px rgba(0, 0, 0, 0.2));
+            }
+        }
+
+        .pulse-clue {
+            animation: pulse-magnifier 2s infinite ease-in-out;
+        }
+
+        /* 答錯搖晃 */
+        @keyframes shake {
+
+            0%,
+            100% {
+                transform: translateX(0);
+            }
+
+            20%,
+            60% {
+                transform: translateX(-8px);
+            }
+
+            40%,
+            80% {
+                transform: translateX(8px);
+            }
+        }
+
+        .shake-element {
+            animation: shake 0.4s ease-in-out;
+        }
+
+        /* 成功彈跳 */
+        @keyframes pop-success {
+            0% {
+                transform: scale(0.8);
+                opacity: 0;
+            }
+
+            50% {
+                transform: scale(1.1);
+            }
+
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        .pop-animation {
+            animation: pop-success 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        /* Loading 旋轉動畫 */
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .animate-spin-fast {
+            animation: spin 0.8s linear infinite;
+        }
+    </style>
+</head>
+
+<body class="min-h-screen flex flex-col items-center justify-between p-3 md:p-6 overflow-x-hidden select-none">
+
+    <canvas id="victory-confetti" class="fixed top-0 left-0 w-full h-full pointer-events-none z-50"></canvas>
+
+    <header class="w-full max-w-6xl text-center my-2 relative">
+        <div
+            class="inline-block bg-amber-100 border-4 border-slate-900 px-6 py-3 rounded-3xl detective-shadow rotate-[-1deg]">
+            <h1
+                class="text-xl md:text-3xl font-black text-slate-800 tracking-wider flex flex-col items-center justify-center gap-1">
+                <span class="flex items-center gap-2">🔎 <span>AEIOU 空間偵探：AI 跨維度搜查！</span></span>
+                <span class="text-xs md:text-sm font-bold text-slate-500 tracking-normal block">AEIOU Space Detective:
+                    AI Cross-Dimensional Search!</span>
+            </h1>
+        </div>
+
+        <!-- AI 探案場景生成面板 (加分亮點) -->
+        <div
+            class="mt-4 max-w-4xl mx-auto bg-white border-4 border-slate-900 rounded-2xl p-4 detective-shadow flex flex-col md:flex-row items-center justify-between gap-3 text-left">
+            <div class="flex-grow">
+                <span class="text-xs font-black text-indigo-600 tracking-wide uppercase block mb-1">🎮 偵探筆記練習 /
+                    Detacor writing Practice</span>
+                <label class="font-black text-slate-700 text-sm md:text-base flex flex-wrap items-center gap-1.5">
+                    🗺️ 當前探案場景 / Current Scene:
+                    <select id="case-selector" onchange="handleSpaceChange()"
+                        class="bg-amber-50 border-2 border-slate-900 rounded-lg px-2 py-1 text-slate-800 font-bold focus:outline-none focus:ring-2 focus:ring-amber-400">
+                        <option value="library_offline">經典圖書館 📖 (預設離線版) / Classic Library 📖 (Offline)</option>
+                        <!-- <option value="cafe">網美咖啡廳 ☕ (AI 生成) / Trendy Cafe ☕ (AI Generated)</option>
+                        <option value="classroom">智慧教室 🏫 (AI 生成) / Smart Classroom 🏫 (AI Generated)</option>
+                        <option value="supermarket">智慧超市 🛒 (AI 生成) / Smart Supermarket 🛒 (AI Generated)</option>
+                        <option value="custom">自訂其他場景... ✍️ / Custom Scenario... ✍️</option> -->
+                    </select>
+                </label>
+                <!-- 自訂場景輸入框 (隱藏，依選擇開啟) -->
+                <div id="custom-space-container" class="hidden mt-2 flex items-center gap-2">
+                    <input type="text" id="custom-space-input"
+                        placeholder="例如：機場大廳、露營區... / E.g., Airport Lobby, Campground..."
+                        class="flex-grow bg-slate-50 border-2 border-slate-900 rounded-lg px-3 py-1 text-sm font-bold focus:outline-none">
+                    <button onclick="generateCustomSpace()"
+                        class="bg-indigo-500 hover:bg-indigo-600 text-white font-black px-4 py-1 rounded-lg border-2 border-slate-900 text-xs detective-shadow-btn">
+                        讓 AI 生成! ✨ / AI Generate! ✨
+                    </button>
+                </div>
+            </div>
+
+            <!-- API Key 設置按鈕 -->
+            <!-- <div class="flex items-center gap-2">
+                <button onclick="toggleApiKeyPanel()"
+                    class="bg-slate-100 hover:bg-slate-200 text-slate-800 border-2 border-slate-900 rounded-lg px-3 py-1.5 text-xs font-black flex items-center gap-1">
+                    ⚙️ 設置 API Key / Set API Key
+                </button>
+            </div> -->
+        </div>
+
+        <!-- API 金鑰面板 -->
+        <div id="api-key-panel"
+            class="hidden max-w-4xl mx-auto mt-2 bg-slate-900 text-white border-4 border-slate-900 rounded-2xl p-4 text-left relative z-10">
+            <h4 class="font-black text-sm text-amber-300 mb-1">🔑 Gemini API 密鑰配置 / Gemini API Key Configuration</h4>
+            <p class="text-[11px] text-slate-300 mb-3 leading-relaxed">
+                如果您是在開發環境或網頁中，請輸入您的 Gemini API Key。若預留為空，我們將嘗試自動注入 Canvas 平台環境中的密鑰。若網路不通，將自動退回「經典圖書館」離線版遊玩，確保試教順利無阻。<br>
+                <span class="text-[10px] text-slate-400">If you are in a development environment, please enter your
+                    Gemini API Key. If left blank, we will attempt to use the platform's key. If the connection fails,
+                    it will fall back to the offline library version to guarantee smooth teaching.</span>
+            </p>
+            <div class="flex items-center gap-2">
+                <input type="password" id="api-key-input" placeholder="AI_zaSy..."
+                    class="flex-grow bg-slate-800 text-white border-2 border-slate-700 rounded-lg px-3 py-1.5 text-xs font-mono focus:outline-none focus:border-amber-400">
+                <button onclick="saveApiKey()"
+                    class="bg-amber-400 text-slate-900 font-black text-xs px-4 py-2 rounded-lg border-2 border-slate-900 hover:bg-amber-300">
+                    儲存設定 / Save Settings
+                </button>
+            </div>
+            <p id="api-status-msg" class="text-[10px] text-emerald-400 mt-1 font-bold"></p>
+        </div>
+    </header>
+
+    <main
+        class="w-full max-w-6xl flex-grow grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch justify-center my-4 relative">
+
+        <!-- Loading 遮罩層 -->
+        <div id="game-loading-overlay"
+            class="absolute inset-0 bg-white/80 backdrop-blur-sm z-20 rounded-[32px] flex flex-col items-center justify-center hidden">
+            <div class="p-8 bg-amber-100 border-4 border-slate-900 rounded-3xl text-center max-w-md detective-shadow">
+                <span class="inline-block text-5xl animate-spin-fast mb-4">🔎</span>
+                <h3 class="text-xl font-black text-slate-800 mb-2">AI 偵探助理分析中... / AI Assistant Analyzing...</h3>
+                <p id="loading-text" class="text-sm text-slate-600 font-bold leading-relaxed">正在請 Gemini
+                    專家生成專屬觀察線索，佈置空間地圖。請稍候約 3~5 秒...</p>
+            </div>
+        </div>
+
+        <!-- 左側：互動式觀察地圖 (佔 7 格) -->
+        <section
+            class="lg:col-span-7 bg-amber-50 border-4 border-slate-900 rounded-[32px] p-4 detective-shadow flex flex-col justify-between relative overflow-hidden min-h-[480px]">
+            <div
+                class="absolute top-3 left-4 bg-slate-900 text-amber-300 text-xs font-black px-3 py-1 rounded-md tracking-widest uppercase">
+                📍 空間偵探觀察圖 / Detective Map (<span id="scene-map-title">LIBRARY SCENE</span>)
+            </div>
+
+            <!-- 地圖主要區塊 (SVG 插圖 + 線索點) -->
+            <div class="flex-grow flex items-center justify-center relative mt-6 min-h-[350px]">
+
+                <!-- 手繪感平面地圖 SVG -->
+                <svg viewBox="0 0 800 500" class="w-full h-full max-h-[420px] text-slate-700 font-bold">
+                    <!-- 地圖背景框 -->
+                    <rect x="10" y="10" width="780" height="480" rx="20" fill="#FFFDF5" stroke="#0F172A"
+                        stroke-width="4" stroke-dasharray="10 5" />
+
+                    <!-- 區域一：右上分區 -->
+                    <g transform="translate(420, 30)">
+                        <rect x="0" y="0" width="350" height="220" rx="15" fill="#FEF2F2" stroke="#0F172A"
+                            stroke-width="3" />
+                        <text x="20" y="35" font-size="14" fill="#991B1B" font-weight="900" id="sector-1-title">🤫 自習靜音區
+                            / Quiet Zone</text>
+                        <!-- 裝飾 -->
+                        <rect x="30" y="60" width="120" height="60" rx="5" fill="#FEE2E2" stroke="#0F172A"
+                            stroke-width="2" />
+                        <rect x="180" y="60" width="120" height="60" rx="5" fill="#FEE2E2" stroke="#0F172A"
+                            stroke-width="2" />
+                        <circle cx="90" cy="90" r="12" fill="#FCA5A5" />
+                        <circle cx="240" cy="90" r="12" fill="#FCA5A5" />
+                    </g>
+
+                    <!-- 區域二：左上分區 -->
+                    <g transform="translate(30, 30)">
+                        <rect x="0" y="0" width="360" height="220" rx="15" fill="#EEF2FF" stroke="#0F172A"
+                            stroke-width="3" />
+                        <text x="20" y="35" font-size="14" fill="#3730A3" font-weight="900" id="sector-2-title">👥 小組討論室
+                            / Discussion Room</text>
+                        <!-- 裝飾 -->
+                        <rect x="60" y="70" width="240" height="80" rx="40" fill="#E0E7FF" stroke="#0F172A"
+                            stroke-width="2" />
+                        <text x="110" y="115" font-size="12" fill="#4338CA" id="sector-2-desc">白板與討論螢幕 / Whiteboards &
+                            Screens</text>
+                    </g>
+
+                    <!-- 區域三：左下分區 -->
+                    <g transform="translate(30, 270)">
+                        <rect x="0" y="0" width="360" height="200" rx="15" fill="#ECFDF5" stroke="#0F172A"
+                            stroke-width="3" />
+                        <text x="20" y="35" font-size="14" fill="#065F46" font-weight="900" id="sector-3-title">🧸 兒童故事角
+                            / Kids Corner</text>
+                        <!-- 裝飾 -->
+                        <rect x="30" y="60" width="300" height="110" rx="10" fill="#A7F3D0" stroke="#0F172A"
+                            stroke-width="2" stroke-dasharray="4 4" />
+                        <circle cx="80" cy="115" r="25" fill="#FDE047" opacity="0.6" />
+                        <circle cx="280" cy="115" r="20" fill="#FCA5A5" opacity="0.6" />
+                        <text x="100" y="120" font-size="12" fill="#047857" id="sector-3-desc">軟骨頭與矮書架 / Beanbags & Low
+                            Shelves</text>
+                    </g>
+
+                    <!-- 區域四：右下分區 -->
+                    <g transform="translate(420, 270)">
+                        <rect x="0" y="0" width="350" height="200" rx="15" fill="#FFFBEB" stroke="#0F172A"
+                            stroke-width="3" />
+                        <text x="20" y="35" font-size="14" fill="#92400E" font-weight="900" id="sector-4-title">🛎️ 服務櫃檯
+                            / Service Counter</text>
+                        <!-- 裝飾 -->
+                        <path d="M 30,120 L 320,120" stroke="#0F172A" stroke-width="8" stroke-linecap="round" />
+                        <rect x="60" y="60" width="60" height="40" rx="5" fill="#FEF3C7" stroke="#0F172A"
+                            stroke-width="2" />
+                        <text x="70" y="85" font-size="11" fill="#78350F" id="sector-4-desc">自動讀取借書機 / RFID
+                            Self-Check</text>
+                    </g>
+                </svg>
+
+                <div id="clues-container" class="absolute inset-0 pointer-events-none">
+                    <!-- 由 JavaScript 動態生成線索定位點 -->
+                </div>
+            </div>
+
+            <!-- 底部資訊列 -->
+            <div
+                class="mt-2 bg-slate-900 text-white rounded-2xl p-3 flex flex-col md:flex-row justify-between items-center text-xs md:text-sm font-bold gap-2">
+                <span id="clue-progress-text" class="text-center md:text-left">🔍 點選地圖上的黃色放大鏡收集線索 / Click the yellow
+                    magnifying glass on the map to collect clues</span>
+                <span class="bg-amber-400 text-slate-900 px-3 py-1 rounded-full text-xs font-black flex-shrink-0"
+                    id="badge-progress">已找到 0 / 10 | Found 0 / 10</span>
+            </div>
+        </section>
+
+        <!-- 右側：偵探辦公桌 & AEIOU 分類區 (佔 5 格) -->
+        <section class="lg:col-span-5 flex flex-col gap-4">
+
+            <!-- 偵探狀態面板 -->
+            <div
+                class="bg-blue-50 border-4 border-slate-900 rounded-3xl p-4 detective-shadow flex justify-between items-center">
+                <div class="flex items-center gap-3">
+                    <span class="text-3xl">🎩</span>
+                    <div>
+                        <h3 class="font-black text-slate-800 text-sm md:text-base">實作任務：偵探筆記本 / Detective Notebook</h3>
+                        <p class="text-[11px] text-slate-500 font-bold">請將觀察線索正確歸類！ / Correctly classify the clues!</p>
+                    </div>
+                </div>
+                <!-- 計分板 -->
+                <div
+                    class="bg-white px-3 py-2 border-2 border-slate-900 rounded-2xl text-center min-w-[70px] flex-shrink-0">
+                    <div class="text-[9px] font-black text-slate-400 leading-none">SCORE</div>
+                    <div id="stat-score" class="text-lg font-black text-indigo-600 leading-tight">0</div>
+                </div>
+            </div>
+
+            <!-- 線索歸類主體 -->
+            <div
+                class="bg-white border-4 border-slate-900 rounded-[32px] p-5 detective-shadow flex-grow flex flex-col justify-between min-h-[380px] relative">
+
+                <!-- 尚未點選線索時的預設狀態 -->
+                <div id="deck-empty-state" class="flex-grow flex flex-col items-center justify-center text-center p-4">
+                    <span class="text-4xl mb-3 animate-bounce">🔎</span>
+                    <h4 class="text-base font-black text-slate-800">偵探雷達觀察中... / Detective Radar Active...</h4>
+                    <p class="text-xs text-slate-500 mt-2 max-w-xs font-bold leading-relaxed">
+                        請在左側地圖中點擊任意閃爍的放大鏡開始分析！<br><span class="text-slate-400 mt-1 block">Click any flashing magnifying
+                            glass on the left map to start analyzing!</span></p>
+                </div>
+
+                <!-- 點選線索後的挑戰大字卡 -->
+                <div id="deck-active-card" class="hidden flex-grow flex flex-col justify-between">
+                    <div class="border-4 border-slate-900 rounded-2xl p-4 bg-amber-50/50 relative mb-4">
+                        <span id="clue-tag"
+                            class="absolute -top-3.5 -right-3 bg-slate-900 text-white text-[10px] font-black px-2.5 py-1 rounded-full border-2 border-slate-900">線索
+                            / Clue #0</span>
+                        <h4 class="text-xs font-black text-slate-400 mb-1 flex items-center gap-1">📍 觀察場景 / Scene：<span
+                                id="clue-location" class="text-slate-700">自習區</span></h4>
+                        <p id="clue-description" class="text-slate-800 font-black text-xs md:text-sm leading-relaxed">
+                            這是一條觀察細節...</p>
+                    </div>
+
+                    <!-- 核心挑戰提問 -->
+                    <div class="mb-4">
+                        <div class="text-[11px] font-black text-slate-500 mb-2 flex flex-col gap-0.5">
+                            <span class="flex items-center gap-1"><span>🧠 偵探任務：</span><span
+                                    class="text-indigo-600">這句話強調的重點，屬於 AEIOU 的哪一個維度？</span></span>
+                            <span class="text-slate-400">Mission: Which AEIOU dimension does the emphasized keyword
+                                belong to?</span>
+                        </div>
+
+                        <!-- AEIOU 五大按鈕 -->
+                        <div class="grid grid-cols-5 gap-1 md:gap-1.5">
+                            <button onclick="submitClassification('A')"
+                                class="py-2.5 px-0.5 text-center font-black rounded-xl border-2 border-slate-900 bg-red-100 text-red-800 hover:bg-red-200 detective-shadow-btn text-xs md:text-sm flex flex-col items-center">
+                                <span class="text-base md:text-lg">A</span>
+                                <span class="text-[8px] mt-0.5">活動 / Act.</span>
+                            </button>
+                            <button onclick="submitClassification('E')"
+                                class="py-2.5 px-0.5 text-center font-black rounded-xl border-2 border-slate-900 bg-emerald-100 text-emerald-800 hover:bg-emerald-200 detective-shadow-btn text-xs md:text-sm flex flex-col items-center">
+                                <span class="text-base md:text-lg">E</span>
+                                <span class="text-[8px] mt-0.5">環境 / Env.</span>
+                            </button>
+                            <button onclick="submitClassification('I')"
+                                class="py-2.5 px-0.5 text-center font-black rounded-xl border-2 border-slate-900 bg-indigo-100 text-indigo-800 hover:bg-indigo-200 detective-shadow-btn text-xs md:text-sm flex flex-col items-center">
+                                <span class="text-base md:text-lg">I</span>
+                                <span class="text-[8px] mt-0.5">互動 / Int.</span>
+                            </button>
+                            <button onclick="submitClassification('O')"
+                                class="py-2.5 px-0.5 text-center font-black rounded-xl border-2 border-slate-900 bg-amber-100 text-amber-800 hover:bg-amber-200 detective-shadow-btn text-xs md:text-sm flex flex-col items-center">
+                                <span class="text-base md:text-lg">O</span>
+                                <span class="text-[8px] mt-0.5">物件 / Obj.</span>
+                            </button>
+                            <button onclick="submitClassification('U')"
+                                class="py-2.5 px-0.5 text-center font-black rounded-xl border-2 border-slate-900 bg-sky-100 text-sky-800 hover:bg-sky-200 detective-shadow-btn text-xs md:text-sm flex flex-col items-center">
+                                <span class="text-base md:text-lg">U</span>
+                                <span class="text-[8px] mt-0.5">用戶 / Users</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- 即時解析回饋區 -->
+                    <div id="feedback-panel"
+                        class="hidden border-2 border-slate-900 p-3 rounded-2xl text-xs font-bold leading-relaxed">
+                        <!-- 動態填充解析 -->
+                    </div>
+                </div>
+
+                <!-- 偵探提示工具箱 -->
+                <div class="border-t-2 border-dashed border-slate-200 pt-3 mt-4">
+                    <details
+                        class="bg-slate-50 border-2 border-slate-900 rounded-xl p-2 cursor-pointer text-xs font-bold">
+                        <summary class="text-slate-700 select-none">🔎 偵探密技：忘記 AEIOU 代表什麼？ / Detective Secret: What is
+                            AEIOU? (Click)</summary>
+                        <div class="grid grid-cols-5 gap-1 mt-2 text-[8px] md:text-[9px] text-center">
+                            <div class="p-1 rounded bg-red-100 text-red-800 font-bold border border-red-300">
+                                <b>A</b>ctivities<br>人類活動<br>Actions
+                            </div>
+                            <div
+                                class="p-1 rounded bg-emerald-100 text-emerald-800 font-bold border border-emerald-300">
+                                <b>E</b>nvironments<br>空間環境<br>Spaces
+                            </div>
+                            <div class="p-1 rounded bg-indigo-100 text-indigo-800 font-bold border border-indigo-300">
+                                <b>I</b>nteractions<br>人或物互動<br>Contacts
+                            </div>
+                            <div class="p-1 rounded bg-amber-100 text-amber-800 font-bold border border-amber-300">
+                                <b>O</b>bjects<br>工具設備<br>Tools
+                            </div>
+                            <div class="p-1 rounded bg-sky-100 text-sky-800 font-bold border border-sky-300">
+                                <b>U</b>sers<br>各類使用者<br>People
+                            </div>
+                        </div>
+                    </details>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer
+        class="w-full max-w-6xl mt-4 bg-slate-900 rounded-3xl border-4 border-slate-900 p-4 text-white flex flex-col md:flex-row justify-between items-center gap-3">
+        <div class="text-[11px] font-bold text-slate-300 text-center md:text-left leading-relaxed">
+            <span>🎓 Detecting Writing Practice 2026。</span>
+        </div>
+        <div class="flex items-center gap-3 flex-shrink-0">
+            <button onclick="toggleAudio()" id="btn-sound"
+                class="px-4 py-1.5 bg-amber-400 text-slate-900 font-black text-xs rounded-xl border-2 border-slate-900 hover:bg-amber-300">
+                🔊 偵探音效: 開 (ON)
+            </button>
+            <button onclick="resetDetectiveGame()"
+                class="px-4 py-1.5 bg-red-500 text-white font-black text-xs rounded-xl border-2 border-slate-900 hover:bg-red-400">
+                🔄 重新辦案 / Restart
+            </button>
+        </div>
+    </footer>
+
+    <!-- 破案成功通關彈窗 -->
+    <div id="victory-modal"
+        class="fixed inset-0 bg-slate-900/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div
+            class="bg-amber-100 border-8 border-slate-900 p-6 md:p-8 rounded-[40px] max-w-lg w-full text-center detective-shadow relative overflow-y-auto max-h-[90vh]">
+            <div class="absolute -top-12 left-1/2 transform -translate-x-1/2 text-7xl">🏆</div>
+            <h2 class="text-2xl md:text-3xl font-black text-slate-900 mt-6 mb-1">破案成功！ / Case Solved!</h2>
+            <p class="text-slate-700 font-black text-xs md:text-sm mb-4">你已成功辨識出該空間中所有的 AEIOU 細節！ / You identified all
+                spatial details!</p>
+
+            <div
+                class="bg-white border-4 border-slate-900 rounded-3xl p-4 mb-4 text-left flex flex-col gap-2 font-black text-slate-800 text-xs md:text-sm">
+                <div class="flex justify-between border-b border-dashed border-slate-200 pb-1">
+                    <span>👑 偵探階級 / Rank：</span>
+                    <span class="text-red-600">★ 特級空間分析師 / Master Analyst ★</span>
+                </div>
+                <div class="flex justify-between border-b border-dashed border-slate-200 pb-1">
+                    <span>🔥 最終積分 / Final Score：</span>
+                    <span id="modal-score" class="text-indigo-600">00</span>
+                </div>
+                <div class="flex justify-between">
+                    <span>⏱️ 下一步計畫 / Next Plan：</span>
+                    <span class="text-emerald-600">啟動 AI 定義 HMW / Launch AI HMW Challenge</span>
+                </div>
+            </div>
+
+            <!-- AI HMW 挑戰生成區塊 -->
+            <div class="bg-white border-4 border-slate-900 rounded-3xl p-4 mb-6 text-left relative">
+                <h3 class="font-black text-slate-800 text-xs md:text-sm flex items-center gap-1 mb-2">
+                    <span>✨ AI 專家顧問：HMW 挑戰 / AI Specialist: HMW Challenge</span>
+                </h3>
+
+                <div id="hmw-loader" class="hidden flex flex-col items-center justify-center py-4 text-center">
+                    <span class="inline-block text-3xl animate-spin-fast mb-2">🌀</span>
+                    <p class="text-xs text-slate-500 font-bold">Gemini 正在深入分析空間觀察線索 / Gemini is analyzing observation
+                        clues...</p>
+                </div>
+
+                <div id="hmw-output" class="text-xs font-bold text-slate-600 space-y-2">
+                    <p class="text-slate-500">點選下方按鈕，請 AI 偵探顧問分析本案線索，並合成雙語 HMW 痛點命題！<br>
+                        <span class="text-slate-400">Click below to analyze the clues and synthesize bilingual "How
+                            Might We" statements!</span>
+                    </p>
+                </div>
+
+                <button id="btn-generate-hmw" onclick="generateHMWs()"
+                    class="mt-3 w-full py-2 bg-indigo-500 hover:bg-indigo-600 text-white text-xs font-black rounded-xl border-2 border-slate-900 detective-shadow-btn">
+                    💡 請 AI 分析空間痛點並生成 HMW！ / Analyze & Generate HMW!
+                </button>
+            </div>
+
+            <button onclick="closeVictoryModal()"
+                class="w-full py-3 bg-emerald-400 hover:bg-emerald-500 text-slate-900 text-base md:text-lg font-black rounded-2xl border-4 border-slate-900 detective-shadow-btn">
+                🎉 關閉獎牌 / Close Award
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // 本地預設離線資料庫（圖書館雙語版本，保證示教順利流暢）
+        const OFFLINE_CLUES = [
+            {
+                id: 1,
+                location: "自習靜音區 / Quiet Zone",
+                x: 55,
+                y: 15,
+                description: "「讀者安靜地坐在單人自習座位上，低頭做著手抄筆記。」<br><span class='text-xs text-slate-500 block mt-1'>\"Readers sit quietly in individual study seats, taking handwritten notes with their heads down.\"</span>",
+                focusText: "關鍵字：『做筆記、安靜閱讀』 / Key: 'taking notes, quiet reading'",
+                correctCategory: "A",
+                explanation: "沒錯！『做筆記』與『安靜閱讀』是讀者在這個空間中所進行的<b>具體活動行為 (Activities)</b>。<br><span class='text-xs text-slate-500 block mt-1'>Correct! 'Taking notes' and 'quiet reading' are concrete <b>activities</b> readers do in this space.</span>"
+            },
+            {
+                id: 2,
+                location: "自習靜音區 / Quiet Zone",
+                x: 75,
+                y: 22,
+                description: "「自習課桌椅設有高隔板，且每個位置都有獨立插座與明亮檯燈。」<br><span class='text-xs text-slate-500 block mt-1'>\"Study desks have high partition panels, individual outlets, and bright lamps.\"</span>",
+                focusText: "關鍵字：『隔板、插座、檯燈』 / Key: 'partitions, outlets, desk lamps'",
+                correctCategory: "O",
+                explanation: "沒錯！『隔板、插座、檯燈』是協助使用者學習的<b>工具、資源與物件設備 (Objects)</b>。<br><span class='text-xs text-slate-500 block mt-1'>Correct! 'Partitions, outlets, and lamps' are the supportive physical <b>objects</b>.</span>"
+            },
+            {
+                id: 3,
+                location: "自習靜音區 / Quiet Zone",
+                x: 88,
+                y: 10,
+                description: "「牆面貼著『請保持安靜』與『禁止飲食』的顯眼標語貼紙。」<br><span class='text-xs text-slate-500 block mt-1'>\"Visible 'Please Keep Quiet' and 'No Food/Drinks' stickers on the wall.\"</span>",
+                focusText: "關鍵字：『安靜標語貼紙、空間氛圍』 / Key: 'quiet stickers, spatial rules'",
+                correctCategory: "E",
+                explanation: "沒錯！『標語貼紙』界定了靜音區的<b>空間規範與物理環境氛圍 (Environments)</b>。<br><span class='text-xs text-slate-500 block mt-1'>Correct! Stickers define the rules and <b>environment</b> of the silent zone.</span>"
+            },
+            {
+                id: 4,
+                location: "小組討論室 / Discussion Room",
+                x: 15,
+                y: 15,
+                description: "「在討論室內，四位大學生正圍繞在白板前，小聲且熱烈地討論專題分工。」<br><span class='text-xs text-slate-500 block mt-1'>\"Four university students huddle around the whiteboard, talking about their project.\"</span>",
+                focusText: "關鍵字：『小聲且熱烈地討論』 / Key: 'quiet yet passionate discussion'",
+                correctCategory: "I",
+                explanation: "答對了！『彼此討論、分享資料』代表的是人與人之間產生火花的<b>互動行為 (Interactions)</b>。<br><span class='text-xs text-slate-500 block mt-1'>Indeed! 'Discussion' and 'sharing ideas' represent social <b>interactions</b> between users.</span>"
+            },
+            {
+                id: 5,
+                location: "小組討論室 / Discussion Room",
+                x: 35,
+                y: 20,
+                description: "「幾位準備研究所考科的大學生，預約了下午的小組討論室空間。」<br><span class='text-xs text-slate-500 block mt-1'>\"Several college students scheduled the discussion room for prep exams.\"</span>",
+                focusText: "關鍵字：『大學生、研究生』 / Key: 'college/grad students'",
+                correctCategory: "U",
+                explanation: "完全正確！『大學生、研究生』代表來到這個空間的<b>核心使用者群體 (Users)</b>。<br><span class='text-xs text-slate-500 block mt-1'>Exactly! Students are the main target <b>users</b> of the discussion rooms.</span>"
+            },
+            {
+                id: 6,
+                location: "兒童故事角 / Kids Corner",
+                x: 10,
+                y: 70,
+                description: "「角落鋪滿了厚實安全的彩色防撞地墊，並設有可供爬行的低矮軟骨頭沙發區。」<br><span class='text-xs text-slate-500 block mt-1'>\"The corner is laid with colorful protective mats and low-profile beanbag sofas.\"</span>",
+                focusText: "關鍵字：『彩色地墊、軟骨頭、空間設計』 / Key: 'colorful mats, beanbags, interior design'",
+                correctCategory: "E",
+                explanation: "答對了！這題指得是提供給兒童安心活動的<b>物理硬體空間與環境配置 (Environments)</b>。<br><span class='text-xs text-slate-500 block mt-1'>Correct! This refers to the physical layout and layout <b>environment</b> made for kids.</span>"
+            },
+            {
+                id: 7,
+                location: "兒童故事角 / Kids Corner",
+                x: 25,
+                y: 65,
+                description: "「一位年輕媽媽正溫柔地拿著兒童繪本，向依偎在身旁的小孩說故事。」<br><span class='text-xs text-slate-500 block mt-1'>\"A young mother is holding a picture book, reading to her child.\"</span>",
+                focusText: "關鍵字：『媽媽向小孩說故事』 / Key: 'mother reading story to child'",
+                correctCategory: "I",
+                explanation: "非常精準！『媽媽說故事、小孩聆聽』正是典型的人與人、人與書本之間的<b>社會互動行為 (Interactions)</b>。<br><span class='text-xs text-slate-500 block mt-1'>Very precise! Reading stories to children is a great example of social <b>interactions</b>.</span>"
+            },
+            {
+                id: 8,
+                location: "兒童故事角 / Kids Corner",
+                x: 40,
+                y: 80,
+                description: "「帶著幼齡兒童一同前來共讀的家長、以及坐在地墊上翻書的小朋友們。」<br><span class='text-xs text-slate-500 block mt-1'>\"Parents visiting with toddlers and kids flipping through picture books on the mat.\"</span>",
+                focusText: "關鍵字：『家長、小朋友』 / Key: 'parents, little kids'",
+                correctCategory: "U",
+                explanation: "沒錯！『家長與小朋友』是兒童故事區的核心<b>目標使用者 (Users)</b>。<br><span class='text-xs text-slate-500 block mt-1'>Correct! Parents and toddlers are the primary <b>users</b> here.</span>"
+            },
+            {
+                id: 9,
+                location: "服務櫃檯 / Service Counter",
+                x: 60,
+                y: 60,
+                description: "         「櫃檯設有一台外觀吸睛的自助借還書機，能自動感應書籍晶片完成過卡。」<br><span class='text-xs text-slate-500 block mt-1'>\"An eye-catching self-checkout kiosk automatically reads RFID tags to process loans.\"</span>",
+                focusText: "關鍵字：『自助借還書機』 / Key: 'self-checkout kiosk'",
+                correctCategory: "O",
+                explanation: "非常棒！『自助借還書機』是館方提供給使用者便利借書的<b>核心科技物件 (Objects)</b>。<br><span class='text-xs text-slate-500 block mt-1'>Awesome! The kiosk is a critical technology <b>object</b> that assists checkouts.</span>"
+            },
+            {
+                id: 10,
+                location: "服務櫃檯 / Service Counter",
+                x: 82,
+                y: 75,
+                description: "「穿著制服的參考館員正在辦理圖書的上架、分類，並隨時準備解答讀者疑問。」<br><span class='text-xs text-slate-500 block mt-1'>\"A uniformed librarian shelve books and gets ready to answer readers' inquiries.\"</span>",
+                focusText: "關鍵字：『辦理圖書分類與上架』 / Key: 'shelving and cataloging books'",
+                correctCategory: "A",
+                explanation: "正確！『上架、分類圖書』是圖書館館員在此空間常態進行的<b>工作活動行為 (Activities)</b>。<br><span class='text-xs text-slate-500 block mt-1'>Correct! Cataloging and shelving are physical <b>activities</b> of staff members.</span>"
+            }
+        ];
+
+        let activeCluesDatabase = [...OFFLINE_CLUES];
+        let activeClue = null;
+        let score = 0;
+        let answeredCount = 0;
+        let isSoundOn = true;
+        let audioContext = null;
+
+        // 偵聽視窗載入
+        window.onload = function () {
+            loadSavedApiKey();
+            initGame();
+        };
+
+        function initAudio() {
+            if (!audioContext) {
+                audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            }
+        }
+
+        function playSynthSound(type) {
+            if (!isSoundOn) return;
+            initAudio();
+            if (audioContext.state === 'suspended') {
+                audioContext.resume();
+            }
+
+            const osc = audioContext.createOscillator();
+            const gain = audioContext.createGain();
+            osc.connect(gain);
+            gain.connect(audioContext.destination);
+            const now = audioContext.currentTime;
+
+            if (type === 'click') {
+                osc.type = 'triangle';
+                osc.frequency.setValueAtTime(350, now);
+                gain.gain.setValueAtTime(0.15, now);
+                gain.gain.exponentialRampToValueAtTime(0.01, now + 0.1);
+                osc.start(now);
+                osc.stop(now + 0.1);
+            } else if (type === 'correct') {
+                const freqs = [523.25, 659.25, 783.99];
+                freqs.forEach((f, i) => {
+                    const subOsc = audioContext.createOscillator();
+                    const subGain = audioContext.createGain();
+                    subOsc.connect(subGain);
+                    subGain.connect(audioContext.destination);
+                    subOsc.type = 'sine';
+                    subOsc.frequency.setValueAtTime(f, now + i * 0.08);
+                    subGain.gain.setValueAtTime(0.2, now + i * 0.08);
+                    subGain.gain.exponentialRampToValueAtTime(0.01, now + i * 0.08 + 0.25);
+                    subOsc.start(now + i * 0.08);
+                    subOsc.stop(now + i * 0.08 + 0.25);
+                });
+            } else if (type === 'wrong') {
+                osc.type = 'sawtooth';
+                osc.frequency.setValueAtTime(180, now);
+                osc.frequency.linearRampToValueAtTime(120, now + 0.25);
+                gain.gain.setValueAtTime(0.25, now);
+                gain.gain.exponentialRampToValueAtTime(0.01, now + 0.25);
+                osc.start(now);
+                osc.stop(now + 0.25);
+            } else if (type === 'victory') {
+                const melody = [523.25, 523.25, 659.25, 783.99, 1046.50];
+                const timing = [0, 0.15, 0.3, 0.45, 0.6];
+                melody.forEach((f, i) => {
+                    const vOsc = audioContext.createOscillator();
+                    const vGain = audioContext.createGain();
+                    vOsc.connect(vGain);
+                    vGain.connect(audioContext.destination);
+                    vOsc.type = i === 4 ? 'sine' : 'triangle';
+                    vOsc.frequency.setValueAtTime(f, now + timing[i]);
+                    vGain.gain.setValueAtTime(0.2, now + timing[i]);
+                    vGain.gain.exponentialRampToValueAtTime(0.01, now + timing[i] + 0.4);
+                    vOsc.start(now + timing[i]);
+                    vOsc.stop(now + timing[i] + 0.4);
+                });
+            }
+        }
+
+        function toggleAudio() {
+            isSoundOn = !isSoundOn;
+            const btn = document.getElementById('btn-sound');
+            if (isSoundOn) {
+                btn.innerText = "🔊 偵探音效: 開 (ON)";
+                btn.className = "px-4 py-1.5 bg-amber-400 text-slate-900 font-black text-xs rounded-xl border-2 border-slate-900 hover:bg-amber-300";
+                playSynthSound('click');
+            } else {
+                btn.innerText = "🔇 偵探音效: 關 (OFF)";
+                btn.className = "px-4 py-1.5 bg-slate-300 text-slate-700 font-black text-xs rounded-xl border-2 border-slate-900 hover:bg-slate-200";
+            }
+        }
+
+        // API Key 相關儲存與取得
+        function toggleApiKeyPanel() {
+            const panel = document.getElementById('api-key-panel');
+            panel.classList.toggle('hidden');
+        }
+
+        function saveApiKey() {
+            const keyInput = document.getElementById('api-key-input').value.trim();
+            localStorage.setItem('gemini_api_key', keyInput);
+            const status = document.getElementById('api-status-msg');
+            status.innerText = "✅ API Key 儲存成功！將用於隨後所有 AI 跨維度生成。";
+            setTimeout(() => { status.innerText = ""; }, 3000);
+        }
+
+        function loadSavedApiKey() {
+            const savedKey = localStorage.getItem('gemini_api_key');
+            if (savedKey) {
+                document.getElementById('api-key-input').value = savedKey;
+            }
+        }
+
+        function getApiKey() {
+            // 從輸入框或 LocalStorage 中讀取。若沒有則傳回空字串，以便執行 Canvas 自動注入
+            const savedKey = localStorage.getItem('gemini_api_key');
+            return savedKey ? savedKey.trim() : "";
+        }
+
+        // 當使用者切換空間下拉選單時
+        async function handleSpaceChange() {
+            const selectValue = document.getElementById('case-selector').value;
+            const customInput = document.getElementById('custom-space-container');
+
+            if (selectValue === 'custom') {
+                customInput.classList.remove('hidden');
+                return;
+            } else {
+                customInput.classList.add('hidden');
+            }
+
+            if (selectValue === 'library_offline') {
+                activeCluesDatabase = [...OFFLINE_CLUES];
+                updateSectorLabels("圖書館", "自習靜音區🤫", "小組討論室👥", "兒童故事角🧸", "服務與借還櫃檯🛎️");
+                initGame();
+            } else if (selectValue === 'cafe') {
+                await fetchAISpace("舒適文青網美咖啡廳");
+            } else if (selectValue === 'classroom') {
+                await fetchAISpace("未來智慧雙語互動教室");
+            } else if (selectValue === 'supermarket') {
+                await fetchAISpace("大型智慧無人超級市場");
+            }
+        }
+
+        async function generateCustomSpace() {
+            const customVal = document.getElementById('custom-space-input').value.trim();
+            if (!customVal) {
+                showToast("⚠️ 請先輸入您想自訂的空間名稱！");
+                return;
+            }
+            await fetchAISpace(customVal);
+        }
+
+        function updateSectorLabels(spaceName, s1, s2, s3, s4) {
+            document.getElementById('scene-map-title').innerText = `${spaceName.toUpperCase()} MAP`;
+            document.getElementById('sector-1-title').innerText = s1;
+            document.getElementById('sector-2-title').innerText = s2;
+            document.getElementById('sector-3-title').innerText = s3;
+            document.getElementById('sector-4-title').innerText = s4;
+
+            // 替換一些簡單裝飾詞彙
+            document.getElementById('sector-2-desc').innerText = "主要討論區塊";
+            document.getElementById('sector-3-desc').innerText = "休憩與休閒佈置區";
+            document.getElementById('sector-4-desc').innerText = "服務閘口與功能櫃檯";
+        }
+
+        // 核心 AI 動態生成邏輯 (具有 Exponential Backoff 機制)
+        async function fetchAISpace(spaceName) {
+            const overlay = document.getElementById('game-loading-overlay');
+            const loadingText = document.getElementById('loading-text');
+            overlay.classList.remove('hidden');
+            loadingText.innerHTML = `正在請 Gemini AI 專家搜查「${spaceName}」，並動態生成雙語 AEIOU 空間線索...<br><span class="text-xs text-slate-400 block mt-2">Gemini is searching "${spaceName}" and generating bilingual AEIOU clues...</span>`;
+
+            const apiKey = getApiKey();
+            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${apiKey}`;
+
+            const systemPrompt = `You are a world-class Design Thinking and spatial observation expert.
+Your task is to generate 10 highly interesting observation clues for a specified physical space based on the AEIOU framework (Activities, Environments, Interactions, Objects, Users).
+You must output a JSON array of exactly 10 objects inside "clues" property of the root object.
+
+Each text field in the output (including "location", "description", "focusText", "explanation" and the items in "sectors" array) MUST be bilingual, containing both Traditional Chinese and English in the exact format: "中文內容 / English content".
+For example:
+"location": "吧檯區 / Bar Area",
+"focusText": "關鍵字：手沖咖啡壺 / Key: pour-over kettle"
+
+Each clue's description should start with quotes 「...」 and then include the English translated quotes like: 「顧客在木質長椅上悠閒地看雜誌。」 / "Customers read magazines leisurely on a wooden bench."
+
+CRITICAL COORDINATES CONSTRAINT:
+You must evenly distribute coordinates into 4 map sectors:
+- Sector 1 (Top-Left, index matches roughly 2 clues): x between 15 and 40, y between 15 and 40.
+- Sector 2 (Top-Right, index matches roughly 3 clues): x between 55 and 85, y between 15 and 40.
+- Sector 3 (Bottom-Left, index matches roughly 3 clues): x between 15 and 40, y between 55 and 85.
+- Sector 4 (Bottom-Right, index matches roughly 2 clues): x between 55 and 85, y between 55 and 85.
+
+Ensure there is an exact balance of categories across the 10 clues (each category A, E, I, O, U should appear exactly 2 times).
+Output language: Traditional Chinese (zh-TW) and English (en).`;
+
+            const userPrompt = `空間名稱：${spaceName}。請為該空間生成對應的 10 個 AEIOU 空間線索。同時提供該空間劃分出的四個主要子分區名稱，置於JSON最外層的 "sectors" 欄位中。子分區名稱也必須是中英雙語格式 (如 "分區一 / Sector One")。
+
+格式範例 / Schema Example:
+{
+  "spaceName": "${spaceName}",
+  "sectors": ["分區1名稱 / Sector 1 Name", "分區2名稱 / Sector 2 Name", "分區3名稱 / Sector 3 Name", "分區4名稱 / Sector 4 Name"],
+  "clues": [
+    {
+      "id": 1,
+      "location": "分區1 / Sector 1",
+      "x": 20,
+      "y": 30,
+      "description": "「顧客翻閱著菜單...」 / \"Customers flipping through menus...\"",
+      "focusText": "關鍵字：翻閱菜單 / Key: browsing menu",
+      "correctCategory": "A",
+      "explanation": "沒錯！『翻閱菜單』是使用者在此空間產生的行為 (Activities)。 / Correct! 'Browsing the menu' represents physical Activities."
+    }
+  ]
+}`;
+
+            const payload = {
+                contents: [{ parts: [{ text: userPrompt }] }],
+                generationConfig: {
+                    responseMimeType: "application/json",
+                    responseSchema: {
+                        type: "OBJECT",
+                        properties: {
+                            spaceName: { type: "STRING" },
+                            sectors: {
+                                type: "ARRAY",
+                                items: { type: "STRING" }
+                            },
+                            clues: {
+                                type: "ARRAY",
+                                items: {
+                                    type: "OBJECT",
+                                    properties: {
+                                        id: { type: "INTEGER" },
+                                        location: { type: "STRING" },
+                                        x: { type: "INTEGER" },
+                                        y: { type: "INTEGER" },
+                                        description: { type: "STRING" },
+                                        focusText: { type: "STRING" },
+                                        correctCategory: { type: "STRING" },
+                                        explanation: { type: "STRING" }
+                                    },
+                                    required: ["id", "location", "x", "y", "description", "focusText", "correctCategory", "explanation"]
+                                }
+                            }
+                        },
+                        required: ["spaceName", "sectors", "clues"]
+                    }
+                },
+                systemInstruction: {
+                    parts: [{ text: systemPrompt }]
+                }
+            };
+
+            // 使用 Exponential Backoff 機制呼叫 API
+            let delay = 1000;
+            const maxRetries = 3;
+            let success = false;
+            let resultJson = null;
+
+            for (let attempt = 1; attempt <= maxRetries; attempt++) {
+                try {
+                    const response = await fetch(apiUrl, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+
+                    if (!response.ok) {
+                        throw new Error(`API returned status ${response.status}`);
+                    }
+
+                    const resData = await response.json();
+                    const jsonText = resData.candidates?.[0]?.content?.parts?.[0]?.text;
+                    resultJson = JSON.parse(jsonText);
+                    success = true;
+                    break;
+                } catch (e) {
+                    console.log(`Gemini API 嘗試 #${attempt} 失敗: ${e.message}. 重試中...`);
+                    await new Promise(resolve => setTimeout(resolve, delay));
+                    delay *= 2;
+                }
+            }
+
+            if (success && resultJson) {
+                // 成功取得資料，載入至遊戲資料庫中！
+                activeCluesDatabase = resultJson.clues;
+
+                // 動態更換地圖上的版塊名稱
+                const sectors = resultJson.sectors || ["A區", "B區", "C區", "D區"];
+                updateSectorLabels(
+                    resultJson.spaceName || spaceName,
+                    sectors[0] || "一區",
+                    sectors[1] || "二區",
+                    sectors[2] || "三區",
+                    sectors[3] || "四區"
+                );
+
+                overlay.classList.add('hidden');
+                initGame();
+                showToast(`🎉 成功生成場景【${spaceName}】！ / Generated scene successfully!`);
+            } else {
+                // 失敗時，啟用備用機制 (Fail-safe)
+                overlay.classList.add('hidden');
+                activeCluesDatabase = [...OFFLINE_CLUES];
+                document.getElementById('case-selector').value = "library_offline";
+                updateSectorLabels("圖書館", "自習靜音區🤫", "小組討論室👥", "兒童故事角🧸", "服務與借還櫃檯🛎️");
+                initGame();
+                showToast("⚠️ 網路異常或 Key 有誤，已啟動離線備份！ / Failed to call API, falling back to offline scenario!");
+            }
+        }
+
+        // 破案成功後呼叫 Gemini API 進行空間觀察的「痛點 HMW 設計挑戰」合成
+        async function generateHMWs() {
+            const hmwLoader = document.getElementById('hmw-loader');
+            const hmwOutput = document.getElementById('hmw-output');
+            const btnGen = document.getElementById('btn-generate-hmw');
+
+            hmwLoader.classList.remove('hidden');
+            hmwOutput.classList.add('hidden');
+            btnGen.disabled = true;
+
+            const apiKey = getApiKey();
+            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${apiKey}`;
+
+            const spaceName = document.getElementById('scene-map-title').innerText.replace(" MAP", "");
+
+            // 組織當前空間的線索作為上下文給 Gemini
+            const cluesContext = activeCluesDatabase.map(c => `- [${c.correctCategory}] 觀察：${c.description}。 解析：${c.explanation}`).join("\n");
+
+            const systemPrompt = `You are a professional Stanford d.school Design Thinking facilitator.
+Your job is to synthesize the 10 AEIOU space observation clues, identify the latent user pains, needs and contradictions, and generate 3 highly inspiring "How Might We" (HMW) design challenge statements.
+
+The HMW statements must be deeply tied to the physical context of the space provided. Provide the output in a clean, structured JSON array of strings.
+
+IMPORTANT: Each HMW challenge statement in the returned array MUST be fully bilingual, formatted as:
+「我們如何（How might we）... [具體行動] ...，以便讓 ... [目標使用者] ... 能夠 ... [解決痛點] ...？」 / "How might we... [action]... so that... [user]... can... [goal]...?"
+
+Do not return any other wrappers, markdown formatting inside JSON, or extra text. Just return the array of bilingual strings.`;
+
+            const userPrompt = `空間：${spaceName}
+觀察線索清單：
+${cluesContext}
+
+請幫我歸納上述 10 項觀察線索，特別著眼於 Activities/Users 與 Objects/Environments 之間的衝突或不便，並生成 3 組最符合設計思考下一步的雙語 HMW 挑戰題！`;
+
+            const payload = {
+                contents: [{ parts: [{ text: userPrompt }] }],
+                generationConfig: {
+                    responseMimeType: "application/json",
+                    responseSchema: {
+                        type: "ARRAY",
+                        items: { type: "STRING" }
+                    }
+                },
+                systemInstruction: {
+                    parts: [{ text: systemPrompt }]
+                }
+            };
+
+            let success = false;
+            let resultArr = null;
+
+            try {
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                if (response.ok) {
+                    const resData = await response.json();
+                    const text = resData.candidates?.[0]?.content?.parts?.[0]?.text;
+                    resultArr = JSON.parse(text);
+                    success = true;
+                }
+            } catch (e) {
+                console.error("HMW 生成失敗:", e);
+            }
+
+            hmwLoader.classList.add('hidden');
+            hmwOutput.classList.remove('hidden');
+            btnGen.disabled = false;
+
+            if (success && resultArr && resultArr.length > 0) {
+                hmwOutput.innerHTML = `
+                    <div class="space-y-3">
+                        <p class="text-xs text-emerald-600 font-black flex items-center gap-1">✅ Gemini AI 已經完美提煉出痛點！這三個雙語 HMW 命題可以直接用在專題研究：<br><span class="text-slate-400 font-bold block">Gemini synthesized user pain points bilingually:</span></p>
+                        <ol class="list-decimal list-inside space-y-2 text-slate-700 text-xs">
+                            <li>🎯 <b>挑戰一 / HMW 1:</b><br><span class="pl-5 text-indigo-600 block italic mt-1 font-bold">"${resultArr[0]}"</span></li>
+                            <li>💡 <b>挑戰二 / HMW 2:</b><br><span class="pl-5 text-indigo-600 block italic mt-1 font-bold">"${resultArr[1]}"</span></li>
+                            <li>🌱 <b>挑戰三 / HMW 3:</b><br><span class="pl-5 text-indigo-600 block italic mt-1 font-bold">"${resultArr[2]}"</span></li>
+                        </ol>
+                        <p class="text-[9px] text-slate-400 mt-2">提示：這可以用作您 20 分鐘微型教學的完美「下一步同理心延伸」板書展示！<br>Tip: Perfect tool for extending the lesson beyond 20 minutes!</p>
+                    </div>
+                `;
+            } else {
+                // HMW 備用版本 (圖書館預設 fallback 輸出 - 雙語化)
+                hmwOutput.innerHTML = `
+                    <div class="space-y-3">
+                        <p class="text-xs text-red-500 font-bold">⚠️ 無法連線至 AI 顧問，已載入通用雙語 HMW 挑戰題：<br><span class="text-[10px] text-slate-400 block font-normal">Offline fallback HMW loaded successfully:</span></p>
+                        <ul class="list-disc list-inside space-y-2 text-slate-700 text-xs">
+                            <li><b>HMW 1:</b> 我們如何降低敲擊鍵盤產生的物理噪音，好讓安靜自習的使用者能更不被打擾？<br>
+                            <span class="pl-5 text-indigo-600 block italic mt-0.5 font-bold">"How might we reduce keyboard noise so quiet-zone users can learn peacefully without distractions?"</span></li>
+                            <li><b>HMW 2:</b> 我們如何利用自助辨識物件，協助館員加速上架圖書，以便騰出精力引導訪客？<br>
+                            <span class="pl-5 text-indigo-600 block italic mt-0.5 font-bold">"How might we use smart checkout objects to accelerate book shelving, so librarians can focus on welcoming new users?"</span></li>
+                            <li><b>HMW 3:</b> 我們如何優化兒童故事角的色彩，好讓家長與學齡前小朋友能進行更生動有趣有趣的親子共讀？<br>
+                            <span class="pl-5 text-indigo-600 block italic mt-0.5 font-bold">"How might we design interactive spaces in the kids corner, so that parents and toddlers can interact better?"</span></li>
+                        </ul>
+                    </div>
+                `;
+            }
+        }
+
+        function selectClue(id) {
+            playSynthSound('click');
+
+            const clue = activeCluesDatabase.find(c => c.id === id);
+            if (!clue) return;
+
+            activeClue = clue;
+
+            document.getElementById('deck-empty-state').classList.add('hidden');
+            const activeCard = document.getElementById('deck-active-card');
+            activeCard.classList.remove('hidden');
+            activeCard.classList.add('pop-animation');
+            setTimeout(() => activeCard.classList.remove('pop-animation'), 400);
+
+            document.getElementById('clue-tag').innerText = `線索 / Clue #${clue.id}`;
+            document.getElementById('clue-location').innerText = clue.location;
+            document.getElementById('clue-description').innerHTML = `${clue.description}<br><span class="text-xs text-indigo-600 block mt-2 font-black">${clue.focusText}</span>`;
+
+            const feedback = document.getElementById('feedback-panel');
+            feedback.classList.add('hidden');
+
+            document.getElementById('clue-progress-text').innerText = `調查：${clue.location} 的第 #${clue.id} 條細節 / Clue #${clue.id} in ${clue.location}`;
+        }
+
+        function submitClassification(category) {
+            if (!activeClue) return;
+
+            const feedback = document.getElementById('feedback-panel');
+            feedback.classList.remove('hidden');
+            feedback.className = "border-2 p-3 rounded-2xl text-xs font-bold leading-relaxed";
+
+            if (category === activeClue.correctCategory) {
+                playSynthSound('correct');
+                score += 100;
+                answeredCount++;
+                updateStatsUI();
+
+                feedback.classList.add(`color-${category}`, 'border-slate-900', 'pop-animation');
+                feedback.innerHTML = `🌟 <b>恭喜答對！ / Correct!</b><br>${activeClue.explanation}`;
+
+                const marker = document.getElementById(`marker-${activeClue.id}`);
+                if (marker) {
+                    marker.className = `absolute pointer-events-none w-8 h-8 md:w-10 md:h-10 color-${category} border-2 border-slate-900 rounded-full flex items-center justify-center text-sm md:text-base z-10`;
+                    marker.style.animation = 'none';
+                    marker.innerHTML = "✅";
+                }
+
+                activeClue = null;
+
+                if (answeredCount === activeCluesDatabase.length) {
+                    setTimeout(triggerVictory, 1000);
+                }
+            } else {
+                playSynthSound('wrong');
+                score = Math.max(0, score - 30);
+                updateStatsUI();
+
+                feedback.classList.add('bg-red-50', 'text-red-700', 'border-red-400', 'shake-element');
+                feedback.innerHTML = `❌ <b>不對喔，再仔細想想！ / Incorrect, try again!</b><br>提示：${activeClue.focusText}。如果是動作或行為屬於 <b>Activities (活動)</b>，輔助工具則屬於 <b>Objects (物件)</b>！<br><span class="text-[10px] text-slate-500 block mt-1">Hint: Actions are Activities (A), and tools are Objects (O)!</span>`;
+
+                setTimeout(() => {
+                    feedback.classList.remove('shake-element');
+                }, 500);
+            }
+        }
+
+        function updateStatsUI() {
+            document.getElementById('stat-score').innerText = score;
+            document.getElementById('badge-progress').innerText = `已找到 ${answeredCount} / ${activeCluesDatabase.length} | Found ${answeredCount} / ${activeCluesDatabase.length}`;
+
+            if (answeredCount === 0) {
+                document.getElementById('clue-progress-text').innerText = "🔍 點選地圖上的黃色放大鏡收集線索 / Click the yellow magnifying glass on the map to collect clues";
+            } else if (answeredCount < activeCluesDatabase.length) {
+                document.getElementById('clue-progress-text').innerText = `做得好！你已歸類 ${answeredCount} 個 AEIOU 密碼！ / Great! You classified ${answeredCount} AEIOU clues!`;
+            }
+        }
+
+        // 破案成功後呼叫 Gemini API 進行空間觀察的「痛點 HMW 設計挑戰」合成
+        async function generateHMWs() {
+            const hmwLoader = document.getElementById('hmw-loader');
+            const hmwOutput = document.getElementById('hmw-output');
+            const btnGen = document.getElementById('btn-generate-hmw');
+
+            hmwLoader.classList.remove('hidden');
+            hmwOutput.classList.add('hidden');
+            btnGen.disabled = true;
+
+            const apiKey = getApiKey();
+            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${apiKey}`;
+
+            const spaceName = document.getElementById('scene-map-title').innerText.replace(" MAP", "");
+
+            // 組織當前空間的線索作為上下文給 Gemini
+            const cluesContext = activeCluesDatabase.map(c => `- [${c.correctCategory}] 觀察：${c.description}。 解析：${c.explanation}`).join("\n");
+
+            const systemPrompt = `You are a professional Stanford d.school Design Thinking facilitator.
+Your job is to synthesize the 10 AEIOU space observation clues, identify the latent user pains, needs and contradictions, and generate 3 highly inspiring "How Might We" (HMW) design challenge statements.
+
+HMW format in Traditional Chinese:
+「我們如何（How might we）... [具體行動] ...，以便讓 ... [目標使用者] ... 能夠 ... [解決痛點 / 達成理想目標] ...？」
+
+The 3 HMW statements must be deeply tied to the physical context of the space provided. Provide the output in a clean, structured JSON array of strings.`;
+
+            const userPrompt = `空間：${spaceName}
+觀察線索清單：
+${cluesContext}
+
+請幫我歸納上述 10 項觀察線索，特別著眼於 Activities/Users 與 Objects/Environments 之間的衝突或不便，並生成 3 組最符合設計思考下一步的 HMW 挑戰題！`;
+
+            const payload = {
+                contents: [{ parts: [{ text: userPrompt }] }],
+                generationConfig: {
+                    responseMimeType: "application/json",
+                    responseSchema: {
+                        type: "ARRAY",
+                        items: { type: "STRING" }
+                    }
+                },
+                systemInstruction: {
+                    parts: [{ text: systemPrompt }]
+                }
+            };
+
+            let success = false;
+            let resultArr = null;
+
+            try {
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                if (response.ok) {
+                    const resData = await response.json();
+                    const text = resData.candidates?.[0]?.content?.parts?.[0]?.text;
+                    resultArr = JSON.parse(text);
+                    success = true;
+                }
+            } catch (e) {
+                console.error("HMW 生成失敗:", e);
+            }
+
+            hmwLoader.classList.add('hidden');
+            hmwOutput.classList.remove('hidden');
+            btnGen.disabled = false;
+
+            if (success && resultArr && resultArr.length > 0) {
+                hmwOutput.innerHTML = `
+                    <div class="space-y-3">
+                        <p class="text-xs text-emerald-600 font-black flex items-center gap-1">✅ Gemini AI 已經完美提煉出痛點！這三個 HMW 命題可以直接用在專題研究：</p>
+                        <ol class="list-decimal list-inside space-y-2 text-slate-700">
+                            <li>🎯 <b>挑戰一：</b><br><span class="pl-5 text-indigo-600 block italic mt-1 font-bold">"${resultArr[0]}"</span></li>
+                            <li>💡 <b>挑戰二：</b><br><span class="pl-5 text-indigo-600 block italic mt-1 font-bold">"${resultArr[1]}"</span></li>
+                            <li>🌱 <b>挑戰三：</b><br><span class="pl-5 text-indigo-600 block italic mt-1 font-bold">"${resultArr[2]}"</span></li>
+                        </ol>
+                        <p class="text-[10px] text-slate-400 mt-2">提示：這可以用作您 20 分鐘微型教學的完美「下一步同理心延伸」板書展示！</p>
+                    </div>
+                `;
+            } else {
+                // HMW 備用版本 (圖書館預設 fallback 輸出)
+                hmwOutput.innerHTML = `
+                    <div class="space-y-3">
+                        <p class="text-xs text-red-500 font-bold">⚠️ 無法連線至 AI 專家顧問（或 API Key 未儲存）。已載入通用 HMW 挑戰題：</p>
+                        <ul class="list-disc list-inside space-y-1 text-slate-700">
+                            <li><b>HMW 1:</b> 我們如何降低敲擊鍵盤產生的物理噪音，好讓安靜自習的使用者能更不被打擾？</li>
+                            <li><b>HMW 2:</b> 我們如何利用自助辨識物件，協助館員加速上架圖書，以便騰出精力引導初次前來的訪客？</li>
+                            <li><b>HMW 3:</b> 我們如何優化兒童故事角的色彩，好讓家長與學齡前小朋友能進行更大膽有趣的親子共讀？</li>
+                        </ul>
+                    </div>
+                `;
+            }
+        }
+
+        // 經典遊戲控制功能
+        function initGame() {
+            const container = document.getElementById('clues-container');
+            container.innerHTML = '';
+
+            activeCluesDatabase.forEach(clue => {
+                const marker = document.createElement('button');
+                marker.id = `marker-${clue.id}`;
+                marker.className = "absolute pointer-events-auto pulse-clue w-8 h-8 md:w-10 md:h-10 bg-yellow-400 hover:bg-yellow-300 border-2 md:border-3 border-slate-900 rounded-full flex items-center justify-center text-sm md:text-base cursor-pointer hover:scale-110 transition-transform active:scale-95 z-10 shadow-lg";
+                marker.style.left = `${clue.x}%`;
+                marker.style.top = `${clue.y}%`;
+                marker.innerHTML = "🔎";
+
+                marker.setAttribute('onclick', `selectClue(${clue.id})`);
+                container.appendChild(marker);
+            });
+
+            score = 0;
+            answeredCount = 0;
+            activeClue = null;
+            updateStatsUI();
+
+            document.getElementById('deck-empty-state').classList.remove('hidden');
+            document.getElementById('deck-active-card').classList.add('hidden');
+        }
+
+        function selectClue(id) {
+            playSynthSound('click');
+
+            const clue = activeCluesDatabase.find(c => c.id === id);
+            if (!clue) return;
+
+            activeClue = clue;
+
+            document.getElementById('deck-empty-state').classList.add('hidden');
+            const activeCard = document.getElementById('deck-active-card');
+            activeCard.classList.remove('hidden');
+            activeCard.classList.add('pop-animation');
+            setTimeout(() => activeCard.classList.remove('pop-animation'), 400);
+
+            document.getElementById('clue-tag').innerText = `線索 #${clue.id}`;
+            document.getElementById('clue-location').innerText = clue.location;
+            document.getElementById('clue-description').innerHTML = `${clue.description}<br><span class="text-xs text-indigo-600 block mt-2 font-black">${clue.focusText}</span>`;
+
+            const feedback = document.getElementById('feedback-panel');
+            feedback.classList.add('hidden');
+
+            document.getElementById('clue-progress-text').innerText = `正在調查：${clue.location} 的第 #${clue.id} 條觀察細節...`;
+        }
+
+        function submitClassification(category) {
+            if (!activeClue) return;
+
+            const feedback = document.getElementById('feedback-panel');
+            feedback.classList.remove('hidden');
+            feedback.className = "border-2 p-3 rounded-2xl text-xs font-bold leading-relaxed";
+
+            if (category === activeClue.correctCategory) {
+                playSynthSound('correct');
+                score += 100;
+                answeredCount++;
+                updateStatsUI();
+
+                feedback.classList.add(`color-${category}`, 'border-slate-900', 'pop-animation');
+                feedback.innerHTML = `🌟 <b>恭喜答對！</b><br>${activeClue.explanation}`;
+
+                const marker = document.getElementById(`marker-${activeClue.id}`);
+                if (marker) {
+                    marker.className = `absolute pointer-events-none w-8 h-8 md:w-10 md:h-10 color-${category} border-2 border-slate-900 rounded-full flex items-center justify-center text-sm md:text-base z-10`;
+                    marker.style.animation = 'none';
+                    marker.innerHTML = "✅";
+                }
+
+                activeClue = null;
+
+                if (answeredCount === activeCluesDatabase.length) {
+                    setTimeout(triggerVictory, 1000);
+                }
+            } else {
+                playSynthSound('wrong');
+                score = Math.max(0, score - 30);
+                updateStatsUI();
+
+                feedback.classList.add('bg-red-50', 'text-red-700', 'border-red-400', 'shake-element');
+                feedback.innerHTML = `❌ <b>不對喔，再仔細想想！</b><br>提示：${activeClue.focusText}。如果是動作或行為屬於 <b>Activities (活動)</b>，如果是輔助工具則屬於 <b>Objects (物件)</b> 喔！`;
+
+                setTimeout(() => {
+                    feedback.classList.remove('shake-element');
+                }, 500);
+            }
+        }
+
+        function updateStatsUI() {
+            document.getElementById('stat-score').innerText = score;
+            document.getElementById('badge-progress').innerText = `已找到 ${answeredCount} / ${activeCluesDatabase.length}`;
+
+            if (answeredCount === 0) {
+                document.getElementById('clue-progress-text').innerText = "🔍 點選地圖上的黃色放大鏡收集線索";
+            } else if (answeredCount < activeCluesDatabase.length) {
+                document.getElementById('clue-progress-text').innerText = `做得好！你已經成功歸類了 ${answeredCount} 個 AEIOU 空間密碼！`;
+            }
+        }
+
+        function triggerVictory() {
+            playSynthSound('victory');
+            document.getElementById('modal-score').innerText = `${score} 分`;
+
+            // 重置 HMW 區塊為未生成狀態
+            document.getElementById('hmw-output').innerHTML = `<p class="text-slate-500">點選下方按鈕，請 AI 偵探顧問自動分析本案的空間線索，並合成 HMW 痛點命題！</p>`;
+            document.getElementById('hmw-loader').classList.add('hidden');
+
+            document.getElementById('victory-modal').classList.remove('hidden');
+            startVictoryConfetti();
+        }
+
+        function closeVictoryModal() {
+            document.getElementById('victory-modal').classList.add('hidden');
+            stopVictoryConfetti();
+
+            document.getElementById('deck-empty-state').classList.remove('hidden');
+            document.getElementById('deck-active-card').classList.add('hidden');
+        }
+
+        function resetDetectiveGame() {
+            playSynthSound('click');
+            initGame();
+        }
+
+        // 簡易 Toast 提示（替換 alert）
+        function showToast(message) {
+            const toast = document.createElement('div');
+            toast.className = "fixed bottom-5 left-1/2 transform -translate-x-1/2 bg-slate-900 text-amber-300 text-xs md:text-sm px-4 py-3 rounded-2xl border-2 border-slate-700 z-50 font-bold detective-shadow";
+            toast.innerText = message;
+            document.body.appendChild(toast);
+            setTimeout(() => {
+                toast.classList.add('transition-opacity', 'duration-500', 'opacity-0');
+                setTimeout(() => toast.remove(), 500);
+            }, 3000);
+        }
+
+        // 漫天碎紙特效
+        const canvas = document.getElementById('victory-confetti');
+        const ctx = canvas.getContext('2d');
+        let confettiArray = [];
+        let animationFrameId = null;
+        let isCelebrating = false;
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        class Confetti {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * -canvas.height;
+                this.size = Math.random() * 8 + 6;
+                this.color = `hsl(${Math.random() * 360}, 100%, 65%)`;
+                this.speedX = Math.random() * 2 - 1;
+                this.speedY = Math.random() * 3 + 2;
+                this.rotation = Math.random() * 360;
+                this.rotationSpeed = Math.random() * 4 - 2;
+            }
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+                this.rotation += this.rotationSpeed;
+                this.speedY += 0.03;
+            }
+            draw() {
+                ctx.save();
+                ctx.translate(this.x, this.y);
+                ctx.rotate((this.rotation * Math.PI) / 180);
+                ctx.fillStyle = this.color;
+                ctx.beginPath();
+                ctx.rect(-this.size / 2, -this.size / 2, this.size, this.size);
+                ctx.fill();
+                ctx.restore();
+            }
+        }
+
+        function startVictoryConfetti() {
+            isCelebrating = true;
+            confettiArray = [];
+            for (let i = 0; i < 80; i++) {
+                confettiArray.push(new Confetti());
+            }
+            if (!animationFrameId) {
+                animateConfetti();
+            }
+        }
+
+        function stopVictoryConfetti() {
+            isCelebrating = false;
+            confettiArray = [];
+        }
+
+        function animateConfetti() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            if (isCelebrating && confettiArray.length < 100) {
+                confettiArray.push(new Confetti());
+            }
+
+            for (let i = confettiArray.length - 1; i >= 0; i--) {
+                const p = confettiArray[i];
+                p.update();
+                p.draw();
+
+                if (p.y > canvas.height || p.x < 0 || p.x > canvas.width) {
+                    confettiArray.splice(i, 1);
+                }
+            }
+
+            if (confettiArray.length > 0) {
+                animationFrameId = requestAnimationFrame(animateConfetti);
+            } else {
+                animationFrameId = null;
+            }
+        }
+    </script>
+</body>
+
+</html>

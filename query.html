@@ -1,0 +1,2570 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>問卷研究所｜高中專題闖關自學</title>
+
+    <style>
+        :root {
+            --yellow: #FFD84D;
+            --yellow2: #FFF3B0;
+            --blue: #4263EB;
+            --blue2: #E9EEFF;
+            --pink: #FF7096;
+            --pink2: #FFF0F4;
+            --green: #27C499;
+            --green2: #E9FFF8;
+            --purple: #805AD5;
+            --orange: #FF922B;
+            --ink: #1F2937;
+            --sub: #667085;
+            --paper: #FFFDF7;
+            --line: #E8E1CF;
+            --white: #fff;
+            --shadow: 0 14px 35px rgba(35, 38, 47, .10);
+        }
+
+        * {
+            box-sizing: border-box
+        }
+
+        html {
+            scroll-behavior: smooth
+        }
+
+        body {
+            margin: 0;
+            color: var(--ink);
+            font-family: "Microsoft JhengHei", "Noto Sans TC", sans-serif;
+            background:
+                radial-gradient(circle at 8% 5%, #FFF1A8 0 5%, transparent 5.5%),
+                radial-gradient(circle at 93% 10%, #DCE4FF 0 7%, transparent 7.5%),
+                radial-gradient(circle at 10% 72%, #FFE3EB 0 6%, transparent 6.5%),
+                linear-gradient(180deg, #FFFDF8, #FFF8E8);
+            line-height: 1.75;
+        }
+
+        button,
+        input,
+        textarea,
+        select {
+            font: inherit;
+        }
+
+        button {
+            cursor: pointer;
+        }
+
+        .wrap {
+            width: min(1180px, 92vw);
+            margin: auto;
+        }
+
+        /* ===== HERO ===== */
+
+        .hero {
+            padding: 30px 0 20px;
+        }
+
+        .heroBox {
+            border: 3px solid #222;
+            border-radius: 34px;
+            background: white;
+            padding: 32px;
+            box-shadow: var(--shadow);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .heroBox:before {
+            content: "";
+            position: absolute;
+            width: 230px;
+            height: 230px;
+            border-radius: 50%;
+            background: var(--yellow);
+            right: -80px;
+            top: -100px;
+            opacity: .7;
+        }
+
+        .heroGrid {
+            display: grid;
+            grid-template-columns: 1.3fr .7fr;
+            gap: 30px;
+            align-items: center;
+            position: relative;
+        }
+
+        .hero h1 {
+            margin: 6px 0 14px;
+            font-size: clamp(2.1rem, 5vw, 4rem);
+            line-height: 1.08;
+            letter-spacing: -2px;
+        }
+
+        .hero h1 span {
+            background: linear-gradient(transparent 62%, var(--yellow) 62%);
+        }
+
+        .heroText {
+            color: var(--sub);
+            max-width: 760px;
+            font-size: 1.06rem;
+        }
+
+        .tag {
+            display: inline-block;
+            margin: 3px;
+            padding: 5px 12px;
+            background: #fff;
+            border: 2px solid #222;
+            border-radius: 999px;
+            font-weight: 700;
+            font-size: .9rem;
+        }
+
+        .heroMission {
+            background: #172033;
+            color: white;
+            padding: 22px;
+            border-radius: 25px;
+            transform: rotate(1deg);
+        }
+
+        .heroMission strong {
+            color: var(--yellow);
+            font-size: 1.2rem;
+        }
+
+        .heroMission p {
+            margin: .4rem 0;
+        }
+
+        /* ===== STATUS BAR ===== */
+
+        .statusbar {
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            background: rgba(255, 253, 247, .93);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--line);
+        }
+
+        .statusInner {
+            width: min(1180px, 94vw);
+            margin: auto;
+            padding: 9px 0;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo {
+            font-weight: 900;
+            white-space: nowrap;
+        }
+
+        .progressTrack {
+            flex: 1;
+            height: 13px;
+            border-radius: 999px;
+            background: white;
+            border: 2px solid #ddd3b8;
+            overflow: hidden;
+        }
+
+        .progressFill {
+            width: 0%;
+            height: 100%;
+            background: linear-gradient(90deg, var(--yellow), var(--orange), var(--pink));
+            transition: .4s;
+        }
+
+        .scoreBox {
+            white-space: nowrap;
+            font-weight: 900;
+            background: var(--yellow);
+            border: 2px solid #222;
+            padding: 5px 12px;
+            border-radius: 999px;
+        }
+
+        .modeBtn {
+            border: 2px solid #222;
+            background: white;
+            border-radius: 999px;
+            padding: 6px 11px;
+            font-weight: 800;
+        }
+
+        /* ===== SECTIONS ===== */
+
+        section {
+            padding: 45px 0;
+        }
+
+        .sectionHead {
+            margin-bottom: 20px;
+        }
+
+        .sectionHead small {
+            color: var(--purple);
+            font-weight: 900;
+            letter-spacing: 1px;
+        }
+
+        .sectionHead h2 {
+            margin: 4px 0;
+            font-size: clamp(1.7rem, 3vw, 2.5rem);
+        }
+
+        .sectionHead p {
+            margin: 0;
+            color: var(--sub);
+        }
+
+        /* ===== ROUTE ===== */
+
+        .route {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 14px;
+        }
+
+        .routeCard {
+            background: white;
+            border: 2px solid var(--line);
+            border-radius: 22px;
+            padding: 18px;
+            box-shadow: var(--shadow);
+        }
+
+        .routeNo {
+            width: 42px;
+            height: 42px;
+            display: grid;
+            place-items: center;
+            border-radius: 50%;
+            background: var(--yellow);
+            border: 2px solid #222;
+            font-weight: 900;
+        }
+
+        .routeCard h3 {
+            margin: 10px 0 4px;
+        }
+
+        /* ===== UNITS ===== */
+
+        .unitList {
+            display: grid;
+            gap: 15px;
+        }
+
+        .unit {
+            background: white;
+            border: 2px solid var(--line);
+            border-radius: 25px;
+            box-shadow: var(--shadow);
+            overflow: hidden;
+        }
+
+        .unitHeader {
+            padding: 17px;
+            display: flex;
+            gap: 14px;
+            align-items: center;
+            cursor: pointer;
+            background: linear-gradient(90deg, #FFFBEA, #fff);
+        }
+
+        .unitNumber {
+            flex: 0 0 48px;
+            width: 48px;
+            height: 48px;
+            display: grid;
+            place-items: center;
+            border-radius: 50%;
+            background: var(--yellow);
+            border: 2px solid #222;
+            font-weight: 900;
+        }
+
+        .unitTitle {
+            flex: 1;
+        }
+
+        .unitTitle h3 {
+            margin: 0;
+        }
+
+        .unitTitle small {
+            color: var(--sub);
+        }
+
+        .unitToggle {
+            width: 40px;
+            height: 40px;
+            display: grid;
+            place-items: center;
+            background: #fff;
+            border: 2px solid #222;
+            border-radius: 50%;
+            font-size: 1.4rem;
+        }
+
+        .unitBody {
+            display: none;
+            padding: 17px;
+            border-top: 1px dashed var(--line);
+        }
+
+        .unit.open .unitBody {
+            display: block;
+        }
+
+        .unit.open .unitToggle {
+            transform: rotate(45deg);
+        }
+
+        .lessonGrid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 13px;
+        }
+
+        .lesson {
+            border-radius: 19px;
+            padding: 16px;
+            border: 1px solid #e8e8e8;
+        }
+
+        .lesson h4 {
+            margin: 0 0 6px;
+        }
+
+        .concept {
+            background: #F2F6FF
+        }
+
+        .wrong {
+            background: #FFF0F3
+        }
+
+        .fix {
+            background: #EEFFF7
+        }
+
+        .task {
+            background: #FFF9DF
+        }
+
+        .keyword {
+            margin-top: 13px;
+            border: 1px dashed #cfc3a0;
+            border-radius: 15px;
+            padding: 10px 13px;
+            background: #fffdf5;
+        }
+
+        /* ===== QUIZ ===== */
+
+        .quiz {
+            margin-top: 18px;
+            border: 2px solid #222;
+            border-radius: 20px;
+            padding: 16px;
+            background: white;
+        }
+
+        .quiz h4 {
+            margin-top: 0;
+        }
+
+        .quizOptions {
+            display: grid;
+            gap: 8px;
+        }
+
+        .quizBtn {
+            text-align: left;
+            padding: 11px 14px;
+            border-radius: 14px;
+            background: #fff;
+            border: 2px solid var(--line);
+        }
+
+        .quizBtn:hover {
+            transform: translateY(-1px);
+            border-color: var(--blue);
+        }
+
+        .quizBtn.correct {
+            background: var(--green2);
+            border-color: var(--green);
+        }
+
+        .quizBtn.wrongAnswer {
+            background: var(--pink2);
+            border-color: var(--pink);
+        }
+
+        .feedback {
+            display: none;
+            margin-top: 10px;
+            padding: 10px 13px;
+            border-radius: 13px;
+            font-weight: 700;
+        }
+
+        .feedback.show {
+            display: block;
+        }
+
+        .feedback.good {
+            background: var(--green2);
+            color: #08785d;
+        }
+
+        .feedback.bad {
+            background: var(--pink2);
+            color: #a6294c;
+        }
+
+        .completeBtn {
+            margin-top: 14px;
+            border: none;
+            background: var(--ink);
+            color: white;
+            padding: 10px 17px;
+            border-radius: 999px;
+            font-weight: 900;
+        }
+
+        .completeBtn.done {
+            background: var(--green);
+        }
+
+        /* ===== GROUP NOTE ===== */
+
+        .groupNote {
+            margin-top: 15px;
+        }
+
+        .groupNote textarea {
+            width: 100%;
+            min-height: 90px;
+            border: 2px solid var(--line);
+            border-radius: 15px;
+            padding: 12px;
+            background: #fffefa;
+        }
+
+        /* ===== CHALLENGES ===== */
+
+        .challengeGrid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 14px;
+        }
+
+        .challenge {
+            background: white;
+            border-radius: 20px;
+            padding: 17px;
+            border: 2px solid var(--line);
+            box-shadow: var(--shadow);
+        }
+
+        .badQuestion {
+            background: #fff5f7;
+            border-left: 5px solid var(--pink);
+            padding: 12px;
+            border-radius: 12px;
+            margin: 10px 0;
+            font-weight: 700;
+        }
+
+        .challenge select {
+            width: 100%;
+            border: 2px solid var(--line);
+            border-radius: 13px;
+            padding: 10px;
+        }
+
+        .checkBtn {
+            margin-top: 10px;
+            border: none;
+            border-radius: 999px;
+            background: var(--yellow);
+            padding: 9px 15px;
+            font-weight: 900;
+        }
+
+        /* ===== CARD GAME ===== */
+
+        .gameArea {
+            display: grid;
+            grid-template-columns: .8fr 1.2fr;
+            gap: 16px;
+        }
+
+        .questionDeck,
+        .categoryArea {
+            background: white;
+            border: 2px solid var(--line);
+            padding: 17px;
+            border-radius: 22px;
+            box-shadow: var(--shadow);
+        }
+
+        .gameCard {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            text-align: left;
+            padding: 13px 14px;
+            background: #fff9dd;
+            color: var(--ink);
+            border: 2px solid #ead17b;
+            border-radius: 15px;
+            margin: 9px 0;
+            cursor: pointer;
+            font-weight: 700;
+            box-shadow: none;
+            transition: .18s;
+        }
+
+        .gameCard:hover {
+            transform: translateY(-2px);
+            border-color: var(--blue);
+            background: #fffdf2;
+        }
+
+        .gameCard:active {
+            transform: scale(.98);
+        }
+
+        .gameCard.selected {
+            outline: 4px solid var(--blue2);
+            border-color: var(--blue);
+            background: #eef2ff;
+        }
+
+        .gameCard.completed {
+            border-color: var(--green);
+            background: var(--green2);
+        }
+
+        .gameCard.completed::after {
+            content: "✓ 已完成";
+            color: #08785d;
+            font-size: .85rem;
+            font-weight: 900;
+        }
+
+        .gameCardNo {
+            font-size: .78rem;
+            color: var(--purple);
+            font-weight: 900;
+        }
+
+        .categoryButtons {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+        }
+
+        .catBtn {
+            padding: 15px;
+            border: 2px solid #222;
+            border-radius: 17px;
+            background: white;
+            font-weight: 900;
+        }
+
+        .catBtn:hover {
+            background: var(--yellow2);
+        }
+
+        .gameResult {
+            margin-top: 10px;
+            font-weight: 800;
+        }
+
+        .gameSelected {
+            padding: 14px;
+            border-radius: 15px;
+            background: #eef2ff;
+            color: #32469b;
+        }
+
+        .gameCorrect {
+            padding: 14px;
+            border-radius: 15px;
+            background: var(--green2);
+            color: #08785d;
+        }
+
+        .gameWrong {
+            padding: 14px;
+            border-radius: 15px;
+            background: var(--pink2);
+            color: #a6294c;
+        }
+
+        /* ===== IPA ===== */
+
+        .ipaBox {
+            display: grid;
+            grid-template-columns: .7fr 1.3fr;
+            gap: 18px;
+        }
+
+        .controlPanel,
+        .ipaChart {
+            background: white;
+            padding: 18px;
+            border: 2px solid var(--line);
+            border-radius: 23px;
+            box-shadow: var(--shadow);
+        }
+
+        .rangeRow {
+            margin-bottom: 17px;
+        }
+
+        .rangeRow input {
+            width: 100%;
+        }
+
+        .ipaChart {
+            position: relative;
+            min-height: 430px;
+            overflow: hidden;
+        }
+
+        .quadrants {
+            position: absolute;
+            inset: 20px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            grid-template-rows: 1fr 1fr;
+        }
+
+        .q {
+            padding: 15px;
+            border: 1px solid #aaa;
+        }
+
+        .q1 {
+            background: #E8FFF2
+        }
+
+        .q2 {
+            background: #EAF1FF
+        }
+
+        .q3 {
+            background: #FFF5E6
+        }
+
+        .q4 {
+            background: #FFE9EF
+        }
+
+        .ipaPoint {
+            position: absolute;
+            width: 28px;
+            height: 28px;
+            background: #111;
+            border: 5px solid var(--yellow);
+            border-radius: 50%;
+            transform: translate(-50%, 50%);
+            transition: .2s;
+            z-index: 5;
+        }
+
+        /* ===== CHECKLIST ===== */
+
+        .checklist {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 9px;
+        }
+
+        .checkItem {
+            background: white;
+            border: 2px solid var(--line);
+            padding: 11px;
+            border-radius: 14px;
+        }
+
+        .checkItem label {
+            display: flex;
+            gap: 8px;
+            align-items: start;
+        }
+
+        .checkScore {
+            margin-top: 15px;
+            padding: 14px;
+            border-radius: 15px;
+            background: var(--yellow2);
+            font-weight: 900;
+        }
+
+        /* ===== WORKSPACE ===== */
+
+        .workspace {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 18px;
+        }
+
+        .panel {
+            background: white;
+            border: 2px solid var(--line);
+            border-radius: 24px;
+            padding: 18px;
+            box-shadow: var(--shadow);
+        }
+
+        .panel h3 {
+            margin-top: 0;
+        }
+
+        .formGroup {
+            margin-bottom: 14px;
+        }
+
+        .formGroup label {
+            display: block;
+            font-weight: 900;
+            margin-bottom: 5px;
+        }
+
+        .formGroup input,
+        .formGroup textarea,
+        .formGroup select {
+            width: 100%;
+            padding: 11px;
+            border: 2px solid var(--line);
+            border-radius: 14px;
+            background: #fffef9;
+        }
+
+        .formGroup textarea {
+            min-height: 90px;
+            resize: vertical;
+        }
+
+        .twoCol {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        /* ===== QUESTION BUILDER ===== */
+
+        .questionBuilder {
+            border: 2px dashed #d6cdb3;
+            border-radius: 18px;
+            padding: 13px;
+            margin-bottom: 12px;
+        }
+
+        .questionBuilder h4 {
+            margin: 0 0 10px;
+        }
+
+        .builderRow {
+            display: grid;
+            grid-template-columns: 1fr 170px;
+            gap: 8px;
+        }
+
+        .addBtn {
+            border: none;
+            background: var(--blue);
+            color: white;
+            border-radius: 999px;
+            padding: 10px 16px;
+            font-weight: 900;
+        }
+
+        .deleteBtn {
+            border: none;
+            background: #fff0f2;
+            color: #b42347;
+            border-radius: 999px;
+            padding: 7px 12px;
+            margin-top: 8px;
+        }
+
+        /* ===== PREVIEW ===== */
+
+        .preview {
+            min-height: 550px;
+            background: #fff;
+            border: 2px dashed #cfbf93;
+            border-radius: 18px;
+            padding: 22px;
+            max-height: 900px;
+            overflow: auto;
+        }
+
+        .preview h1 {
+            text-align: center;
+        }
+
+        .btnRow {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 14px;
+        }
+
+        .primary {
+            border: none;
+            background: var(--yellow);
+            border: 2px solid #222;
+            border-radius: 999px;
+            padding: 10px 17px;
+            font-weight: 900;
+        }
+
+        .dark {
+            border: none;
+            background: var(--ink);
+            color: white;
+            border-radius: 999px;
+            padding: 11px 17px;
+            font-weight: 900;
+        }
+
+        .blue {
+            border: none;
+            background: var(--blue);
+            color: white;
+            border-radius: 999px;
+            padding: 11px 17px;
+            font-weight: 900;
+        }
+
+        /* ===== TOAST ===== */
+
+        .toast {
+            position: fixed;
+            right: 20px;
+            bottom: 20px;
+            background: #172033;
+            color: white;
+            padding: 13px 18px;
+            border-radius: 15px;
+            box-shadow: var(--shadow);
+            transform: translateY(120px);
+            opacity: 0;
+            transition: .3s;
+            z-index: 100;
+        }
+
+        .toast.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        /* ===== BADGE ===== */
+
+        .badgePopup {
+            position: fixed;
+            inset: 0;
+            display: none;
+            place-items: center;
+            background: rgba(18, 24, 40, .45);
+            z-index: 120;
+        }
+
+        .badgePopup.show {
+            display: grid;
+        }
+
+        .badgeCard {
+            width: min(420px, 86vw);
+            background: white;
+            border: 3px solid #222;
+            padding: 30px;
+            border-radius: 30px;
+            text-align: center;
+            box-shadow: 0 30px 70px rgba(0, 0, 0, .25);
+        }
+
+        .badgeIcon {
+            font-size: 4rem;
+        }
+
+        /* ===== PRESENTATION ===== */
+
+        body.presentation {
+            font-size: 1.12rem;
+        }
+
+        body.presentation .wrap {
+            width: min(1350px, 95vw);
+        }
+
+        body.presentation .unitTitle h3 {
+            font-size: 1.35rem;
+        }
+
+        footer {
+            text-align: center;
+            color: var(--sub);
+            padding: 30px;
+        }
+
+        @media(max-width:900px) {
+
+            .heroGrid,
+            .ipaBox,
+            .workspace,
+            .gameArea {
+                grid-template-columns: 1fr;
+            }
+
+            .route {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .lessonGrid,
+            .challengeGrid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media(max-width:600px) {
+            .route {
+                grid-template-columns: 1fr;
+            }
+
+            .heroBox {
+                padding: 20px;
+            }
+
+            .twoCol,
+            .builderRow,
+            .checklist,
+            .categoryButtons {
+                grid-template-columns: 1fr;
+            }
+
+            .scoreBox {
+                font-size: .8rem;
+            }
+
+            .logo {
+                display: none;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="statusbar">
+        <div class="statusInner">
+            <div class="logo">🔎 問卷研究所</div>
+
+            <div class="progressTrack">
+                <div class="progressFill" id="progressFill"></div>
+            </div>
+
+            <div class="scoreBox">
+                ⭐ <span id="score">0</span>
+            </div>
+
+            <button class="modeBtn" id="presentationBtn" type="button">
+                投影模式
+            </button>
+        </div>
+    </div>
+
+    <header class="hero">
+        <div class="wrap">
+
+            <div class="heroBox">
+                <div class="heroGrid">
+
+                    <div>
+                        <span class="tag">高中專題</span>
+                        <span class="tag">分組自學</span>
+                        <span class="tag">問卷 × 分析</span>
+
+                        <h1>歡迎進入<br><span>問卷研究所</span></h1>
+
+                        <p class="heroText">
+                            你們今天不是來「做 Google Form」，
+                            而是要學會像研究員一樣思考：
+                            我們最後要知道什麼？
+                            要怎麼問，才會得到真正可以分析的資料？
+                        </p>
+
+                        <div>
+                            <span class="tag">12個研究任務</span>
+                            <span class="tag">互動挑戰</span>
+                            <span class="tag">IPA實驗室</span>
+                            <span class="tag">Word問卷產出</span>
+                        </div>
+                    </div>
+
+                    <div class="heroMission">
+                        <strong>🎯 最終任務</strong>
+                        <p>完成所有研究訓練後，每組要產出：</p>
+                        <p>① 研究目的</p>
+                        <p>② 問卷構面</p>
+                        <p>③ 可分析的正式題目</p>
+                        <p>④ 分析規劃</p>
+                        <p>⑤ 可在 Word 繼續編輯的問卷</p>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </header>
+
+    <main>
+
+        <section>
+            <div class="wrap">
+
+                <div class="sectionHead">
+                    <small>MISSION MAP</small>
+                    <h2>今天的研究路線</h2>
+                    <p>建議老師讓每組依序完成四個階段。</p>
+                </div>
+
+                <div class="route">
+
+                    <div class="routeCard">
+                        <div class="routeNo">1</div>
+                        <h3>學觀念</h3>
+                        <p>完成12個自學單元與單元小測驗。</p>
+                    </div>
+
+                    <div class="routeCard">
+                        <div class="routeNo">2</div>
+                        <h3>抓錯誤</h3>
+                        <p>挑戰常見壞問卷，找出真正的問題。</p>
+                    </div>
+
+                    <div class="routeCard">
+                        <div class="routeNo">3</div>
+                        <h3>玩分析</h3>
+                        <p>體驗題型分類、交叉分析與IPA。</p>
+                    </div>
+
+                    <div class="routeCard">
+                        <div class="routeNo">4</div>
+                        <h3>做作品</h3>
+                        <p>小組一起完成正式問卷並輸出Word。</p>
+                    </div>
+
+                </div>
+
+            </div>
+        </section>
+
+        <section id="learning">
+            <div class="wrap">
+
+                <div class="sectionHead">
+                    <small>LEVEL 01</small>
+                    <h2>12個問卷研究任務</h2>
+                    <p>每一關都有「觀念＋錯誤＋修改＋小組任務＋小測驗」。</p>
+                </div>
+
+                <div id="unitList" class="unitList"></div>
+
+            </div>
+        </section>
+
+        <section>
+            <div class="wrap">
+
+                <div class="sectionHead">
+                    <small>LEVEL 02</small>
+                    <h2>🚨 問卷錯誤診斷室</h2>
+                    <p>你能不能一眼看出這些題目有什麼問題？</p>
+                </div>
+
+                <div class="challengeGrid" id="challengeGrid"></div>
+
+            </div>
+        </section>
+
+        <section>
+            <div class="wrap">
+
+                <div class="sectionHead">
+                    <small>LEVEL 03</small>
+                    <h2>🃏 題型分類挑戰</h2>
+                    <p>點一張題目卡，再選擇它最適合使用的題型。</p>
+                </div>
+
+                <div class="gameArea">
+
+                    <div class="questionDeck">
+                        <h3>題目卡</h3>
+                        <div id="gameCards"></div>
+                    </div>
+
+                    <div class="categoryArea">
+
+                        <h3>這題應該用什麼題型？</h3>
+
+                        <div class="categoryButtons">
+
+                            <button type="button" class="catBtn" data-type="single">
+                                單選題
+                            </button>
+
+                            <button type="button" class="catBtn" data-type="multiple">
+                                複選題
+                            </button>
+
+                            <button type="button" class="catBtn" data-type="likert">
+                                李克特量表
+                            </button>
+
+                            <button type="button" class="catBtn" data-type="open">
+                                開放題
+                            </button>
+
+                        </div>
+
+                        <div class="gameResult" id="gameResult">
+                            先選一張題目卡。
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+        </section>
+
+        <section>
+            <div class="wrap">
+
+                <div class="sectionHead">
+                    <small>LEVEL 04</small>
+                    <h2>📊 IPA互動實驗室</h2>
+                    <p>拖動重要度與滿意度，看看同一功能會落在哪一個象限。</p>
+                </div>
+
+                <div class="ipaBox">
+
+                    <div class="controlPanel">
+
+                        <h3>測試項目：AR互動體驗</h3>
+
+                        <div class="rangeRow">
+                            <label>
+                                重要度：
+                                <strong id="importanceValue">4.2</strong>
+                            </label>
+
+                            <input id="importance" type="range" min="1" max="5" value="4.2" step=".1">
+                        </div>
+
+                        <div class="rangeRow">
+                            <label>
+                                滿意度：
+                                <strong id="satisfactionValue">2.8</strong>
+                            </label>
+
+                            <input id="satisfaction" type="range" min="1" max="5" value="2.8" step=".1">
+                        </div>
+
+                        <div id="ipaText" class="keyword"></div>
+
+                    </div>
+
+                    <div class="ipaChart">
+
+                        <div class="quadrants">
+
+                            <div class="q q2">
+                                <strong>第二象限</strong><br>
+                                滿意度高、重要度低<br>
+                                可能投入過多
+                            </div>
+
+                            <div class="q q1">
+                                <strong>第一象限</strong><br>
+                                重要且滿意<br>
+                                繼續保持
+                            </div>
+
+                            <div class="q q3">
+                                <strong>第三象限</strong><br>
+                                不重要且不滿意<br>
+                                次要改善
+                            </div>
+
+                            <div class="q q4">
+                                <strong>第四象限</strong><br>
+                                重要但不滿意<br>
+                                優先改善
+                            </div>
+
+                        </div>
+
+                        <div id="ipaPoint" class="ipaPoint"></div>
+
+                    </div>
+
+                </div>
+
+            </div>
+        </section>
+
+        <section>
+            <div class="wrap">
+
+                <div class="sectionHead">
+                    <small>QUALITY CHECK</small>
+                    <h2>✅ 正式發放前檢查</h2>
+                    <p>請全組一起檢查，而不是只有負責做Google Form的人看。</p>
+                </div>
+
+                <div class="checklist" id="checklist"></div>
+
+                <div class="checkScore" id="checkScore">
+                    完成 0 / 12 項
+                </div>
+
+            </div>
+        </section>
+
+        <section id="studio">
+            <div class="wrap">
+
+                <div class="sectionHead">
+                    <small>FINAL LEVEL</small>
+                    <h2>🧪 小組問卷工作室</h2>
+                    <p>把前面學到的內容真的變成一份可以使用的問卷。</p>
+                </div>
+
+                <div class="workspace">
+
+                    <div class="panel">
+
+                        <h3>Step 1｜研究設定</h3>
+
+                        <div class="formGroup">
+                            <label>問卷名稱</label>
+                            <input id="surveyTitle" value="傳統文化互動產品接受度問卷">
+                        </div>
+
+                        <div class="formGroup">
+                            <label>研究主題</label>
+                            <input id="topic" value="桃園地區高中生對傳統文化互動產品之接受度研究">
+                        </div>
+
+                        <div class="twoCol">
+
+                            <div class="formGroup">
+                                <label>研究對象</label>
+                                <input id="target" value="桃園地區高中生">
+                            </div>
+
+                            <div class="formGroup">
+                                <label>小組名稱</label>
+                                <input id="group" value="資料處理科＿組">
+                            </div>
+
+                        </div>
+
+                        <div class="formGroup">
+                            <label>研究目的</label>
+                            <textarea id="purposes">了解受訪者的相關經驗
+了解受訪者對產品功能的需求
+了解產品接受度、價格接受度與購買意願</textarea>
+                        </div>
+
+                        <h3>Step 2｜問卷構面</h3>
+
+                        <div class="twoCol">
+
+                            <div class="formGroup">
+                                <label>構面一</label>
+                                <input id="c1" value="文化教育價值">
+                            </div>
+
+                            <div class="formGroup">
+                                <label>構面二</label>
+                                <input id="c2" value="產品設計與體驗">
+                            </div>
+
+                        </div>
+
+                        <div class="formGroup">
+                            <label>構面三</label>
+                            <input id="c3" value="行為意願與價格接受度">
+                        </div>
+
+                        <h3>Step 3｜加入問卷題目</h3>
+
+                        <div id="builder"></div>
+
+                        <button class="addBtn" id="addQuestionBtn" type="button">
+                            ＋新增題目
+                        </button>
+
+                        <div class="btnRow">
+
+                            <button class="primary" id="previewBtn" type="button">
+                                生成正式問卷
+                            </button>
+
+                            <button class="dark" id="copyBtn" type="button">
+                                複製內容
+                            </button>
+
+                            <button class="blue" id="downloadBtn" type="button">
+                                下載 Word
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                    <div class="panel">
+
+                        <h3>Word問卷預覽</h3>
+
+                        <div class="preview" id="preview">
+                            完成左方設定後，按「生成正式問卷」。
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+        </section>
+
+    </main>
+
+    <footer>
+        問卷研究所｜先想最後怎麼分析，再決定現在怎麼問。
+    </footer>
+
+    <div class="toast" id="toast"></div>
+
+    <div class="badgePopup" id="badgePopup">
+
+        <div class="badgeCard">
+
+            <div class="badgeIcon">🏆</div>
+
+            <h2>獲得研究徽章！</h2>
+
+            <p id="badgeText"></p>
+
+            <button class="primary" id="closeBadgeBtn" type="button">
+                繼續挑戰
+            </button>
+
+        </div>
+
+    </div>
+
+    <script>
+
+        /* =========================
+           學習單元資料
+        ========================= */
+
+        const units = [
+            {
+                title: "問卷到底是拿來做什麼？",
+                concept: "問卷不是想到什麼就問什麼，而是用來蒐集可以回答研究目的的資料。",
+                wrong: "先把所有想到的問題全部放進Google Form。",
+                fix: "先寫研究主題與研究目的，再決定需要哪些資料。",
+                task: "寫出你們最想知道的三件事。",
+                keyword: "研究目的、research question",
+                quiz: "下面哪一個順序比較正確？",
+                options: [
+                    "先寫題目 → 再想研究目的",
+                    "研究目的 → 需要資料 → 設計題目",
+                    "先做Google Form → 再決定主題"
+                ],
+                answer: 1
+            },
+            {
+                title: "先決定研究目的",
+                concept: "每一題都應該能回應研究目的，否則問卷容易變得零散。",
+                wrong: "研究目的只寫『了解大家想法』。",
+                fix: "拆成經驗、需求、價格、接受度、改善方向。",
+                task: "為你們的專題寫出至少三個研究目的。",
+                keyword: "研究目的、survey planning",
+                quiz: "哪一個研究目的最清楚？",
+                options: [
+                    "了解大家",
+                    "了解高中生對AR文化產品的購買意願",
+                    "研究一些產品"
+                ],
+                answer: 1
+            },
+            {
+                title: "需求調查與成果驗證",
+                concept: "產品完成前適合問期待與需求；產品體驗後才適合問滿意度。",
+                wrong: "還沒有使用過AR就問『您滿意AR嗎？』",
+                fix: "前期問吸引程度，體驗後再問滿意程度。",
+                task: "各寫三題前期需求題與成果驗證題。",
+                keyword: "需求調查、滿意度",
+                quiz: "產品尚未完成，最適合問哪一題？",
+                options: [
+                    "您對本產品滿意嗎？",
+                    "如果增加AR功能，您的期待程度為何？",
+                    "您使用產品後是否推薦？"
+                ],
+                answer: 1
+            },
+            {
+                title: "認識問卷構面",
+                concept: "構面是把同一概念的題目放在一起，例如教育性、產品設計、使用體驗。",
+                wrong: "價格、AR、交通、推薦意願全部混成一組。",
+                fix: "同一構面的題目應測量同一概念。",
+                task: "決定你們的三個核心構面。",
+                keyword: "construct、構面",
+                quiz: "哪一組最適合放在同一構面？",
+                options: [
+                    "教育價值、文化理解、文化傳承",
+                    "價格、性別、網站顏色",
+                    "年齡、滿意度、購買管道"
+                ],
+                answer: 0
+            },
+            {
+                title: "選對問卷題型",
+                concept: "單選適合分類；複選適合偏好；量表適合態度；開放題適合建議。",
+                wrong: "詢問滿意度卻只讓受訪者回答是或否。",
+                fix: "改用五點量表。",
+                task: "將你們目前的題目標記題型。",
+                keyword: "Likert scale、open-ended",
+                quiz: "『您希望產品有哪些功能？』最適合？",
+                options: ["單選", "複選", "開放題"],
+                answer: 1
+            },
+            {
+                title: "題目一定要可以分析",
+                concept: "題目應清楚、具體，而且一次只測量一件事。",
+                wrong: "吹糖好吃又有趣。",
+                fix: "拆成『吹糖味道讓我滿意』與『吹糖體驗很有趣』。",
+                task: "找三題一題兩問並改寫。",
+                keyword: "double-barreled question",
+                quiz: "哪一題寫法比較好？",
+                options: [
+                    "網站漂亮又很好用。",
+                    "我認為網站操作容易理解。",
+                    "網站是不是非常棒？"
+                ],
+                answer: 1
+            },
+            {
+                title: "選項不能互相打架",
+                concept: "選項要彼此不重疊，而且大部分人都找得到答案。",
+                wrong: "300元以下／300～500元。",
+                fix: "300元以下／301～500元。",
+                task: "檢查所有金額與年齡區間。",
+                keyword: "mutually exclusive",
+                quiz: "哪一組價格選項最好？",
+                options: [
+                    "300以下／300-500／500以上",
+                    "300以下／301-500／501以上",
+                    "300以下／200-500／400以上"
+                ],
+                answer: 1
+            },
+            {
+                title: "基本資料不是越多越好",
+                concept: "只問真正會拿來分析或篩選的基本資料。",
+                wrong: "血型、星座、生肖全部放入問卷。",
+                fix: "若不會拿來比較，就不要詢問。",
+                task: "每一題基本資料後寫『未來拿來比較什麼』。",
+                keyword: "demographics",
+                quiz: "研究產品購買意願時，哪個變項較可能有分析價值？",
+                options: ["星座", "是否有購買經驗", "幸運數字"],
+                answer: 1
+            },
+            {
+                title: "跳題與問卷流程",
+                concept: "沒有相關經驗的人，不應回答只有體驗者才知道的題目。",
+                wrong: "沒買過桌遊仍要求回答上次購買價格。",
+                fix: "加入『若否請跳至第4題』。",
+                task: "畫出你們的問卷流程。",
+                keyword: "skip logic",
+                quiz: "沒有使用過產品的人可以回答哪一題？",
+                options: [
+                    "使用後滿意度",
+                    "產品操作流暢度",
+                    "未來購買意願"
+                ],
+                answer: 2
+            },
+            {
+                title: "先決定最後怎麼分析",
+                concept: "設計每題時，同時想好未來是算百分比、平均數、排名還是整理文字。",
+                wrong: "題目很有趣，但完全不知道怎麼統計。",
+                fix: "建立『目的→題目→題型→分析方式』表格。",
+                task: "挑五題寫出分析方式。",
+                keyword: "data analysis",
+                quiz: "李克特量表最常用哪類分析？",
+                options: [
+                    "只看文字",
+                    "平均數與排序",
+                    "只做圓餅圖"
+                ],
+                answer: 1
+            },
+            {
+                title: "交叉分析與IPA",
+                concept: "交叉分析比較不同族群；IPA用重要度與滿意度找出改善優先順序。",
+                wrong: "只有滿意度題卻想做IPA。",
+                fix: "同一功能需同時問重要度與滿意度。",
+                task: "設計一組交叉分析與三個IPA功能。",
+                keyword: "IPA、cross tabulation",
+                quiz: "IPA至少需要哪兩類資料？",
+                options: [
+                    "價格＋年齡",
+                    "重要度＋滿意度",
+                    "性別＋職業"
+                ],
+                answer: 1
+            },
+            {
+                title: "預試後再正式發放",
+                concept: "正式發放前先找類似研究對象試填，可以發現看不懂、漏選項與跳題錯誤。",
+                wrong: "寫完後直接大量發送。",
+                fix: "先預試、修改，再正式發放。",
+                task: "安排至少3～5位同學進行預試。",
+                keyword: "pilot test",
+                quiz: "預試最主要的用途是？",
+                options: [
+                    "讓問卷看起來比較長",
+                    "發現題目與作答流程問題",
+                    "增加問卷樣本數"
+                ],
+                answer: 1
+            }
+        ];
+
+        let score = 0;
+        let completed = new Set();
+        let quizAnswered = new Set();
+
+        function renderUnits() {
+
+            const box = document.getElementById("unitList");
+
+            box.innerHTML = units.map((u, i) => `
+
+ <article class="unit" id="unit${i}">
+
+  <div class="unitHeader" data-unit="${i}">
+
+   <div class="unitNumber">${i + 1}</div>
+
+   <div class="unitTitle">
+    <h3>${u.title}</h3>
+    <small>觀念＋修正＋任務＋小測驗</small>
+   </div>
+
+   <div class="unitToggle">＋</div>
+
+  </div>
+
+  <div class="unitBody">
+
+   <div class="lessonGrid">
+
+    <div class="lesson concept">
+     <h4>💡 觀念解釋</h4>
+     ${u.concept}
+    </div>
+
+    <div class="lesson wrong">
+     <h4>🚨 錯誤示範</h4>
+     ${u.wrong}
+    </div>
+
+    <div class="lesson fix">
+     <h4>🛠 修改範例</h4>
+     ${u.fix}
+    </div>
+
+    <div class="lesson task">
+     <h4>👥 小組任務</h4>
+     ${u.task}
+    </div>
+
+   </div>
+
+   <div class="keyword">
+    🔎 可搜尋關鍵字：${u.keyword}
+   </div>
+
+   <div class="groupNote">
+    <h4>📝 我們這組的討論：</h4>
+    <textarea
+      data-note="${i}"
+      placeholder="把小組剛剛討論出的答案記在這裡……"></textarea>
+   </div>
+
+   <div class="quiz">
+
+    <h4>⚡ 30秒小測驗</h4>
+
+    <p>${u.quiz}</p>
+
+    <div class="quizOptions">
+
+    ${u.options.map((o, j) => `
+      <button
+       type="button"
+       class="quizBtn"
+       data-unit-index="${i}"
+       data-choice-index="${j}">
+       ${o}
+      </button>
+    `).join("")}
+
+    </div>
+
+    <div class="feedback" id="feedback${i}"></div>
+
+   </div>
+
+   <button
+    type="button"
+    class="completeBtn"
+    id="complete${i}"
+    data-complete="${i}">
+    ✓ 完成本關
+   </button>
+
+  </div>
+
+ </article>
+
+ `).join("");
+
+            document.querySelectorAll(".unitHeader").forEach(header => {
+                header.addEventListener("click", () => {
+                    const i = Number(header.dataset.unit);
+                    toggleUnit(i);
+                });
+            });
+
+            document.querySelectorAll(".quizBtn").forEach(btn => {
+                btn.addEventListener("click", () => {
+                    const unitIndex = Number(btn.dataset.unitIndex);
+                    const choice = Number(btn.dataset.choiceIndex);
+                    answerQuiz(unitIndex, choice, btn);
+                });
+            });
+
+            document.querySelectorAll("[data-complete]").forEach(btn => {
+                btn.addEventListener("click", () => {
+                    completeUnit(Number(btn.dataset.complete));
+                });
+            });
+
+            document.querySelectorAll("[data-note]").forEach(t => {
+                t.addEventListener("input", () => {
+                    saveNote(Number(t.dataset.note), t.value);
+                });
+            });
+
+            loadNotes();
+        }
+
+        function toggleUnit(i) {
+            document.getElementById("unit" + i).classList.toggle("open");
+        }
+
+        function answerQuiz(unitIndex, choice, btn) {
+
+            if (quizAnswered.has(unitIndex)) return;
+
+            const u = units[unitIndex];
+            const buttons = document.querySelectorAll(`#unit${unitIndex} .quizBtn`);
+            const feedback = document.getElementById("feedback" + unitIndex);
+
+            quizAnswered.add(unitIndex);
+
+            buttons.forEach(b => {
+                b.disabled = true;
+            });
+
+            if (choice === u.answer) {
+
+                btn.classList.add("correct");
+
+                feedback.className = "feedback show good";
+                feedback.innerHTML = "答對了！＋10分";
+
+                addScore(10);
+
+            } else {
+
+                btn.classList.add("wrongAnswer");
+                buttons[u.answer].classList.add("correct");
+
+                feedback.className = "feedback show bad";
+                feedback.innerHTML = "再注意一下。綠色答案才符合問卷設計原則。";
+
+            }
+        }
+
+        function completeUnit(i) {
+
+            if (completed.has(i)) return;
+
+            completed.add(i);
+
+            const btn = document.getElementById("complete" + i);
+
+            btn.classList.add("done");
+            btn.innerText = "✓ 已完成";
+
+            addScore(5);
+
+            updateProgress();
+
+            if (completed.size === 6) {
+                showBadge("你已完成一半的研究訓練！");
+            }
+
+            if (completed.size === 12) {
+                showBadge("問卷研究員：12關全部完成！");
+            }
+
+        }
+
+        function updateProgress() {
+
+            const percent = completed.size / units.length * 100;
+
+            document.getElementById("progressFill").style.width = percent + "%";
+
+        }
+
+        function addScore(v) {
+
+            score += v;
+
+            document.getElementById("score").innerText = score;
+        }
+
+        /* =========================
+           小組筆記
+        ========================= */
+
+        function saveNote(i, text) {
+            localStorage.setItem("survey_note_" + i, text);
+        }
+
+        function loadNotes() {
+
+            document.querySelectorAll("[data-note]").forEach(t => {
+
+                const i = Number(t.dataset.note);
+
+                t.value = localStorage.getItem("survey_note_" + i) || "";
+
+            });
+
+        }
+
+        /* =========================
+           找錯挑戰
+        ========================= */
+
+        const challenges = [
+            {
+                q: "您覺得吹糖好吃又有趣嗎？",
+                answer: "double",
+                explanation: "一題同時問『好吃』與『有趣』兩件事。"
+            },
+            {
+                q: "價格：□300元以下 □300～500元 □500元以上",
+                answer: "overlap",
+                explanation: "300元與500元都出現在兩個選項。"
+            },
+            {
+                q: "保存這麼珍貴的傳統文化是不是非常重要？",
+                answer: "leading",
+                explanation: "題目已經暗示受訪者『應該覺得重要』。"
+            },
+            {
+                q: "沒有使用過AR的人：您對AR功能滿意嗎？",
+                answer: "experience",
+                explanation: "受訪者沒有實際體驗，無法合理回答滿意度。"
+            }
+        ];
+
+        let challengeDone = new Set();
+
+        function renderChallenges() {
+
+            const box = document.getElementById("challengeGrid");
+
+            box.innerHTML = challenges.map((c, i) => `
+
+ <div class="challenge">
+
+  <strong>診斷題 ${i + 1}</strong>
+
+  <div class="badQuestion">
+   ${c.q}
+  </div>
+
+  <select id="diag${i}">
+   <option value="">選擇問題類型</option>
+   <option value="double">一題問兩件事</option>
+   <option value="overlap">選項重疊</option>
+   <option value="leading">引導式問句</option>
+   <option value="experience">缺乏回答經驗</option>
+  </select>
+
+  <button
+    type="button"
+    class="checkBtn"
+    data-diagnose="${i}">
+    檢查答案
+  </button>
+
+  <div id="diagResult${i}" class="keyword"></div>
+
+ </div>
+
+ `).join("");
+
+            document.querySelectorAll("[data-diagnose]").forEach(btn => {
+                btn.addEventListener("click", () => {
+                    checkChallenge(Number(btn.dataset.diagnose));
+                });
+            });
+        }
+
+        function checkChallenge(i) {
+
+            const value = document.getElementById("diag" + i).value;
+            const box = document.getElementById("diagResult" + i);
+
+            if (value === challenges[i].answer) {
+
+                box.innerHTML = "✅ 正確！" + challenges[i].explanation;
+
+                if (!challengeDone.has(i)) {
+                    challengeDone.add(i);
+                    addScore(8);
+                }
+
+            } else {
+
+                box.innerHTML = "❌ 再想一下。" + challenges[i].explanation;
+
+            }
+
+        }
+
+        /* =========================
+           題型分類遊戲
+        ========================= */
+
+        const gameQuestions = [
+            {
+                text: "您是否曾參加過吹糖體驗？",
+                type: "single"
+            },
+            {
+                text: "您希望產品有哪些功能？",
+                type: "multiple"
+            },
+            {
+                text: "我認為本產品具有教育價值。",
+                type: "likert"
+            },
+            {
+                text: "您認為本產品最需要改善什麼？",
+                type: "open"
+            },
+            {
+                text: "您可接受的價格區間為何？",
+                type: "single"
+            },
+            {
+                text: "您希望有哪些促銷方式？",
+                type: "multiple"
+            }
+        ];
+
+        let selectedCard = null;
+        let answeredGameCards = new Set();
+
+        function renderGame() {
+
+            const gameCardsBox = document.getElementById("gameCards");
+
+            gameCardsBox.innerHTML = gameQuestions.map((q, i) => `
+
+  <button
+    type="button"
+    class="gameCard"
+    data-index="${i}"
+  >
+    <span class="gameCardNo">題目 ${i + 1}</span>
+    <span>${q.text}</span>
+  </button>
+
+ `).join("");
+
+            document.querySelectorAll(".gameCard").forEach(card => {
+
+                card.addEventListener("click", function () {
+
+                    const index = Number(this.dataset.index);
+
+                    selectGame(index);
+
+                });
+
+            });
+
+        }
+
+        function selectGame(i) {
+
+            selectedCard = i;
+
+            document.querySelectorAll(".gameCard").forEach(card => {
+                card.classList.remove("selected");
+            });
+
+            const selected = document.querySelector(
+                `.gameCard[data-index="${i}"]`
+            );
+
+            if (selected) {
+                selected.classList.add("selected");
+            }
+
+            document.getElementById("gameResult").innerHTML = `
+   <div class="gameSelected">
+     🎯 你選的是：
+     <strong>${gameQuestions[i].text}</strong>
+     <br>
+     請判斷它最適合使用哪一種題型。
+   </div>
+ `;
+
+        }
+
+        function chooseCategory(type) {
+
+            if (selectedCard === null) {
+
+                showToast("請先點選一張題目卡");
+
+                document.getElementById("gameResult").innerHTML = `
+    👆 請先從左邊選一張題目卡。
+  `;
+
+                return;
+            }
+
+            const question = gameQuestions[selectedCard];
+
+            const typeNames = {
+                single: "單選題",
+                multiple: "複選題",
+                likert: "李克特量表",
+                open: "開放題"
+            };
+
+            if (question.type === type) {
+
+                document.getElementById("gameResult").innerHTML = `
+    <div class="gameCorrect">
+      🎉 分類正確！
+      <br>
+      「${question.text}」
+      <br>
+      最適合使用
+      <strong>${typeNames[type]}</strong>
+    </div>
+  `;
+
+                if (!answeredGameCards.has(selectedCard)) {
+                    answeredGameCards.add(selectedCard);
+                    addScore(6);
+                }
+
+                const selected = document.querySelector(
+                    `.gameCard[data-index="${selectedCard}"]`
+                );
+
+                if (selected) {
+                    selected.classList.add("completed");
+                }
+
+                setTimeout(() => {
+                    selectNextGameCard();
+                }, 900);
+
+            } else {
+
+                document.getElementById("gameResult").innerHTML = `
+    <div class="gameWrong">
+      ❌ 還差一點！
+      <br>
+      想一想：
+      <strong>這題最後想得到的是一個答案、多個答案、程度分數，還是自由文字？</strong>
+    </div>
+  `;
+
+            }
+
+        }
+
+        function selectNextGameCard() {
+
+            const nextIndex = gameQuestions.findIndex(
+                (_, index) => !answeredGameCards.has(index)
+            );
+
+            if (nextIndex !== -1) {
+
+                selectGame(nextIndex);
+
+            } else {
+
+                selectedCard = null;
+
+                document.querySelectorAll(".gameCard").forEach(card => {
+                    card.classList.remove("selected");
+                });
+
+                document.getElementById("gameResult").innerHTML = `
+    <div class="gameCorrect">
+      🏆 太棒了！
+      <br>
+      你已經完成所有題型分類挑戰。
+    </div>
+  `;
+
+                showBadge("題型分類達人：你已完成全部分類！");
+
+            }
+
+        }
+
+        /* =========================
+           IPA
+        ========================= */
+
+        const importance = document.getElementById("importance");
+        const satisfaction = document.getElementById("satisfaction");
+
+        function updateIPA() {
+
+            const imp = parseFloat(importance.value);
+            const sat = parseFloat(satisfaction.value);
+
+            document.getElementById("importanceValue").innerText = imp.toFixed(1);
+            document.getElementById("satisfactionValue").innerText = sat.toFixed(1);
+
+            const x = 20 + (imp - 1) / 4 * 60;
+            const y = 20 + (sat - 1) / 4 * 60;
+
+            const point = document.getElementById("ipaPoint");
+
+            point.style.left = x + "%";
+            point.style.bottom = y + "%";
+
+            let text = "";
+
+            if (imp >= 3 && sat >= 3) {
+                text = "第一象限：重要而且滿意 → 繼續保持。";
+            }
+            else if (imp < 3 && sat >= 3) {
+                text = "第二象限：重要度較低但滿意 → 可檢查是否投入過多。";
+            }
+            else if (imp < 3 && sat < 3) {
+                text = "第三象限：重要度與滿意度都較低 → 次要改善。";
+            }
+            else {
+                text = "第四象限：重要但不滿意 → ⭐ 最值得優先改善！";
+            }
+
+            document.getElementById("ipaText").innerHTML = text;
+
+        }
+
+        /* =========================
+           檢查表
+        ========================= */
+
+        const checkItems = [
+            "每一題都能對應研究目的",
+            "每一題都知道未來怎麼分析",
+            "沒有一題同時問兩件事",
+            "沒有引導式問句",
+            "單選與複選標示清楚",
+            "選項沒有重疊",
+            "需要時有『其他』選項",
+            "沒有經驗的人不會回答滿意度",
+            "跳題指示清楚",
+            "量表方向一致",
+            "沒有詢問無關的私人資料",
+            "已請其他同學進行預試"
+        ];
+
+        let checklistCompleted = false;
+
+        function renderChecklist() {
+
+            document.getElementById("checklist").innerHTML =
+                checkItems.map((t, i) => `
+
+ <div class="checkItem">
+  <label>
+   <input
+    type="checkbox"
+    class="checkInput">
+   <span>${i + 1}. ${t}</span>
+  </label>
+ </div>
+
+ `).join("");
+
+            document.querySelectorAll(".checkInput").forEach(input => {
+                input.addEventListener("change", updateCheckScore);
+            });
+
+        }
+
+        function updateCheckScore() {
+
+            const all = document.querySelectorAll(".checkInput").length;
+            const checked = document.querySelectorAll(".checkInput:checked").length;
+
+            document.getElementById("checkScore")
+                .innerHTML = `完成 ${checked} / ${all} 項`;
+
+            if (checked === all && !checklistCompleted) {
+
+                checklistCompleted = true;
+
+                addScore(10);
+
+                showBadge("正式問卷品質檢查全部完成！");
+
+            }
+
+        }
+
+        /* =========================
+           問卷產生器
+        ========================= */
+
+        let questionCount = 0;
+
+        function addQuestion() {
+
+            questionCount++;
+
+            const div = document.createElement("div");
+
+            div.className = "questionBuilder";
+
+            div.innerHTML = `
+
+ <h4>題目 ${questionCount}</h4>
+
+ <div class="builderRow">
+
+  <input
+   class="qText"
+   placeholder="輸入題目內容">
+
+  <select class="qType">
+   <option value="single">單選題</option>
+   <option value="multiple">複選題</option>
+   <option value="likert">李克特量表</option>
+   <option value="open">開放題</option>
+  </select>
+
+ </div>
+
+ <div style="margin-top:8px">
+
+  <input
+   class="qOptions"
+   placeholder="選項請用逗號分隔；量表與開放題可留白">
+
+ </div>
+
+ <div style="margin-top:8px">
+
+  <select class="qConstruct">
+   <option value="1">構面一</option>
+   <option value="2">構面二</option>
+   <option value="3">構面三</option>
+   <option value="basic">基本資料／經驗</option>
+  </select>
+
+  <select class="qAnalysis">
+   <option>人數與百分比</option>
+   <option>選擇次數與排名</option>
+   <option>平均數與排序</option>
+   <option>交叉分析</option>
+   <option>文字主題整理</option>
+  </select>
+
+ </div>
+
+ <button
+  type="button"
+  class="deleteBtn">
+  刪除此題
+ </button>
+
+ `;
+
+            div.querySelector(".deleteBtn").addEventListener("click", () => {
+                div.remove();
+            });
+
+            document.getElementById("builder").appendChild(div);
+
+        }
+
+        function buildPreview() {
+
+            const title = document.getElementById("surveyTitle").value;
+            const topic = document.getElementById("topic").value;
+            const target = document.getElementById("target").value;
+            const group = document.getElementById("group").value;
+
+            const purposes = document.getElementById("purposes").value
+                .split("\n")
+                .map(x => x.trim())
+                .filter(Boolean);
+
+            const c1 = document.getElementById("c1").value;
+            const c2 = document.getElementById("c2").value;
+            const c3 = document.getElementById("c3").value;
+
+            const questions = [...document.querySelectorAll(".questionBuilder")];
+
+            let sections = {
+                basic: [],
+                "1": [],
+                "2": [],
+                "3": []
+            };
+
+            questions.forEach(q => {
+
+                const text = q.querySelector(".qText").value.trim();
+
+                if (!text) return;
+
+                const type = q.querySelector(".qType").value;
+                const options = q.querySelector(".qOptions").value;
+                const construct = q.querySelector(".qConstruct").value;
+                const analysis = q.querySelector(".qAnalysis").value;
+
+                sections[construct].push({
+                    text,
+                    type,
+                    options,
+                    analysis
+                });
+
+            });
+
+            function questionHTML(q, i) {
+
+                let answer = "";
+
+                if (q.type === "single" || q.type === "multiple") {
+
+                    answer = q.options
+                        .split(",")
+                        .map(o => o.trim())
+                        .filter(Boolean)
+                        .map(o => "□ " + o)
+                        .join("　");
+
+                }
+
+                if (q.type === "likert") {
+
+                    answer =
+                        "□非常不同意　□不同意　□普通　□同意　□非常同意";
+
+                }
+
+                if (q.type === "open") {
+
+                    answer =
+                        "＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿";
+
+                }
+
+                return `
+   <p>
+   ${i + 1}. ${q.text}<br>
+   ${answer}<br>
+   <small>分析方式：${q.analysis}</small>
+   </p>
+  `;
+
+            }
+
+            const html = `
+
+ <div style="font-family:Microsoft JhengHei;line-height:1.8">
+
+  <h1>${title}</h1>
+
+  <p>
+  親愛的受訪者，您好：
+  本問卷旨在了解「${topic}」相關想法與感受，
+  研究對象為${target}。
+  所有資料僅供學術研究使用，敬請安心填答。
+  </p>
+
+  <p>
+  小組：${group}
+  </p>
+
+  <h2>研究目的</h2>
+
+  <ol>
+   ${purposes.map(p => `<li>${p}</li>`).join("")}
+  </ol>
+
+  <h2>第一部分　基本資料與使用經驗</h2>
+
+  ${sections.basic.length
+                    ? sections.basic.map(questionHTML).join("")
+                    : "請加入基本資料或篩選題。"
+                }
+
+  <h2>第二部分　${c1}</h2>
+
+  ${sections["1"].length
+                    ? sections["1"].map(questionHTML).join("")
+                    : "尚未加入題目。"
+                }
+
+  <h2>第三部分　${c2}</h2>
+
+  ${sections["2"].length
+                    ? sections["2"].map(questionHTML).join("")
+                    : "尚未加入題目。"
+                }
+
+  <h2>第四部分　${c3}</h2>
+
+  ${sections["3"].length
+                    ? sections["3"].map(questionHTML).join("")
+                    : "尚未加入題目。"
+                }
+
+  <p style="text-align:center;margin-top:30px">
+  問卷到此結束，非常感謝您的協助！
+  </p>
+
+ </div>
+
+ `;
+
+            document.getElementById("preview").innerHTML = html;
+
+            showToast("問卷已生成");
+
+        }
+
+        function copySurvey() {
+
+            buildPreview();
+
+            const text = document.getElementById("preview").innerText;
+
+            navigator.clipboard.writeText(text)
+                .then(() => {
+                    showToast("已複製，可以貼到 Word");
+                })
+                .catch(() => {
+                    showToast("無法自動複製，請手動選取內容");
+                });
+
+        }
+
+        function downloadWord() {
+
+            buildPreview();
+
+            const content = document.getElementById("preview").innerHTML;
+
+            const title =
+                document.getElementById("surveyTitle").value || "問卷設計";
+
+            const html = `
+ <html
+ xmlns:o="urn:schemas-microsoft-com:office:office"
+ xmlns:w="urn:schemas-microsoft-com:office:word"
+ xmlns="http://www.w3.org/TR/REC-html40">
+
+ <head>
+ <meta charset="UTF-8">
+ <title>${title}</title>
+ </head>
+
+ <body>
+ ${content}
+ </body>
+
+ </html>
+ `;
+
+            const blob =
+                new Blob(["\ufeff", html],
+                    { type: "application/msword" });
+
+            const url = URL.createObjectURL(blob);
+
+            const a = document.createElement("a");
+
+            a.href = url;
+            a.download = title + ".doc";
+
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+
+            URL.revokeObjectURL(url);
+
+        }
+
+        /* =========================
+           UI
+        ========================= */
+
+        function togglePresentation() {
+            document.body.classList.toggle("presentation");
+        }
+
+        function showToast(text) {
+
+            const toast = document.getElementById("toast");
+
+            toast.innerText = text;
+
+            toast.classList.add("show");
+
+            setTimeout(() => {
+                toast.classList.remove("show");
+            }, 1800);
+
+        }
+
+        function showBadge(text) {
+
+            document.getElementById("badgeText").innerText = text;
+
+            document.getElementById("badgePopup")
+                .classList.add("show");
+
+        }
+
+        function closeBadge() {
+
+            document.getElementById("badgePopup")
+                .classList.remove("show");
+
+        }
+
+        /* =========================
+           初始化
+        ========================= */
+
+        function init() {
+
+            renderUnits();
+            renderChallenges();
+            renderGame();
+            renderChecklist();
+
+            updateIPA();
+
+            addQuestion();
+            addQuestion();
+            addQuestion();
+            addQuestion();
+
+            document.querySelectorAll(".catBtn").forEach(btn => {
+
+                btn.addEventListener("click", function () {
+
+                    chooseCategory(this.dataset.type);
+
+                });
+
+            });
+
+            importance.addEventListener("input", updateIPA);
+            satisfaction.addEventListener("input", updateIPA);
+
+            document.getElementById("presentationBtn")
+                .addEventListener("click", togglePresentation);
+
+            document.getElementById("closeBadgeBtn")
+                .addEventListener("click", closeBadge);
+
+            document.getElementById("addQuestionBtn")
+                .addEventListener("click", addQuestion);
+
+            document.getElementById("previewBtn")
+                .addEventListener("click", buildPreview);
+
+            document.getElementById("copyBtn")
+                .addEventListener("click", copySurvey);
+
+            document.getElementById("downloadBtn")
+                .addEventListener("click", downloadWord);
+
+        }
+
+        document.addEventListener("DOMContentLoaded", init);
+
+    </script>
+
+</body>
+
+</html>

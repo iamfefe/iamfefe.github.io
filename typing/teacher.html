@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>教師管理 - 中英文輸入練習暨測驗系統</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body class="page teacher">
+<header class="hd small">
+  <div class="band"></div>
+  <div class="brand"><div class="logo">鍵</div><h1>中英文輸入練習暨測驗系統</h1><div class="sub">教師管理</div></div>
+</header>
+
+<main class="stage">
+  <div class="watermark">KEY IN</div>
+
+  <div class="tpanel">
+    <h2>學生連線網址</h2>
+    <div id="addrs" class="tbar"></div>
+  </div>
+
+  <div class="tpanel">
+    <h2>考試設定</h2>
+    <div class="tbar">
+      <label>中文試卷 <select id="cfgChn"></select></label>
+      <label>英文試卷 <select id="cfgEng"></select></label>
+      <label>考試時間 <select id="cfgMin"></select></label>
+      <button class="btn small" id="saveCfg">儲存設定</button>
+      <button class="btn ghost small" id="reloadQ">重新讀取題庫</button>
+      <span id="cfgMsg" class="muted"></span>
+    </div>
+    <div class="muted">題庫放在 questions 資料夾，檔名格式為 CHN-0001-1.txt、CHN-0001-2.txt、ENG-0001-1.txt……新增或修改後按「重新讀取題庫」。</div>
+  </div>
+
+  <div class="tpanel">
+    <h2>成績 <span id="sumText" class="muted" style="font-size:15px"></span></h2>
+    <div class="tbar">
+      <label>日期 <input type="date" id="date"></label>
+      <label>科目 <select id="fLang"><option value="">全部</option><option value="chn">中文</option><option value="eng">英文</option></select></label>
+      <label>班級 <select id="fCls"><option value="">全部</option></select></label>
+      <label>顯示 <select id="view"><option value="best">每人最高分</option><option value="all">全部紀錄</option></select></label>
+      <label><input type="checkbox" id="auto" checked> 每 5 秒自動更新</label>
+      <button class="btn small" id="refresh">更新</button>
+      <button class="btn ghost small" id="csv">匯出 Excel (CSV)</button>
+    </div>
+    <div class="table-wrap"><table class="grid" id="scores"></table></div>
+  </div>
+</main>
+
+<div class="overlay" id="textDlg" hidden>
+  <div class="dialog">
+    <h2 id="textTitle">輸入內容</h2>
+    <pre class="typed" id="textBody"></pre>
+    <div class="actions"><button class="btn" id="textClose">關閉</button></div>
+  </div>
+</div>
+
+<script src="js/questions-data.js"></script>
+<script src="js/common.js"></script>
+<script src="js/scorer.js"></script>
+<script src="js/teacher.js"></script>
+</body>
+</html>

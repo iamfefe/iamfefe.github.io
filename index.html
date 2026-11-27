@@ -1,0 +1,507 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Fefe 教學網站 / Hack fefe 教材</title>
+<meta name="description" content="Fefe 教學網站 / Hack fefe 教材：Fefe 老師的丙級檢定、數概、數應、多媒體、網頁、打字、升學互動教材、刷題機與小遊戲。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Caveat:wght@600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f4efe6; --paper:#fbf8f2; --ink:#161616; --muted:#5f5a52; --line:#ddd4c6;
+  --yellow:#ffc533; --pink:#f36fa8; --blue:#2f8cf0;
+  --en:"Space Grotesk","Microsoft JhengHei","微軟正黑體",sans-serif;
+  --tc:"Microsoft JhengHei","微軟正黑體","PingFang TC","Heiti TC",sans-serif;
+  --hand:"Caveat","Microsoft JhengHei","微軟正黑體",cursive;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--tc);line-height:1.6;-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}
+.wrap{max-width:1180px;margin:0 auto;padding:0 24px}
+.en{font-family:var(--en)}
+.hand{font-family:var(--hand);font-size:1.5rem;line-height:1.05}
+
+/* ---------- header ---------- */
+.top{border-bottom:1px solid var(--line);background:var(--bg);position:sticky;top:0;z-index:20}
+.top .wrap{display:flex;align-items:center;gap:28px;height:64px}
+.logo{display:flex;align-items:center;gap:10px;font-family:var(--en);font-weight:700;font-size:20px;letter-spacing:-.02em}
+.logo-mark{width:34px;height:34px;background:var(--ink);color:var(--yellow);display:grid;place-items:center;font-size:17px;border-radius:4px}
+.meta{font-family:var(--en);font-size:11px;letter-spacing:.06em;text-transform:uppercase;line-height:1.35;color:var(--muted)}
+.meta b{color:var(--ink);font-weight:700}
+.top nav{margin-left:auto;display:flex;gap:8px}
+.pill{border:1px solid var(--line);border-radius:999px;padding:6px 16px;font-family:var(--en);font-size:13px;font-weight:700;background:var(--paper);cursor:pointer;transition:transform .15s,background .15s}
+.pill:hover{background:var(--yellow);transform:translateY(-2px)}
+
+/* ---------- hero ---------- */
+.hero{position:relative;padding:56px 0 48px;border-bottom:1px solid var(--line);overflow:hidden}
+.hero .wrap{position:relative}
+.chip{display:inline-block;background:var(--yellow);border:1px solid var(--line);font-family:var(--en);font-weight:700;font-size:12px;letter-spacing:.08em;padding:4px 10px}
+.hero h1{font-weight:900;font-size:clamp(34px,5.4vw,64px);line-height:1.18;letter-spacing:-.01em;margin:22px 0 18px;max-width:780px}
+.hero h1 em{font-style:normal;position:relative;white-space:nowrap}
+.hero h1 em::after{content:"";position:absolute;left:0;right:0;bottom:.06em;height:.28em;background:var(--pink);z-index:-1;opacity:.75}
+.hero .en-line{font-family:var(--en);font-weight:700;font-size:clamp(14px,1.6vw,18px);letter-spacing:.04em;color:var(--muted)}
+.hero .note{display:flex;gap:10px;align-items:flex-start;margin-top:26px}
+.hero .note span{font-size:26px;font-family:var(--en);line-height:1}
+.doodles{position:absolute;right:24px;top:-10px;width:44%;max-width:470px;height:100%;pointer-events:none}
+.doodle{position:absolute;animation:float 6s ease-in-out infinite}
+.mascot{position:absolute;left:50%;top:50%;width:140px;margin:-160px 0 0 -70px;z-index:1;cursor:pointer}
+.mascot .m-body{transform-origin:60px 200px;animation:sway 3.2s ease-in-out infinite}
+.mascot .m-eyes{transform-origin:60px 89px;animation:blink 4.5s infinite}
+.mascot .m-arm{transform-origin:88px 108px;transform-box:view-box}
+.mascot.wave .m-arm{animation:wave .9s ease}
+.mascot.wave .m-body{animation:hop .6s cubic-bezier(.34,1.56,.64,1),sway 3.2s .6s ease-in-out infinite}
+@keyframes sway{0%,100%{transform:rotate(-2deg)}50%{transform:rotate(2deg)}}
+@keyframes blink{0%,92%,100%{transform:scaleY(1)}95%{transform:scaleY(.1)}}
+@keyframes wave{0%,100%{transform:rotate(0)}25%{transform:rotate(-22deg)}50%{transform:rotate(12deg)}75%{transform:rotate(-14deg)}}
+@keyframes hop{0%,100%{transform:translateY(0)}40%{transform:translateY(-18px) scaleY(1.04)}}
+.doodle:nth-child(2n){animation-delay:-2s}
+.doodle:nth-child(3n){animation-delay:-4s;animation-duration:7s}
+@keyframes float{0%,100%{transform:translateY(0) rotate(var(--r,0deg))}50%{transform:translateY(-10px) rotate(var(--r,0deg))}}
+
+/* ---------- featured ---------- */
+.featured{padding:44px 0;border-bottom:1px solid var(--line)}
+.featured .wrap{display:grid;grid-template-columns:220px 1fr;gap:28px}
+.sec-title{font-family:var(--en);font-weight:700;font-size:15px;letter-spacing:.1em;text-transform:uppercase}
+.sec-sub{color:var(--muted);font-size:14px;margin:8px 0 18px}
+.btn{display:inline-block;border:1px solid var(--line);padding:8px 18px;font-family:var(--en);font-weight:700;font-size:13px;background:var(--paper);cursor:pointer}
+.btn:hover{background:var(--ink);color:var(--paper)}
+.f-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.card{background:var(--paper);border:1px solid var(--line);display:flex;flex-direction:column;transition:transform .18s,box-shadow .18s}
+.card:hover{transform:translate(-3px,-3px);box-shadow:5px 5px 0 var(--ink)}
+.thumb{height:150px;border-bottom:1px solid var(--line);position:relative;display:grid;place-items:center;overflow:hidden}
+.thumb .badge{position:absolute;left:10px;top:10px;background:var(--paper);border:1px solid var(--line);font-size:11px;font-weight:700;padding:2px 8px}
+.thumb svg{width:88px;height:88px}
+.thumb .big{position:absolute;right:-8px;bottom:-34px;font-size:130px;font-weight:900;color:rgba(0,0,0,.08);line-height:1}
+.card .body{padding:14px 16px 16px;display:flex;flex-direction:column;flex:1}
+.card h3{font-size:16px;margin:0 0 4px;font-weight:700}
+.card p{font-size:13px;color:var(--muted);margin:0 0 14px;flex:1}
+.card .foot{display:flex;justify-content:space-between;align-items:center;font-family:var(--en);font-size:11px;font-weight:700;letter-spacing:.05em}
+.arrow{font-family:var(--en);font-size:18px;transition:transform .15s}
+.card:hover .arrow,.tile:hover .arrow{transform:translateX(4px)}
+
+/* ---------- category tiles ---------- */
+.tiles{display:grid;grid-template-columns:repeat(9,1fr);border-bottom:1px solid var(--line)}
+.tile{position:relative;padding:18px 16px 16px;min-height:300px;display:flex;flex-direction:column;border-right:1px solid var(--line);cursor:pointer;text-align:left;font:inherit;color:inherit;border-top:0;border-bottom:0;border-left:0;transition:filter .15s}
+.tile:last-child{border-right:0}
+.tile:hover{filter:brightness(1.05) saturate(1.1)}
+.tile.on{box-shadow:inset 0 -8px 0 var(--ink)}
+.tile .char{font-size:54px;font-weight:900;line-height:1}
+.tile .lab{font-family:var(--en);font-weight:700;font-size:11px;letter-spacing:.1em;margin-top:6px}
+.tile .nm{font-weight:900;font-size:17px;margin-top:10px}
+.tile .ds{font-size:12.5px;line-height:1.55;margin-top:4px;opacity:.9}
+.tile .ic{margin:auto 0 8px;align-self:center}
+.tile .ic svg{width:70px;height:70px}
+.tile .bt{display:flex;justify-content:space-between;align-items:center;font-family:var(--en);font-weight:700;font-size:12px}
+
+/* ---------- all list ---------- */
+.list{padding:44px 0 56px;border-bottom:1px solid var(--line)}
+.list-head{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:16px;margin-bottom:20px}
+.list-head h2{font-size:clamp(26px,3.4vw,38px);font-weight:900;margin:4px 0 0;line-height:1.2}
+.search{border:1px solid var(--line);background:var(--paper);padding:10px 14px;font:inherit;font-size:14px;width:min(320px,100%)}
+.search:focus{outline:3px solid var(--yellow);outline-offset:1px}
+.filters{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:24px}
+.filters .pill{font-family:var(--tc);font-weight:700}
+.filters .pill.on{background:var(--ink);color:var(--paper)}
+.filters .pill i{display:inline-block;width:9px;height:9px;border-radius:50%;border:1px solid var(--line);margin-right:6px;vertical-align:1px}
+.l-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:18px}
+.l-grid .thumb{height:110px}
+.l-grid .thumb svg{width:64px;height:64px}
+.l-grid .thumb .big{font-size:100px;bottom:-26px}
+.empty{border:1.5px dashed var(--line);padding:30px;text-align:center;color:var(--muted);grid-column:1/-1;background:var(--paper)}
+.ext{font-size:10px;border:1px solid var(--line);padding:0 5px;margin-left:6px;vertical-align:2px;font-family:var(--en)}
+
+/* ---------- notes strip ---------- */
+.notes{padding:40px 0;border-bottom:1px solid var(--line)}
+.notes .wrap{display:flex;align-items:center;gap:48px;flex-wrap:wrap}
+.sticky{background:#eaf3cf;border:1px solid var(--line);padding:18px 22px 16px;transform:rotate(-3deg);box-shadow:4px 5px 0 rgba(0,0,0,.15);position:relative;font-family:var(--en);font-weight:700;font-size:12px;letter-spacing:.06em}
+.sticky::before{content:"";position:absolute;top:-12px;left:50%;width:70px;height:22px;margin-left:-35px;background:rgba(255,197,51,.75);transform:rotate(3deg)}
+.sticky li{list-style:none;display:flex;gap:8px;align-items:center;margin:5px 0}
+.sticky li::before{content:"";width:11px;height:11px;border:1px solid var(--line);background:var(--paper)}
+.sticky ul{margin:0;padding:0}
+.star{font-size:40px;color:var(--pink);line-height:1}
+.manifesto{font-size:15px;line-height:1.9;max-width:460px}
+.manifesto a{display:inline-block;margin-top:8px;font-family:var(--en);font-weight:700;font-size:13px;border-bottom:1px solid var(--line)}
+
+/* ---------- footer ---------- */
+footer .grid{display:grid;grid-template-columns:1.1fr 1.2fr 1fr}
+footer .cell{padding:26px 24px;border-right:1px solid var(--line)}
+footer .cell:last-child{border-right:0}
+footer .y{background:var(--yellow)}
+footer h4{margin:0 0 8px;font-family:var(--en);font-size:12px;letter-spacing:.1em}
+footer .big{font-weight:900;font-size:22px;line-height:1.35}
+footer .links a{display:block;font-family:var(--en);font-size:13px;font-weight:700;line-height:1.9}
+footer .links a:hover{text-decoration:underline}
+.bottom{border-top:1px solid var(--line);font-family:var(--en);font-size:11px;letter-spacing:.08em;padding:10px 24px;display:flex;justify-content:space-between;color:var(--muted)}
+
+/* ---------- responsive ---------- */
+@media (max-width:1100px){
+  .tiles{grid-template-columns:repeat(3,1fr)}
+  .tile{border-bottom:1px solid var(--line);min-height:250px}
+  .tile:nth-child(3n){border-right:0}
+  .tile:nth-last-child(-n+3){border-bottom:0}
+}
+@media (max-width:860px){
+  .doodles{position:relative;width:100%;height:290px;right:auto;top:auto;margin-top:24px}
+  .mascot{width:140px;margin:-130px 0 0 -70px}
+  .featured .wrap{grid-template-columns:1fr;gap:8px}
+  .f-grid{grid-template-columns:1fr}
+  footer .grid{grid-template-columns:1fr}
+  footer .cell{border-right:0;border-bottom:1px solid var(--line)}
+  .meta{display:none}
+}
+@media (max-width:560px){
+  .wrap{padding:0 16px}
+  .tiles{grid-template-columns:repeat(2,1fr)}
+  .tile{min-height:220px;border-right:1px solid var(--line)!important;border-bottom:1px solid var(--line)!important}
+  .tile:nth-child(2n){border-right:0!important}
+  .tile .char{font-size:42px}
+  .top nav .pill:not(:last-child){display:none}
+}
+/* ---------- soft dividers: buttons keep a crisp edge ---------- */
+.pill,.btn{border-color:var(--ink)}
+.chip{border:0}
+.search{border-color:#c9bfae}
+.thumb .badge{border-color:transparent}
+
+/* ---------- playful motion ---------- */
+:root{--spring:cubic-bezier(.34,1.56,.64,1)}
+.pill,.btn,.card,.tile,.logo-mark,.search{transition:transform .35s var(--spring),box-shadow .25s,background .2s,color .2s,filter .2s}
+.pill:hover{transform:translateY(-3px) rotate(-2deg);box-shadow:3px 3px 0 var(--ink)}
+.pill:active,.btn:active{transform:translate(2px,2px) scale(.96);box-shadow:none}
+.btn{box-shadow:4px 4px 0 var(--ink)}
+.btn:hover{transform:translate(-2px,-2px);box-shadow:6px 6px 0 var(--pink)}
+.logo:hover .logo-mark{transform:rotate(-12deg) scale(1.12)}
+.card:hover{transform:translate(-4px,-4px) rotate(-.6deg);box-shadow:7px 7px 0 var(--ink)}
+.card:nth-child(2n):hover{transform:translate(-4px,-4px) rotate(.6deg)}
+.card:active{transform:translate(1px,1px);box-shadow:2px 2px 0 var(--ink)}
+.card .thumb svg,.tile .ic svg{transition:transform .45s var(--spring)}
+.card:hover .thumb svg{transform:scale(1.18) rotate(-8deg)}
+.card .thumb .big{transition:transform .5s var(--spring)}
+.card:hover .thumb .big{transform:translateY(-14px) rotate(6deg)}
+.card:hover .arrow,.tile:hover .arrow{transform:translateX(6px)}
+.card h3{background:linear-gradient(var(--yellow),var(--yellow)) 0 88%/0 35% no-repeat;transition:background-size .35s ease;display:inline}
+.card:hover h3{background-size:100% 35%}
+.tile:hover{transform:translateY(-8px);z-index:2;box-shadow:0 8px 0 var(--ink)}
+.tile:hover .ic svg{animation:wiggle .6s ease}
+.tile .char{transition:transform .4s var(--spring)}
+.tile:hover .char{transform:scale(1.15) rotate(-6deg)}
+.tile:active{transform:translateY(-2px)}
+@keyframes wiggle{0%,100%{transform:rotate(0)}20%{transform:rotate(-14deg) scale(1.15)}45%{transform:rotate(10deg) scale(1.15)}70%{transform:rotate(-5deg) scale(1.08)}}
+.search:focus{transform:scale(1.02)}
+.manifesto a,footer .links a{background:linear-gradient(var(--ink),var(--ink)) 0 100%/0 2px no-repeat;transition:background-size .3s,transform .3s var(--spring);text-decoration:none!important}
+.manifesto a{border-bottom:0;background-size:100% 2px}
+.manifesto a:hover{transform:translateX(4px)}
+footer .links a:hover{background-size:100% 2px;transform:translateX(5px)}
+.sticky{transition:transform .4s var(--spring)}
+.sticky:hover{transform:rotate(2deg) scale(1.05)}
+.star{display:inline-block;animation:spin 10s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.hero h1 em::after{transform-origin:left;animation:mark 1s .6s var(--spring) both}
+@keyframes mark{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+.doodles{pointer-events:auto}
+.doodle{cursor:grab}
+.doodle>svg{transition:transform .4s var(--spring)}
+.doodle:hover>svg{transform:scale(1.25) rotate(12deg)}
+.doodle.pop>svg{animation:pop .5s var(--spring)}
+@keyframes pop{40%{transform:scale(1.5) rotate(-20deg)}}
+.reveal{opacity:0;transform:translateY(26px);transition:opacity .6s ease,transform .7s var(--spring)}
+.reveal.in{opacity:1;transform:none}
+.l-grid .card{animation:popin .45s var(--spring) both}
+@keyframes popin{from{opacity:0;transform:translateY(16px) scale(.94)}}
+.hero .chip,.hero h1,.hero .en-line,.hero .note{animation:rise .8s var(--spring) both}
+.hero h1{animation-delay:.08s}.hero .en-line{animation-delay:.18s}.hero .note{animation-delay:.28s}
+@keyframes rise{from{opacity:0;transform:translateY(24px)}}
+
+/* ---------- top bar: docked pen + split view ---------- */
+#fa-dock{margin-left:auto;display:flex;align-items:center;min-width:0;overflow-x:auto;scrollbar-width:none}
+#fa-dock::-webkit-scrollbar{display:none}
+.top nav{margin-left:0}
+.nav-view{display:none!important}
+.crumb{display:none;font-weight:700;font-size:15px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0;max-width:30vw}
+.crumb::before{content:"›";margin-right:10px;color:var(--muted);font-family:var(--en)}
+@media (max-width:1440px){.meta{display:none}}
+body.viewing{overflow:hidden}
+body.viewing > section, body.viewing > footer{display:none}
+body.viewing .top .wrap{max-width:none}
+body.viewing .nav-home{display:none!important}
+body.viewing .nav-view{display:flex!important}
+body.viewing .crumb{display:block}
+body.viewing .meta{display:none}
+.logo{transition:opacity .2s}
+body.viewing .logo:hover{opacity:.7}
+.viewer{position:fixed;left:0;right:0;bottom:0;top:65px;background:#fff}
+.viewer[hidden]{display:none}
+.viewer iframe{width:100%;height:100%;border:0;display:block;background:#fff}
+.frame-loading{position:absolute;inset:0;display:grid;place-items:center;font-weight:700;color:var(--muted);background:var(--bg);pointer-events:none;transition:opacity .3s}
+.frame-loading.done{opacity:0}
+@media (max-width:860px){.top .wrap{gap:12px}.top nav .pill{padding:6px 12px}}
+
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}.reveal{opacity:1;transform:none}}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap">
+    <a class="logo" href="#" id="homeLink" title="回首頁"><span class="logo-mark">Ff</span>FEFE<span style="color:var(--muted);font-weight:500">.教學</span></a>
+    <span class="crumb" id="crumb"></span>
+    <div class="meta"><b>Teaching Notebook</b><br>互動教材資料庫</div>
+    <div class="meta"><b id="countMeta">— Items</b><br>Always growing</div>
+    <div id="fa-dock"></div>
+    <nav class="nav-home">
+      <a class="pill" href="#cats">分類</a>
+      <a class="pill" href="#all">全部教材</a>
+      <a class="pill" href="#about">關於</a>
+    </nav>
+    <nav class="nav-view">
+      <a class="pill" id="openNew" href="#" target="_blank" rel="noopener" title="在新分頁開啟這份教材">新分頁 ↗</a>
+      <a class="pill" href="#" title="回首頁">回首頁</a>
+    </nav>
+  </div>
+</header>
+
+<div class="viewer" id="viewer" hidden>
+  <iframe id="frame" title="教材內容" allow="fullscreen; clipboard-write; autoplay"></iframe>
+  <div class="frame-loading" id="frameLoading">載入中…</div>
+</div>
+
+<section class="hero">
+  <div class="wrap">
+    <span class="chip">FEFE 教學網站 / HACK FEFE 教材</span>
+    <h1>互動教材、刷題機、<br>小遊戲、升學地圖，<br>還有一堆<em>還在長大</em>的課。</h1>
+    <div class="en-line">TOOLS · PRACTICE · GAMES · GUIDES — FOR MY STUDENTS.</div>
+    <div class="note"><span>+</span><div class="hand">點進去就能玩<br>&nbsp;&nbsp;練到會為止<br>&nbsp;&nbsp;&nbsp;&nbsp;一起慢慢累積</div></div>
+    <div class="doodles" id="doodles" aria-hidden="true"></div>
+  </div>
+</section>
+
+<section class="featured">
+  <div class="wrap">
+    <div>
+      <div class="sec-title">Featured</div>
+      <div class="sec-sub">最近常用、<br>推薦先從這裡開始。</div>
+      <a class="btn" href="#all">VIEW ALL →</a>
+    </div>
+    <div class="f-grid" id="featured"></div>
+  </div>
+</section>
+
+<section class="tiles" id="cats" aria-label="分類"></section>
+
+<section class="list" id="all">
+  <div class="wrap">
+    <div class="list-head">
+      <div>
+        <div class="sec-title">All Materials</div>
+        <h2 id="listTitle">全部教材</h2>
+      </div>
+      <input class="search" id="q" type="search" placeholder="搜尋教材名稱或關鍵字…">
+    </div>
+    <div class="filters" id="filters"></div>
+    <div class="l-grid" id="list"></div>
+  </div>
+</section>
+
+<section class="notes" id="about">
+  <div class="wrap">
+    <div class="sticky"><ul><li>新教材</li><li>外部連結</li><li>更多小遊戲</li><li>之後再說</li></ul></div>
+    <div class="star">✻</div>
+    <div class="manifesto">
+      這裡是我上課用的教材集合。<br>
+      有些很完整，有些還在改，有些是課堂上臨時做的。<br>
+      覺得好用就拿去練，發現 bug 歡迎跟我說。
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="grid">
+    <div class="cell"><h4>REMINDER</h4><div class="big">會用很簡單。<br>練到熟才厲害。</div></div>
+    <div class="cell y"><h4>FEFE 教學網站 / HACK FEFE 教材</h4><div style="font-size:14px">檢定・數概・數應・多媒體・網頁・打字・升學・工具・其他<br>都是做給學生用的互動教材。</div></div>
+    <div class="cell links"><h4>JUMP TO</h4><a href="#cats">分類 Categories</a><a href="#all">全部教材 All</a><a href="#about">關於 About</a></div>
+  </div>
+  <div class="bottom"><span>COLLECTING · PRACTICING · BUILDING</span><span>© <span id="yr"></span> FEFE</span></div>
+</footer>
+
+<script src="projects.js"></script>
+<script src="annotate.js"></script>
+<script>
+(function(){
+  // Flat illustration style: no outlines, soft warm palette, little white highlight dashes, soft ground shadow.
+  const C={or:'#ec8b5e',dk:'#c9663f',cr:'#f8ead8',mi:'#a8dccb',te:'#4fa3a5',br:'#3b2a24',sk:'#f2c9a9',ye:'#f4c25b',pk:'#e98a8a'};
+  const SH='<ellipse cx="32" cy="60" rx="20" ry="3" fill="#000" opacity=".13"/>';
+  const HL=(d)=>`<path d="${d}" stroke="#fff" stroke-width="1.8" stroke-linecap="round" opacity=".75" fill="none"/>`;
+  const ICONS={
+    badge:`<svg viewBox="0 0 64 64">${SH}<path d="M21 34 15 56l8-4 5 6 5-18z" fill="${C.mi}"/><path d="M43 34l6 22-8-4-5 6-5-18z" fill="${C.mi}"/><circle cx="32" cy="25" r="19" fill="${C.ye}"/><circle cx="32" cy="25" r="12" fill="${C.cr}"/><path d="m26.5 25 4 4 7.5-8" stroke="${C.br}" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="none"/>${HL('M19 17v3M45 30v3M22 33v2')}</svg>`,
+    chip:`<svg viewBox="0 0 64 64">${SH}<g fill="${C.dk}"><rect x="19" y="5" width="4" height="9" rx="2"/><rect x="30" y="5" width="4" height="9" rx="2"/><rect x="41" y="5" width="4" height="9" rx="2"/><rect x="19" y="46" width="4" height="9" rx="2"/><rect x="30" y="46" width="4" height="9" rx="2"/><rect x="41" y="46" width="4" height="9" rx="2"/><rect x="6" y="18" width="9" height="4" rx="2"/><rect x="6" y="28" width="9" height="4" rx="2"/><rect x="6" y="38" width="9" height="4" rx="2"/><rect x="49" y="18" width="9" height="4" rx="2"/><rect x="49" y="28" width="9" height="4" rx="2"/><rect x="49" y="38" width="9" height="4" rx="2"/></g><rect x="13" y="11" width="38" height="38" rx="7" fill="${C.te}"/><rect x="23" y="21" width="18" height="18" rx="4" fill="${C.cr}"/><circle cx="32" cy="30" r="4" fill="${C.or}"/>${HL('M17 17v3M46 41v3M17 42v2')}</svg>`,
+    window:`<svg viewBox="0 0 64 64">${SH}<rect x="6" y="9" width="52" height="45" rx="7" fill="${C.cr}"/><path d="M6 16a7 7 0 0 1 7-7h38a7 7 0 0 1 7 7v4H6z" fill="${C.te}"/><circle cx="13" cy="15" r="2" fill="${C.cr}"/><circle cx="19" cy="15" r="2" fill="${C.cr}"/><rect x="12" y="26" width="17" height="21" rx="3" fill="${C.mi}"/><rect x="34" y="27" width="18" height="4" rx="2" fill="${C.te}" opacity=".7"/><rect x="34" y="35" width="18" height="4" rx="2" fill="${C.te}" opacity=".7"/><rect x="34" y="43" width="11" height="4" rx="2" fill="${C.te}" opacity=".7"/>${HL('M16 30v3M24 39v3')}</svg>`,
+    camera:`<svg viewBox="0 0 64 64">${SH}<path d="M24 12h16l4 8H20z" fill="${C.dk}"/><rect x="6" y="18" width="52" height="36" rx="8" fill="${C.or}"/><circle cx="32" cy="36" r="13" fill="${C.cr}"/><circle cx="32" cy="36" r="8" fill="${C.br}"/><circle cx="29" cy="33" r="2.4" fill="#fff" opacity=".8"/><rect x="45" y="23" width="7" height="4" rx="2" fill="${C.ye}"/>${HL('M11 26v3M12 44v3M52 42v3')}</svg>`,
+    code:`<svg viewBox="0 0 64 64">${SH}<rect x="6" y="9" width="52" height="45" rx="7" fill="${C.br}"/><path d="m22 25-8 7 8 7M42 25l8 7-8 7" stroke="${C.mi}" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" fill="none"/><path d="m36 21-8 22" stroke="${C.ye}" stroke-width="4" stroke-linecap="round"/>${HL('M11 15v3M53 45v3')}</svg>`,
+    keyboard:`<svg viewBox="0 0 64 64">${SH}<rect x="4" y="18" width="56" height="34" rx="8" fill="${C.cr}"/><g fill="${C.or}"><rect x="10" y="24" width="8" height="7" rx="2"/><rect x="21" y="24" width="8" height="7" rx="2"/><rect x="32" y="24" width="8" height="7" rx="2"/></g><rect x="43" y="24" width="11" height="7" rx="2" fill="${C.te}"/><rect x="10" y="35" width="8" height="7" rx="2" fill="${C.te}"/><rect x="21" y="35" width="33" height="7" rx="2" fill="${C.mi}"/>${HL('M8 46h3M53 46h2')}</svg>`,
+    cap:`<svg viewBox="0 0 64 64">${SH}<path d="M17 30v13c0 7 30 7 30 0V30z" fill="${C.te}"/><path d="M4 25 32 13l28 12-28 12z" fill="${C.br}"/><path d="M50 29v12" stroke="${C.ye}" stroke-width="2.6" stroke-linecap="round"/><circle cx="50" cy="44" r="4" fill="${C.ye}"/>${HL('M22 40v3M41 40v3')}</svg>`,
+    wrench:`<svg viewBox="0 0 64 64">${SH}<path d="M44 5a14 14 0 0 0-13 19L8 47a6 6 0 0 0 9 9l23-23A14 14 0 0 0 59 20l-9 9-8-3-3-8 9-9a14 14 0 0 0-4-4z" fill="${C.ye}"/><path d="M31 24 8 47a6 6 0 0 0 9 9l23-23" fill="${C.or}" opacity=".9"/><circle cx="13" cy="51" r="2.5" fill="${C.br}"/>${HL('M44 11v3M22 39l2 2')}</svg>`,
+    dice:`<svg viewBox="0 0 64 64">${SH}<g transform="rotate(-8 32 32)"><rect x="11" y="9" width="42" height="42" rx="10" fill="${C.cr}"/><g fill="${C.br}"><circle cx="21" cy="19" r="4"/><circle cx="43" cy="19" r="4"/><circle cx="32" cy="30" r="4"/><circle cx="21" cy="41" r="4"/><circle cx="43" cy="41" r="4"/></g></g>${HL('M15 26v3M49 34v3')}</svg>`
+  };
+  // Mascot: kid in an orange cat-hood onesie (sleeping cat face on the hood), mint shorts, striped socks.
+  const MASCOT=`<svg viewBox="0 0 120 230" width="100%">
+    <ellipse cx="60" cy="220" rx="46" ry="6" fill="#000" opacity=".12"/>
+    <g class="m-body">
+      <rect x="37" y="168" width="16" height="40" fill="#fbf5ee"/><rect x="67" y="168" width="16" height="40" fill="#fbf5ee"/>
+      <g fill="${C.or}"><rect x="37" y="180" width="16" height="5"/><rect x="67" y="180" width="16" height="5"/><rect x="37" y="191" width="16" height="5"/><rect x="67" y="191" width="16" height="5"/></g>
+      <path d="M37 204h16v12H28a9 9 0 0 1 9-12zM67 204h16a9 9 0 0 1 9 12H67z" fill="${C.br}"/>
+      <path d="M31 150h58l12 26q-41 7-82 0z" fill="${C.mi}"/>
+      <path d="M45 158l-4 20M60 158v21M75 158l4 20" stroke="${C.te}" stroke-width="1.6" stroke-linecap="round" opacity=".45"/>
+      <!-- cat ears -->
+      <path d="M41 40Q41 30 43 20q1-4 4-2L58 30z" fill="${C.or}"/><path d="M79 40Q79 30 77 20q-1-4-4-2L62 30z" fill="${C.or}"/>
+      <path d="M45 33Q45 28 46 24L54 30z" fill="#fbf5ee"/><path d="M75 33Q75 28 74 24L66 30z" fill="#fbf5ee"/>
+      <!-- hood + onesie -->
+      <path d="M21 68a39 39 0 0 1 78 0v86a8 8 0 0 1-8 8H29a8 8 0 0 1-8-8z" fill="${C.or}"/>
+      <g fill="${C.dk}" opacity=".55"><path d="M54 30h3l-1 8h-1zM59 29h2v10h-2zM63 30h3l-1 8h-1z"/></g>
+      <ellipse cx="60" cy="47" rx="30" ry="14" fill="${C.dk}" opacity=".28"/>
+      <path d="M41 45q6 5 12 0M67 45q6 5 12 0" stroke="${C.br}" stroke-width="2.6" stroke-linecap="round" fill="none"/>
+      <path d="M56 51h8l-4 4.5z" fill="${C.br}"/>
+      <path d="M60 55.5q-2 3-5 1.5M60 55.5q2 3 5 1.5" stroke="${C.br}" stroke-width="1.6" stroke-linecap="round" fill="none"/>
+      <path d="M46 53l-12-2M46 56l-11 2M74 53l12-2M74 56l11 2" stroke="${C.br}" stroke-width="1.3" stroke-linecap="round" opacity=".7"/>
+      <!-- face opening -->
+      <ellipse cx="60" cy="95" rx="28" ry="23" fill="#f8dcc6"/>
+      <ellipse cx="60" cy="96" rx="23.5" ry="18.5" fill="${C.sk}"/>
+      <g class="m-eyes"><rect x="49" y="86" width="3" height="6" rx="1.5" fill="${C.br}"/><rect x="68" y="86" width="3" height="6" rx="1.5" fill="${C.br}"/></g>
+      <path d="M60.5 90q-1 4-3 6h4" stroke="${C.dk}" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+      <path d="M55 101.5q5 4.5 10 0" stroke="${C.br}" stroke-width="2.2" stroke-linecap="round" fill="none"/>
+      ${HL('M30 74v6M89 72v6M27 104v6M93 100v6M32 132v6M88 130v6M44 140v6M58 136v6M74 142v6M50 126v5M70 128v5')}
+    </g></svg>`;
+  // hero doodles: [icon, left%, top%, size, rotate]
+  const DOODLES=[['camera',2,10,70,-10],['keyboard',66,4,78,6],['badge',80,40,64,10],['cap',4,56,70,-6],['code',70,74,62,8],['dice',20,80,50,14]];
+  const sparkle=`<svg viewBox="0 0 40 40" width="34" height="34"><path d="M20 4v32M4 20h32M9 9l22 22M31 9 9 31" stroke="${C.ye}" stroke-width="4" stroke-linecap="round"/></svg>`;
+  const heart=`<svg viewBox="0 0 40 36" width="32" height="29"><path d="M20 34S2 22 2 11a9 9 0 0 1 18-2 9 9 0 0 1 18 2c0 11-18 23-18 23z" fill="${C.pk}"/><path d="M9 10v3" stroke="#fff" stroke-width="2" stroke-linecap="round" opacity=".8"/></svg>`;
+  const dEl=document.getElementById('doodles');
+  dEl.innerHTML=`<div class="mascot" title="嗨！">${MASCOT}</div>`
+    +DOODLES.map(([k,l,t,s,r])=>`<div class="doodle" style="left:${l}%;top:${t}%;width:${s}px;--r:${r}deg">${ICONS[k].replace('<svg','<svg width="100%"')}</div>`).join('')
+    +`<div class="doodle" style="left:28%;top:14%">${sparkle}</div><div class="doodle" style="left:88%;top:16%">${heart}</div>`;
+  const mascot=dEl.querySelector('.mascot');
+  mascot.addEventListener('click',()=>{mascot.classList.remove('wave');void mascot.offsetWidth;mascot.classList.add('wave')});
+
+  const cats=window.CATEGORIES, items=window.PROJECTS;
+  const byId=Object.fromEntries(cats.map(c=>[c.id,c]));
+  const isExt=u=>/^https?:\/\//.test(u);
+  // Can this material open in the split view (iframe) under the top bar?
+  // frame:false in projects.js = site refuses to be embedded (e.g. Canva) -> new tab.
+  // An http:// link can't be embedded once this site is served over https.
+  const canEmbed=p=>p.frame!==false && !(location.protocol==='https:' && /^http:/.test(p.url));
+  const esc=s=>String(s).replace(/[&<>"]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m]));
+  document.getElementById('countMeta').textContent=items.length+' Items';
+  document.getElementById('yr').textContent=new Date().getFullYear();
+
+  function card(p){
+    const c=byId[p.cat]||cats[cats.length-1];
+    const emb=canEmbed(p);
+    const tgt=emb?'':' target="_blank" rel="noopener"';
+    return `<a class="card" href="${emb?'#view='+encodeURIComponent(p.url):esc(p.url)}"${tgt}>
+      <div class="thumb" style="background:${c.color}">
+        <span class="badge">${esc(p.tag||c.name)}</span><span class="big">${c.char}</span>${ICONS[c.icon]}
+      </div>
+      <div class="body"><h3>${esc(p.title)}${emb?'':'<span class="ext">新分頁 ↗</span>'}</h3><p>${esc(p.desc||'')}</p>
+      <div class="foot"><span>${c.name} · ${esc(p.date||'')}</span><span class="arrow">→</span></div></div></a>`;
+  }
+
+  // featured
+  const feat=items.filter(p=>p.featured).sort((a,b)=>(b.date||'').localeCompare(a.date||'')).slice(0,3);
+  document.getElementById('featured').innerHTML=feat.map(card).join('');
+
+  // tiles
+  const tilesEl=document.getElementById('cats');
+  tilesEl.innerHTML=cats.map(c=>{
+    const n=items.filter(p=>p.cat===c.id).length;
+    return `<button class="tile" data-cat="${c.id}" style="background:${c.color}">
+      <span class="char">${c.char}</span><span class="lab">${c.en}</span>
+      <span class="nm">${c.name}</span><span class="ds">${c.desc}</span>
+      <span class="ic">${ICONS[c.icon]}</span>
+      <span class="bt"><span>${n?n+' ITEMS':'COMING SOON'}</span><span class="arrow">→</span></span></button>`;
+  }).join('');
+
+  // list + filters
+  let cur='all', q='';
+  const fEl=document.getElementById('filters'), lEl=document.getElementById('list'), tEl=document.getElementById('listTitle');
+  fEl.innerHTML=`<button class="pill on" data-cat="all">全部</button>`+cats.map(c=>`<button class="pill" data-cat="${c.id}"><i style="background:${c.color}"></i>${c.name}</button>`).join('');
+  function render(){
+    const kw=q.trim().toLowerCase();
+    const rows=items.filter(p=>(cur==='all'||p.cat===cur)&&(!kw||[p.title,p.desc,p.tag,byId[p.cat]?.name].join(' ').toLowerCase().includes(kw)));
+    tEl.textContent=cur==='all'?'全部教材':byId[cur].name;
+    lEl.innerHTML=rows.length?rows.map(card).join(''):`<div class="empty">${kw?'找不到符合「'+esc(q)+'」的教材。':'這個分類還在準備中，敬請期待 ✻'}</div>`;
+    fEl.querySelectorAll('.pill').forEach(b=>b.classList.toggle('on',b.dataset.cat===cur));
+    tilesEl.querySelectorAll('.tile').forEach(b=>b.classList.toggle('on',b.dataset.cat===cur));
+  }
+  fEl.addEventListener('click',e=>{const b=e.target.closest('[data-cat]');if(!b)return;cur=b.dataset.cat;render()});
+  tilesEl.addEventListener('click',e=>{const b=e.target.closest('[data-cat]');if(!b)return;cur=b.dataset.cat;render();document.getElementById('all').scrollIntoView()});
+  document.getElementById('q').addEventListener('input',e=>{q=e.target.value;render()});
+  render();
+
+  // ---- split view: top bar stays, material loads below ----
+  const viewer=document.getElementById('viewer'), frame=document.getElementById('frame'),
+        crumb=document.getElementById('crumb'), openNew=document.getElementById('openNew'),
+        loading=document.getElementById('frameLoading');
+  let homeScroll=0, curUrl=null;
+  frame.addEventListener('load',()=>{
+    loading.classList.add('done');
+    try{ window.fefeAnnotate && window.fefeAnnotate.bindKeys(frame.contentDocument); }catch(_){}
+  });
+  function route(home){
+    const m=home===true?null:location.hash.match(/^#view=(.+)$/);
+    if(m){
+      const url=decodeURIComponent(m[1]);
+      const p=items.find(x=>x.url===url)||{title:url,url};
+      if(!document.body.classList.contains('viewing')) homeScroll=scrollY;
+      document.body.classList.add('viewing'); viewer.hidden=false;
+      crumb.textContent=p.title; openNew.href=p.url; document.title=p.title+'｜Fefe 教學網站';
+      if(curUrl!==url){ curUrl=url; loading.classList.remove('done'); frame.src=p.url; window.fefeAnnotate&&window.fefeAnnotate.clear(); }
+    }else if(document.body.classList.contains('viewing')){
+      document.body.classList.remove('viewing'); viewer.hidden=true;
+      frame.src='about:blank'; curUrl=null; document.title='Fefe 教學網站 / Hack fefe 教材';
+      window.fefeAnnotate&&window.fefeAnnotate.clear();
+      if(!/^#(cats|all|about)$/.test(location.hash)) requestAnimationFrame(()=>scrollTo(0,homeScroll));
+    }
+    window.fefeAnnotate&&window.fefeAnnotate.refit();
+  }
+  addEventListener('hashchange',()=>route());
+  addEventListener('popstate',()=>route());
+  // open embeddable cards in the split view
+  document.addEventListener('click',e=>{
+    const a=e.target.closest('a[href^="#view="]'); if(!a||e.ctrlKey||e.metaKey||e.shiftKey) return;
+    e.preventDefault();
+    history.pushState(null,'',a.getAttribute('href'));
+    route();
+  });
+  // title / 回首頁: back to the homepage
+  document.querySelectorAll('#homeLink, .nav-view a:not(#openNew)').forEach(a=>a.addEventListener('click',e=>{
+    e.preventDefault();
+    if(location.hash.startsWith('#view=')){ try{ history.pushState(null,'',location.href.split('#')[0]); }catch(_){} }
+    route(true); if(!homeScroll) scrollTo(0,0);
+  }));
+  route();
+
+  // ---- playful extras ----
+  const still=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  // stagger list cards on each render
+  new MutationObserver(()=>lEl.querySelectorAll('.card').forEach((c,i)=>c.style.animationDelay=(i*45)+'ms')).observe(lEl,{childList:true});
+  lEl.querySelectorAll('.card').forEach((c,i)=>c.style.animationDelay=(i*45)+'ms');
+  // reveal on scroll
+  const rv=[...document.querySelectorAll('#featured .card, .tile, .notes .wrap > *, footer .cell')];
+  if(!still && 'IntersectionObserver' in window){
+    rv.forEach((el,i)=>{el.classList.add('reveal');el.style.transitionDelay=((i%9)*60)+'ms'});
+    const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);setTimeout(()=>{e.target.style.transitionDelay='';e.target.classList.remove('reveal','in')},1400)}}),{threshold:.15});
+    rv.forEach(el=>io.observe(el));
+  }
+  // doodles: mouse parallax + click pop
+  const ds=[...dEl.querySelectorAll('.doodle')];
+  ds.forEach(d=>d.addEventListener('click',()=>{d.classList.remove('pop');void d.offsetWidth;d.classList.add('pop')}));
+  if(!still) document.querySelector('.hero').addEventListener('mousemove',e=>{
+    const x=e.clientX/innerWidth-.5,y=e.clientY/innerHeight-.5;
+    ds.forEach((d,i)=>{const k=(i%3+1)*10;d.style.translate=`${x*k}px ${y*k}px`});
+  });
+})();
+</script>
+</body>
+</html>

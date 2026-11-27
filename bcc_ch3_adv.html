@@ -1,0 +1,533 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>數概第三章複習站</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=JetBrains+Mono:wght@500;700&display=swap">
+<style>
+/* Layout: one centered work column (max 760px); sticky header with a "today" tally chip at right, like a register stamp. */
+:root{
+  --bg:#eef2f4; --surface:#ffffff; --ink:#14232c; --muted:#5b6d78; --line:#d4dde2;
+  --accent:#0f6a73; --accent-ink:#ffffff; --accent-soft:#dcefef;
+  --ok:#1f7a3f; --ok-soft:#e1f3e7; --bad:#b3261e; --bad-soft:#fbe6e4; --warn:#9a5b00; --warn-soft:#fdf0d9;
+  --f-body:"Noto Sans TC","PingFang TC","Microsoft JhengHei",system-ui,sans-serif;
+  --f-num:"JetBrains Mono",ui-monospace,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0f171b; --surface:#17232a; --ink:#e3ecef; --muted:#93a6b0; --line:#2a3a42;
+  --accent:#4fb8bf; --accent-ink:#0b1417; --accent-soft:#1a3639;
+  --ok:#5cc37f; --ok-soft:#163222; --bad:#f08a80; --bad-soft:#3a1c1a; --warn:#e8b45a; --warn-soft:#352812; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0f171b; --surface:#17232a; --ink:#e3ecef; --muted:#93a6b0; --line:#2a3a42;
+  --accent:#4fb8bf; --accent-ink:#0b1417; --accent-soft:#1a3639;
+  --ok:#5cc37f; --ok-soft:#163222; --bad:#f08a80; --bad-soft:#3a1c1a; --warn:#e8b45a; --warn-soft:#352812; color-scheme:dark}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.6}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--surface)}
+button{font:inherit;color:inherit;cursor:pointer}
+button:focus-visible,input:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--surface);border-bottom:1px solid var(--line)}
+.top-in{max-width:760px;margin:0 auto;padding-block:10px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.brand{font-weight:900;font-size:18px;letter-spacing:.02em;background:none;border:0;padding:0}
+.brand small{display:block;font-weight:500;font-size:12px;color:var(--muted);letter-spacing:.06em}
+.spacer{flex:1}
+.who{display:flex;align-items:center;gap:6px;font-size:14px;color:var(--muted)}
+.who input{width:9em;padding:6px 8px;border:1px solid var(--line);border-radius:6px;background:var(--bg);color:var(--ink);font:inherit;font-size:14px}
+.tally{display:flex;align-items:center;gap:10px;padding:6px 12px 6px 10px;border:2px solid var(--accent);border-radius:8px;background:var(--accent-soft);color:var(--ink)}
+.tally .lbl{font-size:12px;line-height:1.2;color:var(--muted)}
+.tally .lbl b{display:block;color:var(--ink);font-size:13px}
+.tally .num{font-family:var(--f-num);font-weight:700;font-size:26px;color:var(--accent);font-variant-numeric:tabular-nums;line-height:1}
+.tally.bump .num{animation:bump .4s ease}
+@keyframes bump{40%{transform:scale(1.35)}}
+main{max-width:760px;margin:0 auto;padding-block:24px 64px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:grid;gap:20px}
+h1,h2,h3{margin:0;text-wrap:balance}
+h2{font-size:20px}
+.sec-label{font-size:12px;font-weight:700;letter-spacing:.12em;color:var(--muted)}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:20px;display:grid;gap:14px}
+.choices{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px}
+.chip{text-align:left;padding:12px 14px;border:1.5px solid var(--line);border-radius:8px;background:var(--bg);display:grid;gap:2px}
+.chip b{font-size:16px}
+.chip span{font-size:13px;color:var(--muted)}
+.chip[aria-pressed="true"]{border-color:var(--accent);background:var(--accent-soft);box-shadow:inset 0 0 0 1px var(--accent)}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.btn{padding:11px 20px;border-radius:8px;border:1.5px solid var(--line);background:var(--surface);font-weight:700}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.btn.big{font-size:18px;padding:14px 28px}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.toggle{display:flex;align-items:center;gap:8px;font-size:14px;color:var(--muted)}
+.wrongcard{display:flex;gap:16px;align-items:center;flex-wrap:wrap}
+.wrongcard .count{font-family:var(--f-num);font-size:40px;font-weight:700;color:var(--bad);line-height:1;font-variant-numeric:tabular-nums}
+.wrongcard .meta{flex:1;min-width:180px}
+.wrongcard .meta p{margin:0;color:var(--muted);font-size:14px}
+.wlist{display:grid;gap:8px;max-height:340px;overflow:auto;padding-right:4px}
+.witem{border:1px solid var(--line);border-radius:8px;padding:10px 12px;font-size:14px;background:var(--bg)}
+.witem .src{font-size:12px;color:var(--muted)}
+.witem .times{font-family:var(--f-num);color:var(--bad);font-size:12px}
+.linkbtn{background:none;border:0;padding:0;color:var(--accent);font-weight:700;font-size:14px;text-decoration:underline;text-underline-offset:3px}
+.linkbtn.danger{color:var(--bad)}
+/* quiz */
+.qhead{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;font-size:14px;color:var(--muted)}
+.qhead b{color:var(--ink);font-family:var(--f-num);font-variant-numeric:tabular-nums}
+.bar{height:8px;border-radius:99px;background:var(--line);overflow:hidden}
+.bar i{display:block;height:100%;background:var(--ok);width:0;transition:width .3s}
+.tag{display:inline-block;font-size:12px;font-weight:700;padding:2px 8px;border-radius:99px;background:var(--accent-soft);color:var(--accent)}
+.tag.retry{background:var(--warn-soft);color:var(--warn)}
+.qtext{font-size:19px;font-weight:500;line-height:1.7}
+.opts{display:grid;gap:10px}
+.opt{display:flex;gap:12px;align-items:flex-start;text-align:left;padding:12px 14px;border:1.5px solid var(--line);border-radius:8px;background:var(--surface);font-size:16px}
+.opt .k{flex:none;width:28px;height:28px;border-radius:6px;display:grid;place-items:center;background:var(--bg);border:1px solid var(--line);font-family:var(--f-num);font-weight:700;font-size:14px}
+.opt:not(:disabled):hover{border-color:var(--accent)}
+.opt:disabled{cursor:default}
+.opt.right{border-color:var(--ok);background:var(--ok-soft)}
+.opt.right .k{background:var(--ok);color:var(--surface);border-color:var(--ok)}
+.opt.wrong{border-color:var(--bad);background:var(--bad-soft)}
+.opt.wrong .k{background:var(--bad);color:var(--surface);border-color:var(--bad)}
+.opt.dim{opacity:.55}
+.fb{border-radius:8px;padding:14px 16px;display:grid;gap:6px}
+.fb.ok{background:var(--ok-soft);border:1px solid var(--ok)}
+.fb.bad{background:var(--bad-soft);border:1px solid var(--bad)}
+.fb h3{font-size:16px}
+.fb.ok h3{color:var(--ok)} .fb.bad h3{color:var(--bad)}
+.fb p{margin:0;white-space:pre-line}
+.fb .note{font-size:13px;color:var(--muted)}
+.hint{font-size:12px;color:var(--muted)}
+/* result */
+.score{display:flex;align-items:baseline;gap:8px}
+.score .n{font-family:var(--f-num);font-weight:700;font-size:72px;line-height:1;color:var(--accent);font-variant-numeric:tabular-nums}
+.score .u{font-size:20px;color:var(--muted)}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px}
+.stat{border:1px solid var(--line);border-radius:8px;padding:10px 12px;background:var(--bg)}
+.stat .v{font-family:var(--f-num);font-weight:700;font-size:22px;font-variant-numeric:tabular-nums}
+.stat .l{font-size:13px;color:var(--muted)}
+/* modal */
+.modal{position:fixed;inset:0;background:rgba(10,20,25,.5);display:grid;place-items:center;z-index:20;padding:16px}
+.modal .box{background:var(--surface);border-radius:12px;max-width:440px;width:100%;padding:22px;display:grid;gap:14px;border:1px solid var(--line)}
+.bigday{font-family:var(--f-num);font-size:64px;font-weight:700;color:var(--accent);line-height:1;font-variant-numeric:tabular-nums}
+.log{font-size:13px;display:grid;gap:4px;max-height:200px;overflow:auto}
+.log div{display:flex;justify-content:space-between;gap:8px;border-bottom:1px dashed var(--line);padding-bottom:3px}
+.log span:last-child{font-family:var(--f-num);white-space:nowrap}
+/* ---------- game feel ---------- */
+:root{--gold:#e0a21b;--hot:#e8613c}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--gold:#f2c14e;--hot:#ff8a5c}}
+:root[data-theme="dark"]{--gold:#f2c14e;--hot:#ff8a5c}
+#fx{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:30}
+.iconbtn{background:none;border:1.5px solid var(--line);border-radius:8px;padding:6px 10px;font-size:13px;color:var(--muted);font-weight:700}
+.iconbtn[aria-pressed="false"]{text-decoration:line-through}
+.tally .lv{font-family:var(--f-num);font-weight:700;color:var(--gold)}
+.panel.enter{animation:slideIn .35s cubic-bezier(.2,.8,.3,1.2)}
+@keyframes slideIn{from{opacity:0;transform:translateY(18px) scale(.98)}}
+.panel.shake{animation:shake .45s}
+@keyframes shake{20%{transform:translateX(-10px)}40%{transform:translateX(9px)}60%{transform:translateX(-6px)}80%{transform:translateX(3px)}}
+.opt{transition:transform .12s,box-shadow .12s,border-color .12s}
+.opt:not(:disabled):hover{transform:translateY(-2px);box-shadow:0 6px 16px -8px rgba(15,60,70,.45)}
+.opt:not(:disabled):active{transform:scale(.98)}
+.opt.right.boom{animation:okPop .55s cubic-bezier(.2,.8,.3,1.4);box-shadow:0 0 0 4px color-mix(in srgb,var(--ok) 30%,transparent)}
+@keyframes okPop{0%{transform:scale(.96)}45%{transform:scale(1.05)}100%{transform:scale(1)}}
+.opt.wrong.boom{animation:shake .4s}
+.bar{height:12px;position:relative}
+.bar i{background:repeating-linear-gradient(-45deg,var(--ok) 0 10px,color-mix(in srgb,var(--ok) 75%,#fff) 10px 20px);background-size:28px 28px;animation:stripes 1s linear infinite;border-radius:99px}
+@keyframes stripes{to{background-position:28px 0}}
+.combo{font-family:var(--f-num);font-weight:700;color:var(--muted);padding:2px 10px;border-radius:99px;border:1.5px solid var(--line);white-space:nowrap}
+.combo.hot{color:#fff;border-color:var(--hot);background:linear-gradient(90deg,var(--hot),var(--gold));animation:glow 1.2s ease-in-out infinite}
+.combo.pump{animation:bump .4s ease}
+@keyframes glow{50%{box-shadow:0 0 14px var(--hot)}}
+.plus{position:fixed;z-index:31;pointer-events:none;font-family:var(--f-num);font-weight:700;font-size:26px;color:var(--ok);text-shadow:0 2px 0 var(--surface)}
+.pop{position:fixed;left:50%;top:32%;z-index:32;pointer-events:none;transform:translate(-50%,-50%);display:grid;justify-items:center;gap:2px;opacity:0;text-align:center}
+.pop b{font-size:clamp(34px,8vw,56px);font-weight:900;color:var(--accent);-webkit-text-stroke:1px var(--surface);text-shadow:0 4px 0 color-mix(in srgb,var(--accent) 30%,transparent);white-space:nowrap}
+.pop span{font-weight:700;color:var(--ink);background:var(--surface);padding:2px 12px;border-radius:99px;border:1px solid var(--line)}
+.pop.combo3 b,.pop.lvl b{color:var(--hot)}
+.pop.show{animation:popIn .95s cubic-bezier(.2,.9,.3,1.3) forwards}
+.pop.show.lvl{animation-duration:1.9s}
+@keyframes popIn{0%{opacity:0;transform:translate(-50%,-30%) scale(.4)}18%{opacity:1;transform:translate(-50%,-50%) scale(1.12)}30%{transform:translate(-50%,-50%) scale(1)}80%{opacity:1}100%{opacity:0;transform:translate(-50%,-80%) scale(1)}}
+.lvcard{display:flex;gap:16px;align-items:center;flex-wrap:wrap}
+.lvbadge{flex:none;width:72px;height:72px;border-radius:50%;display:grid;place-items:center;background:conic-gradient(var(--gold) calc(var(--p)*1%),var(--line) 0);position:relative}
+.lvbadge::before{content:"";position:absolute;inset:6px;border-radius:50%;background:var(--surface)}
+.lvbadge b{position:relative;font-family:var(--f-num);font-size:22px;line-height:1;text-align:center}
+.lvbadge b small{display:block;font-size:10px;color:var(--muted);letter-spacing:.1em}
+.lvmeta{flex:1;min-width:200px;display:grid;gap:4px}
+.lvmeta .t{font-size:20px;font-weight:900}
+.lvmeta p{margin:0;color:var(--muted);font-size:14px}
+.ladder{display:flex;gap:4px;flex-wrap:wrap}
+.ladder i{width:18px;height:6px;border-radius:3px;background:var(--line)}
+.ladder i.on{background:var(--gold)}
+.btn.primary.big{box-shadow:0 4px 0 color-mix(in srgb,var(--accent) 55%,#000);transition:transform .1s,box-shadow .1s}
+.btn.primary.big:active{transform:translateY(3px);box-shadow:0 1px 0 color-mix(in srgb,var(--accent) 55%,#000)}
+.stars{display:flex;gap:10px}
+.star{width:52px;height:52px;background:var(--line);clip-path:polygon(50% 0,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%)}
+.star.on{background:var(--gold);animation:starIn .5s cubic-bezier(.2,.9,.3,1.6) both}
+@keyframes starIn{0%{transform:scale(0) rotate(-90deg)}100%{transform:scale(1) rotate(0)}}
+.grade{font-size:22px;font-weight:900}
+@media (max-width:520px){.who input{width:7em}.qtext{font-size:17px}.score .n{font-size:56px}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+
+<header class="top"><div class="top-in">
+  <button class="brand" id="homeBtn" title="回首頁">數概第三章複習站<small>計算機硬體 · 線上練習</small></button>
+  <div class="spacer"></div>
+  <label class="who" for="stuName">姓名/座號 <input id="stuName" placeholder="例：12 王小明" maxlength="20"></label>
+  <button class="iconbtn" id="muteBtn" aria-pressed="true" title="音效開關">音效</button>
+  <button class="tally" id="tally" title="查看今日紀錄">
+    <span class="lbl"><b>今日答對</b><span id="tallyDate"></span> · <span class="lv" id="tallyLv">Lv.1</span></span>
+    <span class="num" id="tallyNum">0</span>
+  </button>
+</div></header>
+
+<main id="app"></main>
+<canvas id="fx" aria-hidden="true"></canvas>
+<div class="pop" id="pop" aria-live="polite"></div>
+
+<div class="modal" id="dayModal" hidden><div class="box" role="dialog" aria-labelledby="dayTitle">
+  <div class="sec-label">今日成果登記</div>
+  <h2 id="dayTitle"></h2>
+  <div class="row" style="align-items:baseline;gap:8px"><span class="bigday" id="dayNum">0</span><span>題答對</span></div>
+  <div class="stats" id="dayStats"></div>
+  <div class="log" id="dayLog"></div>
+  <p class="hint" style="margin:0">紀錄只存在這台裝置的瀏覽器中，隔天會自動從 0 開始。</p>
+  <div class="row"><button class="btn primary" id="dayClose">關閉</button></div>
+</div></div>
+
+<script>
+const BANK = [{"id": "ch3-1", "title": "第三章 1-3 節", "qs": [{"id": "ch3-1-1", "n": 1, "q": "同學在撰寫網頁設計專題時，辛苦打好的 HTML 程式碼與素材在尚未存檔至硬碟前，主要是暫存在電腦硬體架構中的哪一個核心單元？", "o": ["算術與邏輯單元", "輸入單元", "記憶單元", "控制單元"], "a": 2, "e": "尚未存檔的資料與程式碼是暫存在主記憶體（RAM，屬於記憶單元）中。"}, {"id": "ch3-1-2", "n": 2, "q": "關於電腦五大單元的協同運作觀念，下列哪一位同學的認知是錯誤的？", "o": ["輸入單元：鍵盤上的按鍵訊號須經由此單元進入電腦", "輸出單元：螢幕負責將處理完成之畫面由此單元呈現送出", "算術邏輯單元：程式設計中的數值加總與條件判斷均在此完成", "記憶單元：功能極度受限，僅能儲存剛輸入且尚未處理之原始資料"], "a": 3, "e": "記憶單元不僅儲存剛輸入的資料，也儲存處理中的資料、程式指令與處理後的結果。"}, {"id": "ch3-1-3", "n": 3, "q": "中壢高商的電腦教室準備進行設備升級，在採購清單上的「中央處理單元(CPU)」，其晶片內部主要封裝了哪兩個核心單元？", "o": ["輸入單元及控制單元", "控制單元及算術∕邏輯單元", "輸入單元及輸出單元", "算術∕邏輯單元及記憶單元"], "a": 1, "e": "CPU(中央處理單元)主要由控制單元(CU)與算術邏輯單元(ALU)組成。"}, {"id": "ch3-1-4", "n": 4, "q": "當學生登入網站時，伺服器需要快速比對作答選項是否正確、計算總分並進行排名。電腦中負責執行這些「比對」與「計算」工作的是哪一個單元？", "o": ["CU", "MU", "ALU", "OU"], "a": 2, "e": "算術邏輯單元(ALU)負責所有的數學計算與邏輯比較(判斷)。"}, {"id": "ch3-1-5", "n": 5, "q": "就像是一間公司的專案經理，本身不負責生產，但負責解碼客戶指令、指揮並協調各個部門（如會計部算帳、倉管部調貨）的運作。若以此角色比喻，最符合電腦的哪一個單元？", "o": ["輸入單元", "記憶單元", "輸出單元", "控制單元"], "a": 3, "e": "控制單元(CU)負責解碼指令並發布控制訊號，如同專案經理指揮各單元運作。"}, {"id": "ch3-1-6", "n": 6, "q": "撰寫 JavaScript 時，常常會用到加、減、乘、除等變數運算。程式執行時，電腦底層是由哪一個單位來實際處理這些數值轉換？", "o": ["算術邏輯單元", "控制單元", "輸出單元", "輸入單元"], "a": 0, "e": "算術邏輯單元(ALU)負責執行加減乘除等算術運算。"}, {"id": "ch3-1-7", "n": 7, "q": "若將負責溝通外界的鍵盤 (IU) 與螢幕(OU) 撇除在外，構成電腦核心主機的另外三大單元？", "o": ["CU、ALU、MU", "CPU、ALU、MU", "CPU、MU、CU", "ALU、CU、CPU"], "a": 0, "e": "電腦五大單元扣除輸入(IU)與輸出(OU)，剩下控制單元(CU)、算術邏輯單元(ALU)及記憶單元(MU)。"}, {"id": "ch3-1-8", "n": 8, "q": "在進行實體線材接駁與周邊擴充時，下列哪一項傳輸介面與應用的搭配是錯誤的？", "o": ["利用 HDMI 可將筆電畫面傳送至教室大電視播放", "利用 USB 可連接有線機械鍵盤", "利用 RJ-45 連接埠可插上實體網路線", "利用音源輸入（line in）孔洞來連接外接式備份硬碟"], "a": 3, "e": "音源輸入(line in)用來接收外部音訊，外接式硬碟應使用USB等傳輸介面。"}, {"id": "ch3-1-9", "n": 9, "q": "購買主機板時，規格表上標示的「背板 I/O 介面」提供了豐富的連接埠。這裡的「I/O」指的是什麼縮寫？", "o": ["1跟0的數位訊號", "物聯網（IoT）", "輸入與輸出（Input/Output）", "整合式辦公室系統（integrated office system）"], "a": 2, "e": "I/O 為 Input (輸入) 與 Output (輸出) 的縮寫。"}, {"id": "ch3-1-10", "n": 10, "q": "現今的 USB 隨身碟或繪圖板大多具備「熱插拔」特性。關於此技術帶來的便利性，下列敘述何者正確？", "o": ["為了安全，只能在電腦完全開好機的情況下插拔", "為了保護晶片，只能在關機的斷電情況下插拔", "無論是在關機或開機運作的情況下皆可隨時插拔而不毀損系統", "只有當主機感測溫度高於一定數值時才可插拔"], "a": 2, "e": "熱插拔(Hot Swapping)允許在電腦開機且通電的狀態下直接插拔設備而不毀損系統。"}, {"id": "ch3-1-11", "n": 11, "q": "為了讓開啟 VS Code 與 Live Server時不再卡頓，同學買了一條16GB 的 DDR4 準備自行升級。打開主機側板後，他應該將此硬體安插在下列哪一種插槽？", "o": ["記憶體插槽", "PCI-E插槽", "CPU插槽", "M.2插槽"], "a": 0, "e": "DDR4 為主記憶體(RAM)規格，須安裝於主機板的記憶體插槽。"}, {"id": "ch3-1-12", "n": 12, "q": "新世代輕薄筆電常精簡機身介面，若僅內建 Type-C、HDMI、line out 等連接埠。下列關於這些連接埠的操作情境，何者不正確？", "o": ["利用 line out 連接埠插上網路線來上網", "利用 Type-C 連接埠連接傳輸線為手機充電", "利用 Type-C 連接埠將手機中的專題素材傳送至電腦", "利用 HDMI 連接埠將手機畫面透過轉接傳送至電視播放"], "a": 0, "e": "line out 為音源輸出，用來連接喇叭或耳機；網路線應接RJ-45或透過Type-C轉接。"}, {"id": "ch3-1-13", "n": 13, "q": "隨插即用的 USB 介面是現代電腦不可或缺的標準配備。下列哪一種裝置最適合且通常是透過 USB 介面與電腦主機連接？", "o": ["電源供應器", "隨身碟", "RAM 主記憶體", "CPU 中央處理器"], "a": 1, "e": "隨身碟是最標準且最常透過USB介面與電腦連接的隨插即用裝置。"}, {"id": "ch3-1-14", "n": 14, "q": "顯示卡背面有一個外觀呈現扁平、內部具有19個腳位，且外框一端略為梯形凹折的連接埠，目前廣泛應用於影音設備，能同時傳輸高畫質視訊與音訊。這代表何種規格的連接埠？", "o": ["DVI", "HDMI", "USB", "D-Sub"], "a": 1, "e": "HDMI 外觀為19腳位梯形，能同時傳輸高畫質視訊與音訊，廣泛用於影音設備。"}, {"id": "ch3-1-15", "n": 15, "q": "進行雙螢幕擴充時需要挑選視訊線材，下列連接埠中，哪一個原本的設計就無法用來傳輸視訊訊號？", "o": ["DVI", "HDMI", "RJ-45", "VGA"], "a": 2, "e": "RJ-45 是網路線連接埠，用來傳輸網路資料，無法傳輸視訊訊號。"}, {"id": "ch3-1-16", "n": 16, "q": "老師準備了一組新的外接式喇叭用來播放英語發音教材。他應該將喇叭的3.5mm 音源線接在主機背板的什麼顏色或標示孔洞，聲音才能正確播放出來？", "o": ["line in (藍色)", "line out (綠色)", "mic in (粉紅色)", "mic out"], "a": 1, "e": "喇叭為音源輸出，應連接綠色的 line out 孔洞；藍色為line in，粉紅色為麥克風。"}, {"id": "ch3-1-17", "n": 17, "q": "關於目前廣泛應用於手機與電腦的 USB 連接埠與技術規格，下列敘述何者錯誤？", "o": ["雖然 USB4 統一採用 Type-C 介面，但市面上的 USB 3.0 插頭也全都是 Type-C 規格", "隨身碟外觀上若印有樹枝狀的圖示標誌，表示該產品是使用 USB 介面與電腦連接", "它除了傳輸資料，亦可作為週邊設備充電使用的連接埠", "支援熱插拔技術，隨插即用"], "a": 0, "e": "USB 3.0 的插頭有Type-A、Type-B等多種規格，並非全部都是Type-C。"}, {"id": "ch3-1-18", "n": 18, "q": "在評估伺服器 CPU 的運算效能時，常會參考 MIPS 這個指標。其中的字母「I」代表的意義為：", "o": ["資訊（Information）", "指令（Instruction）", "輸入（Input）", "內部（Internal）"], "a": 1, "e": "MIPS (Million Instructions Per Second) 中的 I 代表 Instruction (指令)。"}, {"id": "ch3-1-19", "n": 19, "q": "電腦教室配備了「內建 8GB 記憶體、64位元」架構的電腦主機，針對這串規格的專業解讀，下列何者正確？", "o": ["8GB 指的是 CPU 內部快取記憶體的總容量", "CPU 內部的「一般用途暫存器」位元數高達 8GB", "這代表該 CPU 的時脈頻率為 64 GHz 運作", "這代表該 CPU 單次能處理的字組（Word）大小為 64 bits（即 8 Bytes）"], "a": 3, "e": "64位元架構指的是CPU的字組(Word)大小，即單次可處理 64 bits (8 Bytes) 的資料。"}, {"id": "ch3-1-20", "n": 20, "q": "某品牌推出搭載「Intel Core i7-1165G7 2.80GHz」CPU的變形筆電，螢幕可翻轉作為平板使用。請根據這段核心硬體敘述判斷，下列何者正確？", "o": ["Intel 是這顆 CPU 的產品型號", "Core i7-1165G7 是這顆 CPU 的製造廠商名稱", "該 CPU 的時脈頻率為 2.80GHz", "這代表內部的石英振盪器每秒僅振盪 2.80 億次"], "a": 2, "e": "Intel是廠牌，Core i7是系列，2.80GHz代表其時脈頻率(每秒28億次振盪)。"}, {"id": "ch3-1-21", "n": 21, "q": "CPU 從記憶體抓取一道指令，經過解碼並實際執行完畢，完成這整個動作所需的時間與過程，在計算機結構中稱作：", "o": ["機器週期（machine cycle）", "擷取週期（fetch cycle）", "執行週期（execution cycle）", "等待週期（wait cycle）"], "a": 0, "e": "機器週期包含擷取、解碼、執行、儲存，是CPU完成一個指令的完整過程。"}, {"id": "ch3-1-22", "n": 22, "q": "探討 CPU 內部處理資訊的運作週期時，下列哪一項說法是錯誤的？", "o": ["CPU 通常使用 MIPS 單位來表示每秒可執行多少百萬個指令", "一個完整的機器週期包含擷取、解碼、執行、儲存等 4 個步驟", "「擷取」及「解碼」這兩個階段合稱為擷取週期", "「執行」及「儲存」這兩個階段合稱為機器週期"], "a": 3, "e": "「執行」與「儲存」合稱為執行週期；擷取、解碼、執行、儲存四個步驟合稱才叫機器週期。"}, {"id": "ch3-1-23", "n": 23, "q": "資訊科在比較兩台電腦執行專題程式碼的速度快慢時，主要是在比較電腦五大單元中的哪一個核心元件效能？", "o": ["輸入單元", "輸出單元", "記憶單元", "中央處理單元"], "a": 3, "e": "運算速度與執行快慢主要取決於中央處理單元(CPU)的效能。"}, {"id": "ch3-1-24", "n": 24, "q": "為了追求極致的處理效率，CPU 內部整合了精密微小的架構。下列何者不包含在 CPU 的封裝結構之內？", "o": ["快取記憶體", "輔助記憶體（如硬碟）", "控制單元", "暫存器"], "a": 1, "e": "輔助記憶體(如硬碟、SSD)屬於外部儲存裝置，不在CPU晶片的封裝結構內。"}, {"id": "ch3-1-25", "n": 25, "q": "暫存器（Register）是 CPU 內部存取速度最快的記憶體，各有專責任務。下列針對其功能的描述，何者不正確？", "o": ["累加器（Accumulator）：用來存放運算的資料與最終結果", "位址暫存器（MAR）：用來存放即將存取指令或資料的主記憶體位址", "指令暫存器（IR）：用來存放「下一個」準備要執行的指令位址", "旗標暫存器（Flag Register）：用來存放 CPU 剛運算後的各種狀態與條件判斷"], "a": 2, "e": "存放「下一個」準備執行的指令位址的是程式計數器(PC)，指令暫存器(IR)是存放「正在執行」的指令。"}, {"id": "ch3-1-26", "n": 26, "q": "資料處理科的專題伺服器搭載了一顆時脈頻率為2.5 GHz 的處理器。請問該CPU 的一個時脈週期（Clock Cycle Time）時間為何？", "o": ["0.25 ns", "0.4 ns", "2.5 ns", "4.0 ns"], "a": 1, "e": "時脈週期 = 1 / 時脈頻率 = 1 / 2.5GHz = 1 / (2.5 * 10^9) = 0.4 * 10^-9 秒 = 0.4 ns。"}, {"id": "ch3-1-27", "n": 27, "q": "若中壢高商電腦教室的一台主機，其CPU 的時脈週期為0.5 ns（奈秒），則該CPU 的時脈頻率應為多少？", "o": ["500 MHz", "1.5 GHz", "2.0 GHz", "5.0 GHz"], "a": 2, "e": "時脈頻率 = 1 / 時脈週期 = 1 / 0.5ns = 1 / (0.5 * 10^-9) = 2 * 10^9 Hz = 2.0 GHz。"}, {"id": "ch3-1-28", "n": 28, "q": "某台執行網頁設計伺服器運算的CPU，時脈頻率為2 GHz，且平均執行一個指令需要4 個時脈週期（CPI = 4）。請問該CPU 的運算速度為多少MIPS？", "o": ["250 MIPS", "500 MIPS", "2000 MIPS", "8000 MIPS"], "a": 1, "e": "2 GHz = 每秒 2*10^9 個時脈；除以 CPI(4) = 5*10^8 個指令 = 500 百萬指令 = 500 MIPS。"}, {"id": "ch3-1-29", "n": 29, "q": "學生撰寫了一支測試程式，編譯後共產生10^6 個機器指令。若在時脈頻率為1 GHz 的電腦上執行，且平均執行一個指令需2 個時脈週期，則該程式需要多少執行時間？", "o": ["1 毫秒(ms)", "2 毫秒 (ms)", "1 微秒 (μs)", "2 微秒 (μs)"], "a": 1, "e": "總需時脈數 = 10^6 * 2 = 2*10^6。時脈週期 = 1ns。總時間 = 2*10^6 * 1ns = 2 ms。"}, {"id": "ch3-1-30", "n": 30, "q": "某CPU 在0.02 秒內執行了500 萬個指令，請問該CPU 的運算速度為多少MIPS？", "o": ["100 MIPS", "250 MIPS", "500 MIPS", "1000 MIPS"], "a": 1, "e": "運算速度 = 指令數 / 執行時間 = 500萬 / 0.02秒 = 25000萬指令/秒 = 250 MIPS。"}, {"id": "ch3-1-31", "n": 31, "q": "假設某主機板的系統資料匯流排寬度為64 位元（bits），其運作時脈頻率為800 MHz，且每個時脈週期可傳送一次資料。請問該資料匯流排的最大理論傳輸頻寬為每秒多少？", "o": ["800 MB/s", "1.6 GB/s", "3.2 GB/s", "6.4 GB/s"], "a": 3, "e": "64 bits = 8 Bytes。傳輸頻寬 = 8 Bytes * 800 MHz = 6400 MB/s = 6.4 GB/s。"}, {"id": "ch3-1-32", "n": 32, "q": "若一顆CPU 平均執行一個指令花費的時間為2 ns，請問這顆CPU 的執行速度為多少MIPS？", "o": ["200 MIPS", "250 MIPS", "500 MIPS", "2000 MIPS"], "a": 2, "e": "一秒可執行的指令數 = 1秒 / 2ns = 1 / (2 * 10^-9) = 0.5 * 10^9 = 500 MIPS。"}, {"id": "ch3-1-33", "n": 33, "q": "選手在準備全國技藝競賽時，需將500 MB 的專題備份檔存入隨身碟。若使用USB 3.0 介面（理論傳輸頻寬為5 Gbps），在不考慮耗損的理想狀態下，傳輸完畢需要多少時間？", "o": ["0.1 秒", "0.8 秒", "1.0 秒", "8.0 秒"], "a": 1, "e": "5 Gbps = 5000 Mbps。理想頻寬約 500MB*8=4000Mb  4000Mb/5000Mb= 0.8 秒。"}, {"id": "ch3-1-34", "n": 34, "q": "老師準備了一個16 GB 的隨身碟存放上課教材。若每個教學簡報檔大小皆為4 MB，請問該隨身碟最多約可存放幾個此類檔案？", "o": ["1024 個", "2048 個", "4096 個", "8192 個"], "a": 2, "e": "實際值16 GB = 16 * 1024 MB = 16384 MB。16384 / 4 = 4096 個。\n大約值16GB=16000MB /4MB=4000"}, {"id": "ch3-1-35", "n": 35, "q": "同學為了玩3D 遊戲，將電腦CPU 從1 GHz 升級到4 GHz。請問升級後，新CPU 的一個時脈週期時間縮短為多少？", "o": ["0.1 ns", "0.25 ns", "0.5 ns", "1.0 ns"], "a": 1, "e": "升級後時脈為 4 GHz，時脈週期 = 1 / 4GHz = 0.25 ns。"}, {"id": "ch3-1-36", "n": 36, "q": "現代作業系統大多支援PnP（Plug and Play）技術，關於PnP 的敘述，下列何者最為正確？", "o": ["隨插即用，硬體接上電腦後系統會自動偵測、配置資源並嘗試安裝驅動程式", "只能應用於隨身碟與鍵盤滑鼠，無法用於顯示卡等內部擴充卡", "PnP 設備不需要任何驅動程式即可運作", "PnP 代表設備可以不用插電即可運作"], "a": 0, "e": "PnP(隨插即用)技術指硬體接上後，系統會自動偵測、配置資源並嘗試安裝驅動程式。"}, {"id": "ch3-1-37", "n": 37, "q": "電腦開機時會先執行BIOS，目前主機板上的BIOS 程式碼主要是存放在下列哪一種記憶體中，使其能在關機後不流失資料且方便更新？", "o": ["DRAM (動態隨機存取記憶體)", "SRAM (靜態隨機存取記憶體)", "Flash ROM (快閃唯讀記憶體)", "Cache (快取記憶體)"], "a": 2, "e": "現代主機板的 BIOS 韌體主要存放在快閃唯讀記憶體(Flash ROM)中，斷電不流失且可更新。"}, {"id": "ch3-1-38", "n": 38, "q": "電腦在按下電源鍵開機的瞬間，BIOS會立刻進行一項重要的工作，用來檢查主機板上的CPU、記憶體、鍵盤等硬體是否運作正常。這個程序稱為什麼？", "o": ["POST (開機自我測試)", "PnP (隨插即用)", "CMOS (互補式金屬氧化物半導體)", "DMA (直接記憶體存取)"], "a": 0, "e": "POST (Power-On Self-Test) 是開機自我測試，負責檢查CPU、記憶體等核心硬體是否正常。"}, {"id": "ch3-1-39", "n": 39, "q": "隨著AI 與多媒體設計的發展，GPU在電腦系統中的地位日益重要。關於GPU 的功用，下列何者敘述錯誤？", "o": ["專司影像與圖形渲染運算，分擔CPU 的工作負荷", "內部具備極少量的核心，專注於處理單一且複雜的邏輯控制", "特別適合用來處理大量平行運算與矩陣乘法", "目前廣泛應用於深度學習與機器學習領域"], "a": 1, "e": "GPU內部具備「大量」的小型核心，適合處理大量平行運算與圖形渲染，而非極少數核心。"}, {"id": "ch3-1-40", "n": 40, "q": "外接介面的傳輸速度會影響檔案備份效率。下列關於歷代USB 介面理論傳輸速度的比較，何者正確？", "o": ["USB 2.0 (480 Mbps) < USB 3.0 (5 Gbps) < USB 3.1 (10 Gbps) < USB 3.2 (20 Gbps)", "USB 2.0 (12 Mbps) < USB 3.0 (480 Mbps) < USB 3.1 (5 Gbps) < USB 3.2 (10 Gbps)", "USB 2.0 (5 Gbps) < USB 3.0 (10 Gbps) < USB 3.1 (20 Gbps) < USB 3.2 (40 Gbps)", "USB 3.0 與USB 3.1 速度完全相同，僅接頭形狀不同"], "a": 0, "e": "USB傳輸速度：2.0(480Mbps)、3.0(5Gbps)、3.1(10Gbps)、3.2(20Gbps)。"}, {"id": "ch3-1-41", "n": 41, "q": "常見於新款手機與筆電的USB Type-C 介面，下列關於它的敘述何者不正確？", "o": ["接頭支援正反面盲插，提升使用便利性", "Type-C 僅是一種實體接頭外觀規格，其實際傳輸速度取決於背後的 USB 協定版本", "Type-C 接頭內建顯示晶片，因此插上螢幕即可顯示畫面", "透過特定協定（如PD），Type-C亦可提供高達上百瓦的充電功率"], "a": 2, "e": "Type-C 僅是實體接頭外觀，是否能輸出畫面取決於內部是否支援影像輸出協定，並非內建晶片。"}, {"id": "ch3-1-42", "n": 42, "q": "為了讓CPU 不會因為等待資料而閒置，電腦內部的記憶體階層設計非常重要。下列何者是依照存取速度由快到慢的正確排列？", "o": ["暫存器 > 快取記憶體 > 主記憶體 > 固態硬碟", "快取記憶體 > 暫存器 > 固態硬碟 > 主記憶體", "主記憶體 > 暫存器 > 快取記憶體 > 固態硬碟", "暫存器 > 主記憶體 > 快取記憶體 > 固態硬碟"], "a": 0, "e": "記憶體存取速度由快到慢：暫存器 > 快取記憶體 > 主記憶體 > 固態硬碟(輔助記憶體)。"}, {"id": "ch3-1-43", "n": 43, "q": "主機板上的鈕扣電池（如CR2032）若沒電了，通常會造成電腦發生什麼現象？", "o": ["電腦完全無法開機且風扇不轉", "系統時間跑掉，且BIOS 的自訂設定恢復為出廠預設值", "硬碟內的作業系統與資料會被格式化", "螢幕顯示會變成黑白無色彩"], "a": 1, "e": "鈕扣電池負責供應CMOS記憶體電力，沒電會導致系統時間跑掉、BIOS設定恢復為出廠預設值。"}, {"id": "ch3-1-44", "n": 44, "q": "為了彌補CPU 運算極快，但DRAM 主記憶體存取較慢的速度落差，硬體工程師在兩者之間加入了哪一種元件來存放CPU 最常存取的資料？", "o": ["虛擬記憶體(Virtual Memory)", "暫存器 (Register)", "快取記憶體 (Cache)", "輔助記憶體(Secondary Memory)"], "a": 2, "e": "快取記憶體(Cache)建置在CPU與主記憶體之間，用來暫存常使用的資料以減少存取落差。"}, {"id": "ch3-1-45", "n": 45, "q": "CPU 與主記憶體之間需要透過系統匯流排（System Bus）來傳遞資訊。系統匯流排主要由哪三種匯流排所組成？", "o": ["暫存、執行、儲存匯流排", "輸入、輸出、算術 匯流排", "內部、外部、擴充匯流排", "資料、位址、控制匯流排"], "a": 3, "e": "系統匯流排依功能分為：資料(Data)、位址(Address)及控制(Control)匯流排。"}, {"id": "ch3-1-46", "n": 46, "q": "承上題，若一台電腦「位址匯流排（Address Bus）」寬度為32 位元，在不使用特殊記憶體擴充技術的情況下，其主記憶體最大可定址的空間為？", "o": ["2 GB", "4 GB", "8 GB", "16 GB"], "a": 1, "e": "32位元位址匯流排可產生 2^32 個位址，即 4G 個位址；每個位址 1 Byte，最大定址空間為 4 GB。"}, {"id": "ch3-1-47", "n": 47, "q": "關於記憶體的特性，下列哪一組元件皆屬於關機斷電後，資料即會消失的「揮發性記憶體（Volatile Memory）」？", "o": ["SRAM、DRAM", "ROM、Flash Memory", "RAM、SSD", "EEPROM、HDD"], "a": 0, "e": "揮發性記憶體在斷電後資料會消失，RAM家族中的 SRAM 與 DRAM 皆屬此類。"}, {"id": "ch3-1-48", "n": 48, "q": "當滑鼠移動或鍵盤按下按鍵時，外部設備會發送一個特定訊號給CPU，要求CPU 暫停目前工作並優先處理該輸入事件。這個機制稱為什麼？", "o": ["解碼(Decode)", "中斷 (Interrupt)", "管線化(Pipelining)", "多工 (Multitasking)"], "a": 1, "e": "中斷(Interrupt)是外部硬體向CPU發出的信號，要求CPU暫停目前工作以優先處理該事件。"}, {"id": "ch3-1-49", "n": 49, "q": "一個完整的指令週期（Instruction Cycle）包含了多個步驟。請問CPU 執行指令的正確先後順序為何？", "o": ["解碼 → 擷取 → 執行 → 儲存", "擷取 → 執行 → 解碼 → 儲存", "擷取 → 解碼 → 執行 → 儲存", "執行 → 解碼 → 擷取 → 儲存"], "a": 2, "e": "CPU執行指令的完整順序為：擷取(Fetch) → 解碼(Decode) → 執行(Execute) → 儲存(Store)。"}, {"id": "ch3-1-50", "n": 50, "q": "電腦規格表上常寫的「L1 / L2 / L3 Cache」，其硬體本質通常是由下列哪一種記憶體技術所構成，因為其存取速度極快且不需要定期充電更新？", "o": ["動態隨機存取記憶體(DRAM)", "靜態隨機存取記憶體 (SRAM)", "可抹除可程式唯讀記憶體(EPROM)", "磁阻式隨機存取記憶體 (MRAM)"], "a": 1, "e": "快取記憶體(L1/L2/L3)為了追求極致速度，通常由不需定期充電的靜態隨機存取記憶體(SRAM)構成。"}]}, {"id": "ch3-4", "title": "第三章 4-6 節", "qs": [{"id": "ch3-4-1", "n": 1, "q": "某電競筆電標榜搭載「5.0 GHz」處理器，此數值「5.0 GHz」主要代表電腦的什麼指標？", "o": ["記憶體匯流排頻寬", "快取記憶體容量", "CPU 的時脈頻率", "網路最高下載速度"], "a": 2, "e": "5.0 GHz 指的是中央處理器(CPU)的時脈頻率，代表每秒的振盪次數。"}, {"id": "ch3-4-2", "n": 2, "q": "固態硬碟 (SSD) 近年已成為電腦主流儲存設備，但相較於傳統機械硬碟(HDD)，SSD目前在下列哪一方面的優勢較低？", "o": ["隨機讀寫速度", "運作時的靜音程度", "抗震與防摔能力", "每單位容量的價格(容積單價)"], "a": 3, "e": "固態硬碟(SSD)的每單位容量價格(容積單價)目前仍普遍高於傳統機械硬碟(HDD)。"}, {"id": "ch3-4-3", "n": 3, "q": "為了提升多工處理 (同時聽音樂、跑數據、下載檔案)與複雜運算的效能，現代CPU 最常見的架構改進是下列何者？", "o": ["採用磁性儲存材質", "發展多核心(Multi-core) 架構", "將 HDD 內建於 CPU 內部", "減少管線化步驟"], "a": 1, "e": "多核心(Multi-core)架構可讓CPU同時處理多個執行緒，大幅提升多工與複雜運算效能。"}, {"id": "ch3-4-4", "n": 4, "q": "SRAM 存取速度極快，但為何一般電腦的「主記憶體」大多採用DRAM 而非SRAM？", "o": ["SRAM 無法儲存二進位資料", "SRAM 單位儲存成本極高且體積較大", "SRAM 需要不斷充電更新，十分耗電", "SRAM 斷電後資料不會消失，有資安疑慮"], "a": 1, "e": "SRAM 存取速度極快，但因製程複雜、單位成本高且體積大，不適合用作大容量的主記憶體。"}, {"id": "ch3-4-5", "n": 5, "q": "電腦系統維護中，一般建議「不需要」甚至「避免」針對固態硬碟 (SSD) 頻繁執行磁碟重組。主要原因為何？", "o": ["SSD 內建自動重組馬達", "SSD 屬於唯讀記憶體，無法重組", "SSD 無實體讀寫頭，隨機讀取極快，重組反而會消耗快閃記憶體壽命", "作業系統不支援對SSD 重組"], "a": 2, "e": "SSD 採用快閃記憶體，隨機存取極快且無實體讀寫頭，磁碟重組無法提升效能，反而會耗損記憶體抹寫壽命。"}, {"id": "ch3-4-6", "n": 6, "q": "CPU 內部用來暫存頻繁使用資料的 L1、L2快取記憶體(Cache Memory)，其硬體材質主要是由下列何者構成？", "o": ["SRAM", "DRAM", "EEPROM", "Flash ROM"], "a": 0, "e": "快取記憶體(L1, L2, L3 Cache)為了追求與 CPU 匹配的極致速度，主要由 SRAM 構成。"}, {"id": "ch3-4-7", "n": 7, "q": "智慧型手機內部的儲存空間，以及日常使用的隨身碟，都是能夠在斷電後保留資料的元件。它們主要採用哪一種記憶體技術？", "o": ["RAM", "ROM", "Flash Memory (快閃記憶體)", "Cache"], "a": 2, "e": "智慧型手機與隨身碟皆採用快閃記憶體(Flash Memory)，具備斷電後資料不遺失的非揮發性特質。"}, {"id": "ch3-4-8", "n": 8, "q": "若要將電腦中元件依「資料存取速度」由快到慢排列，下列順序何者正確？", "o": ["暫存器 > 快取記憶體 > 主記憶體 > 固態硬碟", "快取記憶體 > 暫存器 > 固態硬碟 > 主記憶體", "固態硬碟 > 主記憶體 > 快取記憶體 > 暫存器", "主記憶體 > 快取記憶體 > 暫存器 > 固態硬碟"], "a": 0, "e": "存取速度由快至慢：CPU內部暫存器 > 快取記憶體 > 主記憶體(DRAM) > 輔助記憶體(SSD/HDD)。"}, {"id": "ch3-4-9", "n": 9, "q": "輕薄型筆記型電腦能將機身厚度壓縮到極致，主要是因為捨棄了傳統硬碟(HDD) 改用固態硬碟(SSD)。這是因為SSD 具備何種特性？", "o": ["沒有實體磁碟片與機械馬達設計", "耗電量為零", "不需要連接任何匯流排", "容量極小所以體積小"], "a": 0, "e": "SSD 使用快閃記憶體晶片儲存，沒有傳統硬碟的實體磁碟片、讀寫頭與機械馬達，因此體積能大幅縮小。"}, {"id": "ch3-4-10", "n": 10, "q": "為什麼電腦的主記憶體 (DRAM) 稱為「動態」，而運作時需要不斷地進行充電更新(Refresh)？", "o": ["因為資料會不斷在主機板上移動", "避免內部微小電容漏電導致資料判讀遺失", "為了讓CPU 運算速度跟上記憶體", "因為它是揮發性記憶體，需要高壓電維持"], "a": 1, "e": "DRAM(動態隨機存取記憶體)的儲存單元由電容構成，因電容會自然漏電，故需持續充電更新(Refresh)以防資料流失。"}, {"id": "ch3-4-11", "n": 11, "q": "關於「非揮發性記憶體」(Non-volatile memory) 的特性，下列敘述何者正確？", "o": ["存取速度是所有記憶體中最快的", "只能被讀取一次，無法寫入", "電源關閉或斷電後，儲存的資料不會遺失", "電腦的主記憶體(RAM) 屬於此類"], "a": 2, "e": "非揮發性記憶體(如ROM、Flash)的特性是當電源關閉或斷電後，其儲存的資料依舊會保留不會遺失。"}, {"id": "ch3-4-12", "n": 12, "q": "現今主機板上的 BIOS 或 UEFI (基本輸入輸出系統) 程式，通常被燒錄在何種記憶體中，使其既能斷電不遺失，又方便使用者日後進行版本更新？", "o": ["SRAM", "Flash ROM (快閃唯讀記憶體)", "DRAM", "SDRAM"], "a": 1, "e": "現代主機板的 BIOS/UEFI 韌體多燒錄於快閃唯讀記憶體(Flash ROM)中，可保留資料並允許重寫更新。"}, {"id": "ch3-4-13", "n": 13, "q": "傳統硬碟 (HDD) 是利用讀取頭在高速旋轉的碟片上進行資料存取，碟片上用來儲存資料的同心圓軌跡稱之為？", "o": ["磁區(Sector)", "磁軌 (Track)", "磁柱 (Cylinder)", "叢集(Cluster)"], "a": 1, "e": "傳統硬碟碟片上用來記錄資料的同心圓軌跡稱為磁軌(Track)。"}, {"id": "ch3-4-14", "n": 14, "q": "將老舊電腦的傳統硬碟替換成 SSD 後，會感覺作業系統開機速度顯著提升。造成此現象的主要原因為何？", "o": ["SSD 具備較大的暫存器容量", "SSD 的內部時脈頻率高於CPU", "SSD 無物理機械運作限制，資料隨機存取延遲極低", "SSD 會自動將作業系統轉換為二進位機器碼"], "a": 2, "e": "SSD 使用電子晶片存取，沒有物理機械移動(如讀寫頭尋道)，因此隨機讀寫延遲極低，大幅提升開機速度。"}, {"id": "ch3-4-15", "n": 15, "q": "關於快取記憶體 (Cache Memory) 在電腦系統中扮演的角色，下列敘述何者最貼切？", "o": ["作為長期備份資料的安全儲存區", "作為CPU 與低速輸入設備之間的橋樑", "緩衝CPU 與主記憶體(RAM) 之間存取速度的落差", "取代硬碟，存放所有應用程式"], "a": 2, "e": "快取記憶體(Cache)建置於 CPU 與主記憶體之間，用以暫存常使用的資料，緩衝兩者之間的速度落差。"}, {"id": "ch3-4-16", "n": 16, "q": "一般消費者去 3C 賣場買「擴充記憶體條」來解決開很多網頁會卡頓的問題，通常指的是擴充電腦的哪一種元件？", "o": ["ROM", "Cache", "DRAM 主記憶體", "硬碟容量"], "a": 2, "e": "一般消費者擴充的「記憶體條」指的是主記憶體，現今絕大多數採用 DRAM 技術。"}, {"id": "ch3-4-17", "n": 17, "q": "在常見的個人電腦架構中，下列哪一種儲存媒體的最高容量通常最大，但資料存取速度卻最慢？", "o": ["L3 Cache", "SSD 固態硬碟", "DRAM 主記憶體", "HDD 傳統機械硬碟"], "a": 3, "e": "傳統機械硬碟(HDD)的單位成本最低，容易達成大容量(如幾十TB)，但受限於機械結構，存取速度最慢。"}, {"id": "ch3-4-18", "n": 18, "q": "下列硬體元件的組合中，何者「皆屬於」電源關閉後資料即會消失的揮發性記憶體(Volatile Memory)？", "o": ["SRAM、DRAM", "ROM、Flash Memory", "暫存器、硬碟", "快取記憶體、隨身碟"], "a": 0, "e": "SRAM 與 DRAM 皆屬於隨機存取記憶體(RAM)，斷電後資料會消失，為揮發性記憶體。"}, {"id": "ch3-4-19", "n": 19, "q": "桌上型雷射印表機的規格表上若標示「30 PPM」，這代表該印表機具備什麼樣的能力？", "o": ["每英吋可印30 個墨點", "每分鐘可列印30 頁(Pages Per Minute)", "每秒鐘可印 30 個字元", "需要 30 秒才能預熱完畢"], "a": 1, "e": "印表機的 PPM(Pages Per Minute) 代表每分鐘可列印的頁數，是評估列印速度的指標。"}, {"id": "ch3-4-20", "n": 20, "q": "若想提升電腦執行 3D 遊戲與影像渲染時的畫面流暢度，最直接有效的升級方式是擴充或更換下列哪一個元件？", "o": ["主記憶體", "音效卡", "顯示卡(GPU)", "網路卡"], "a": 2, "e": "顯示卡(GPU)專門處理圖形渲染與影像輸出，升級顯示卡能最有效提升 3D 遊戲與影像運算的流暢度。"}, {"id": "ch3-4-21", "n": 21, "q": "近年高階智慧型手機常標榜採用 OLED 螢幕，相較於傳統LCD 螢幕，OLED的主要硬體優勢為何？", "o": ["具有實體按鍵回饋感", "不需要電池即可發光", "像素自發光，可顯示純粹的黑色且對比度極高", "重量與傳統映像管(CRT) 相同但較便宜"], "a": 2, "e": "OLED(有機發光二極體)具備像素自發光的特性，顯示黑色時可直接關閉像素，因此能呈現極高的對比度。"}, {"id": "ch3-4-22", "n": 22, "q": "企業採購海報掃描器時，若希望能完美數位化並呈現原稿的極細緻圖像，應特別注意下列哪一項解析度規格指標？", "o": ["DPI (Dots Per Inch)", "CPS (Characters Per Second)", "RPM (Revolutions Per Minute)", "BPS (Bits Per Second)"], "a": 0, "e": "掃描器或印表機的解析度指標為 DPI(Dots Per Inch)，即每英吋的像素點數，數值越高影像越細緻。"}, {"id": "ch3-4-23", "n": 23, "q": "銀行或郵局櫃台常使用的存摺補登機，能將字體用力敲打印在多層複寫紙上，請問這是利用哪種印表機的撞擊特性？", "o": ["噴墨印表機", "點矩陣印表機", "雷射印表機", "熱感應印表機"], "a": 1, "e": "點矩陣印表機利用撞針物理敲擊色帶，產生壓力印在紙上，因此可列印多層複寫紙。"}, {"id": "ch3-4-24", "n": 24, "q": "便利商店結帳時，店員用來掃描商品條碼的「條碼掃描器 (Barcode Scanner)」，在電腦五大單元架構中歸屬於？", "o": ["控制單元", "輸出單元", "輸入單元", "算術邏輯單元"], "a": 2, "e": "條碼掃描器負責將外界的實體條碼資訊讀取並傳入電腦，屬於輸入單元。"}, {"id": "ch3-4-25", "n": 25, "q": "早期秦始皇焚書坑儒，若當時有現代數位資訊設備，他可以使用何種「輸入設備」將簡牘古籍轉換成數位影像檔案來備份？", "o": ["點矩陣印表機", "固態硬碟", "掃描器", "液晶螢幕"], "a": 2, "e": "掃描器能將實體的紙本文件或圖像掃描，轉換為數位影像檔案輸入至電腦中備份。"}, {"id": "ch3-4-26", "n": 26, "q": "一張 4 英吋 × 6 英吋的照片，若以 300 DPI 的解析度進行掃描，請問掃描後的影像，其長與寬的像素(Pixels) 大小分別為多少？", "o": ["120 × 180 像素", "400 × 600 像素", "1200 × 1800 像素", "2400 × 3600 像素"], "a": 2, "e": "解析度 300 DPI 代表每英吋有 300 像素。寬 = 4英吋 × 300 = 1200 像素；長 = 6英吋 × 300 = 1800 像素。"}, {"id": "ch3-4-27", "n": 27, "q": "辦公室的雷射印表機列印速度為 40 PPM。若要列印一份高達200 頁的會議手冊，在不卡紙的理想狀態下，最快需要多少分鐘才能印完？", "o": ["2 分鐘", "4 分鐘", "5 分鐘", "8 分鐘"], "a": 2, "e": "列印速度為 40 PPM (每分鐘40頁)。總需時間 = 200頁 ÷ 40 頁/分 = 5 分鐘。"}, {"id": "ch3-4-28", "n": 28, "q": "某醫院使用的點矩陣印表機列印速度標示為 250 CPS(Characters Per Second)。若要列印一份包含 15,000 個字元的藥品清單報表，預估需要多少秒才能完成？", "o": ["30 秒", "60 秒", "90 秒", "120 秒"], "a": 1, "e": "列印速度為 250 CPS (每秒250字元)。總需時間 = 15,000字元 ÷ 250 字元/秒 = 60 秒。"}, {"id": "ch3-4-29", "n": 29, "q": "若學生電腦的 CPU 時脈頻率為 2.5 GHz (GigaHertz)，請問該 CPU 執行一個時脈週期(Clock Cycle Time) 所需的時間為多少奈秒 (ns)？", "o": ["0.25 ns", "0.4 ns", "2.5 ns", "4.0 ns"], "a": 1, "e": "時脈週期 = 1 ÷ 時脈頻率 = 1 ÷ 2.5 GHz = 1 ÷ (2.5 × 10^9) = 0.4 × 10^-9 秒 = 0.4 ns。"}, {"id": "ch3-4-30", "n": 30, "q": "假設一張數位照片的螢幕解析度為 1920 × 1080像素，且採用全彩(True Color, 24 bits / 3 Bytes) 顯示。請問儲存這樣一張未壓縮的照片，大約需要多少位元組 (Bytes) 的記憶體空間？(1MB約等於百萬Bytes)", "o": ["約 2.07 MB", "約 6.22 MB", "約 16 MB", "約 24 MB"], "a": 1, "e": "全彩 24 bits = 3 Bytes。資料量 = 1920 × 1080 × 3 Bytes = 6,220,800 Bytes。約等於 6.22 MB。\n大約值：　2000X1000X3=6000000Bytes=6MB"}, {"id": "ch3-4-31", "n": 31, "q": "標準 CD 音質的數位音訊規格為：取樣頻率 44,100 Hz、16 bits 量化、雙聲道。請問錄製10 秒鐘未壓縮的聲音資料，大約佔用多少位元組(Bytes)？(提示：取樣頻率× 量化位元/8× 聲道數× 秒數)", "o": ["176,400 Bytes", "882,000 Bytes", "1,764,000 Bytes", "14,112,000 Bytes"], "a": 2, "e": "數位音訊大小 = 44100(Hz) × 16/8(Bytes) × 2(雙聲道) × 10(秒) = 1,764,000 Bytes。"}, {"id": "ch3-4-32", "n": 32, "q": "電腦儲存容量單位的換算中，1 TB (Terabyte) 理論上等於多少GB (Gigabyte)？", "o": ["100 GB", "512 GB", "1024 GB", "2048 GB"], "a": 2, "e": "在二進位標準容量換算中，1 TB = 1024 GB。"}, {"id": "ch3-4-33", "n": 33, "q": "現代作業系統支援隨插即用 (PnP, Plug and Play) 技術。下列關於PnP 的敘述何者最正確？", "o": ["所有PnP 設備都不需要電力即可運作", "系統能自動偵測新接上的硬體，並嘗試分配系統資源與載入驅動程式", "PnP 僅限於USB 隨身碟，滑鼠與鍵盤不適用", "只要有PnP，電腦完全不需要作業系統也能控制硬體"], "a": 1, "e": "PnP (Plug and Play，隨插即用) 代表硬體連接後，作業系統會自動偵測、配置資源並嘗試載入相應的驅動程式。"}, {"id": "ch3-4-34", "n": 34, "q": "買電腦時常聽到的「64 位元CPU」，其中的「位元數(字組大小)」通常代表CPU 內部的哪一種匯流排寬度，決定了CPU 一次能處理的最大資料量？", "o": ["資料匯流排(Data Bus)", "控制匯流排 (Control Bus)", "電源匯流排 (Power Bus)", "通訊匯流排(Communication Bus)"], "a": 0, "e": "CPU 的字組大小(如64位元)通常對應其內部資料匯流排(Data Bus)的寬度，決定單次處理資料的最大吞吐量。"}, {"id": "ch3-4-35", "n": 35, "q": "若要連接外接高畫質螢幕 (如4K 螢幕)，目前市場上常見支援高解析度視訊，且能「同時傳輸音訊」的介面為何？", "o": ["VGA 與DVI", "PS/2 與 RS-232", "HDMI 與 DisplayPort(DP)", "RJ-45 與 Line-in"], "a": 2, "e": "HDMI (及 DisplayPort) 介面專為影音設計，能透過單一線材同時傳輸高畫質的數位視訊與音訊訊號。"}, {"id": "ch3-4-36", "n": 36, "q": "我們平常購買電視或螢幕時所說的螢幕尺寸（例如 27 吋螢幕），這個「27吋」是如何量測定義的？", "o": ["螢幕邊框的水平寬度", "螢幕面板顯示區域的對角線長度", "螢幕的垂直高度", "螢幕背板的總面積大小"], "a": 1, "e": "螢幕的尺寸標示(如27吋)是指顯示面板可視區域的「對角線」長度。"}, {"id": "ch3-4-37", "n": 37, "q": "現今多數智慧型手機與平板電腦的觸控螢幕，是利用人體具備微弱靜電導電的特性來感應觸控位置，且支援多點觸控。這是屬於哪一種觸控技術？", "o": ["電容式", "電阻式", "光學式", "音波式"], "a": 0, "e": "電容式觸控螢幕利用人體微小的靜電電流來改變電容值，藉此定位觸控點，且支援多點觸控。"}, {"id": "ch3-4-38", "n": 38, "q": "CPU 的效能評估常使用 MIPS 作為指標，其英文全名與意義為何？", "o": ["每秒百萬個指令(Million Instructions Per Second)", "每秒百萬個位元組 (Million Bytes Per Second)", "記憶體內部處理速度 (Memory Internal Processing Speed)", "微處理器指令集 (Microprocessor Instruction Set)"], "a": 0, "e": "MIPS (Million Instructions Per Second) 中文為「每秒百萬個指令」，是評估 CPU 運算速度的常見指標。"}, {"id": "ch3-4-39", "n": 39, "q": "在匯流排 (Bus) 的分類中，決定電腦「主記憶體最大可尋址(定址)空間」的是哪一種匯流排的寬度？", "o": ["控制匯流排", "資料匯流排", "位址匯流排(Address Bus)", "PCI 擴充匯流排"], "a": 2, "e": "位址匯流排(Address Bus)的寬度決定了 CPU 可以定址的記憶體空間大小(例如32位元可定址 4GB)。"}, {"id": "ch3-4-40", "n": 40, "q": "哪一種印表機的運作原理，是將墨水匣中的微小墨滴精準噴灑在紙張上，因為色彩漸層表現佳，非常適合用來列印相片？", "o": ["熱感應印表機", "噴墨印表機", "雷射印表機", "點矩陣印表機"], "a": 1, "e": "噴墨印表機透過將微小墨水滴噴灑至紙張來顯像，色彩混合與漸層表現佳，最適合相片列印。"}, {"id": "ch3-4-41", "n": 41, "q": "為了減少電子垃圾與提升相容性，歐盟已立法規定新款智慧型手機與平板電腦等行動裝置，應統一採用何種有線充電與資料傳輸連接埠？", "o": ["Micro-USB", "Lightning", "USB Type-A", "USB Type-C"], "a": 3, "e": "為減少電子垃圾，歐盟立法規定智慧型手機等中小型電子產品須統一採用 USB Type-C 介面標準。"}, {"id": "ch3-4-42", "n": 42, "q": "電競滑鼠的規格表上常強調極高的「DPI」(例如16000 DPI)，在此處高 DPI 代表滑鼠具備何種特性？", "o": ["滑鼠點擊按鍵的壽命次數可達16000 次", "滑鼠實體移動1 英吋時，螢幕上的游標會移動16000 個像素，代表游標移動極其靈敏", "滑鼠每秒鐘可以回傳16000 次資料給電腦", "滑鼠的光學感測器壽命"], "a": 1, "e": "滑鼠的 DPI(Dots Per Inch) 代表滑鼠實體移動 1 英吋，游標在螢幕上相對移動的像素點數量。"}, {"id": "ch3-4-43", "n": 43, "q": "下列何種儲存設備的資料讀寫方式，是利用「雷射光學」原理讀取碟片表面的凹凸亮暗來判別0 與1？", "o": ["磁帶機", "SSD 固態硬碟", "藍光光碟機(Blu-ray Disc)", "SD 記憶卡"], "a": 2, "e": "藍光光碟機(與CD/DVD)屬於光學儲存設備，利用雷射光束讀取碟片表面的凹凸(亮暗)訊號。"}, {"id": "ch3-4-44", "n": 44, "q": "關於 USB (Universal Serial Bus) 介面的特性，下列敘述何者錯誤？", "o": ["支援熱插拔(Hot Swapping)，開機狀態下即可隨插即用", "透過集線器(Hub) 最多可串接127 個周邊裝置", "USB 3.0 的接頭通常以藍色作為識別，速度比 USB 2.0 快", "USB 介面僅能傳輸資料，完全無法供應電源給周邊設備"], "a": 3, "e": "USB 介面不僅可以傳輸資料，亦具備直接供電的能力(如為隨身碟、手機等周邊裝置充電)。"}, {"id": "ch3-4-45", "n": 45, "q": "智慧型手機若在外出時電量耗盡，常會使用外接的「行動電源」充電。行動電源的電量規格單位，最常以下列何者表示？", "o": ["mAh (毫安培小時)", "GHz (十億赫茲)", "Mbps (百萬位元每秒)", "RPM (每分鐘轉速)"], "a": 0, "e": "行動電源的電池容量最常以 mAh(毫安培小時) 作為標示單位。"}, {"id": "ch3-4-46", "n": 46, "q": "當電腦按下電源鍵開機時，最先負責執行開機自我測試 (POST)，並負責引導作業系統載入的韌體程式是？", "o": ["Windows 作業系統", "防毒軟體", "BIOS / UEFI", "顯示卡驅動程式"], "a": 2, "e": "BIOS 或 UEFI 是主機板上的核心韌體，負責開機時的 POST(開機自我測試) 並引導作業系統啟動。"}, {"id": "ch3-4-47", "n": 47, "q": "3D 列印機近年被廣泛應用於工業設計打樣、醫療模型製作等領域，它屬於電腦硬體五大單元中的哪一單元？", "o": ["輸入單元", "輸出單元", "記憶單元", "算術邏輯單元"], "a": 1, "e": "3D列印機能將電腦中建立的3D數位模型，以實體材料列印輸出成型，屬於輸出單元。"}, {"id": "ch3-4-48", "n": 48, "q": "同學家中的寬頻網路速率標示為「下載 100 Mbps / 上傳40 Mbps」。若他要將一個大小為50 MB (Megabytes) 的專題影片上傳至雲端硬碟，在網路完全穩定不折損的理想情況下，最少需要幾秒鐘才能上傳完畢？(提示：1Byte = 8 bits)", "o": ["1.25 秒", "5 秒", "10 秒", "40 秒"], "a": 2, "e": "50 MB = 50 × 8 = 400 Megabits (Mb)。上傳時間 = 400 Mb ÷ 40 Mbps = 10 秒。"}, {"id": "ch3-4-49", "n": 49, "q": "目前市面上的智慧型手機與平板電腦，其核心處理器大多採用 ARM 架構的SoC (System on a Chip，系統單晶片)。與傳統桌上型電腦分離式的 CPU 相比，SoC的最大硬體設計優勢為何？", "o": ["運算時脈突破100 GHz", "採用真空管材質，極度耐高溫", "將CPU、GPU、通訊數據機等高度整合在一顆晶片上，體積小且低功耗", "內建實體硬碟，不需額外儲存空間"], "a": 2, "e": "SoC(系統單晶片)將 CPU、GPU、通訊晶片等核心元件整合在單一晶片上，具備體積小、低功耗的極大優勢。"}, {"id": "ch3-4-50", "n": 50, "q": "假設在純文字檔案中，若使用 Unicode (UTF-16) 編碼，每個字元皆佔用2 Bytes (位元組)。請問撰寫一篇包含 50 萬個字元的小說，儲存成純文字檔後，其檔案大小約為多少？", "o": ["約1 MB (Megabyte)", "約 10 MB", "約 100 MB", "約1 GB (Gigabyte)"], "a": 0, "e": "50萬字元 × 2 Bytes = 1,000,000 Bytes。1,000,000 Bytes 大約等於 1 MB。"}]}];
+const SRC = Object.fromEntries(BANK.map(s=>[s.id,s]));
+const ALLQ = {}; BANK.forEach(s=>s.qs.forEach(q=>{q.src=s.id; ALLQ[q.id]=q;}));
+
+// ---------- storage (safe) ----------
+const store = {
+  get(k,d){try{const v=localStorage.getItem(k);return v==null?d:JSON.parse(v);}catch(e){return d;}},
+  set(k,v){try{localStorage.setItem(k,JSON.stringify(v));}catch(e){}}
+};
+const mem = {}; // fallback when storage blocked
+function load(k,d){const v=store.get(k,undefined);return v===undefined?(k in mem?mem[k]:d):v;}
+function save(k,v){mem[k]=v;store.set(k,v);}
+
+function todayKey(){const d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');}
+// day2：今日答對＝「今天答對過的不同題目數」，同一題一天只算一次；log 留下每次作答紀錄供老師查核
+function getDay(){const k=todayKey();const d=load('day2',null);
+  if(!d||d.date!==k)return{date:k,correct:0,answered:0,rounds:[],seen:{},log:[],fast:0};
+  d.seen=d.seen||{};d.log=d.log||[];d.fast=d.fast||0;return d;}
+function setDay(d){if(d.log.length>600)d.log=d.log.slice(-600);save('day2',d);renderTally();}
+const FAST_MS=2000;     // 少於 2 秒就作答 → 標記為「快速作答」
+const LOCK_MS=600;      // 題目出現後 0.6 秒內的點擊/按鍵不受理（防連點、按住按鍵連發）
+const NEXT_LOCK_MS=500; // 作答後 0.5 秒內不能跳下一題
+function getWrong(){return load('wrong',{});}
+function setWrong(w){save('wrong',w);}
+
+// ---------- utils ----------
+const $=s=>document.querySelector(s);
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+function shuffle(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+const L='ABCD';
+
+// ---------- levels (以今日答對題數計算) ----------
+const LEVELS=[[0,'位元新手'],[10,'位元組學徒'],[25,'暫存器見習生'],[45,'快取命中手'],[70,'主記憶體守護者'],[100,'匯流排騎士'],[140,'多核心大師'],[190,'超頻達人'],[250,'晶片傳說']];
+function levelOf(n){let i=0;while(i+1<LEVELS.length&&n>=LEVELS[i+1][0])i++;
+  const cur=LEVELS[i][0],nxt=LEVELS[i+1]?LEVELS[i+1][0]:null;
+  return {lv:i+1,title:LEVELS[i][1],need:nxt===null?0:nxt-n,pct:nxt===null?100:Math.round((n-cur)/(nxt-cur)*100),nextTitle:LEVELS[i+1]?LEVELS[i+1][1]:null};}
+
+// ---------- effects: sound / confetti / popups ----------
+const reduceMotion=(()=>{try{return matchMedia('(prefers-reduced-motion: reduce)').matches;}catch(e){return false;}})();
+let muted=load('muted',false);let actx=null;
+function tone(freqs,dur,type,gap,vol){
+  if(muted)return;
+  try{actx=actx||new (window.AudioContext||window.webkitAudioContext)();if(actx.state==='suspended')actx.resume();
+    const t0=actx.currentTime+0.01;
+    freqs.forEach((f,i)=>{const o=actx.createOscillator(),g=actx.createGain();o.type=type;o.frequency.value=f;
+      const st=t0+i*gap;g.gain.setValueAtTime(0.0001,st);g.gain.exponentialRampToValueAtTime(vol,st+0.015);g.gain.exponentialRampToValueAtTime(0.0001,st+dur);
+      o.connect(g);g.connect(actx.destination);o.start(st);o.stop(st+dur+0.03);});
+  }catch(e){}
+}
+const sfx={
+  ok:c=>{const k=Math.pow(1.0595,Math.min(c-1,12));tone((c>=5?[523,659,784,1047]:[523,659,784]).map(f=>f*k),.2,'triangle',.07,.16);},
+  bad:()=>tone([220,165],.25,'square',.13,.05),
+  lvl:()=>tone([523,659,784,1047,784,1047,1319],.22,'triangle',.08,.16),
+  win:()=>tone([392,523,659,784,659,784,1047],.3,'triangle',.11,.16)
+};
+function renderMute(){const b=$('#muteBtn');b.setAttribute('aria-pressed',String(!muted));b.textContent=muted?'音效 關':'音效 開';}
+$('#muteBtn').onclick=()=>{muted=!muted;save('muted',muted);renderMute();if(!muted)tone([784,1047],.12,'triangle',.06,.12);};
+
+const cv=$('#fx');const cx=cv.getContext('2d');let parts=[];let raf=0;
+function sizeCv(){const r=window.devicePixelRatio||1;cv.width=innerWidth*r;cv.height=innerHeight*r;cx.setTransform(r,0,0,r,0,0);}
+addEventListener('resize',sizeCv);sizeCv();
+const FXC=['#0f6a73','#4fb8bf','#e0a21b','#e8613c','#3fae63','#7a5cf0','#ff5c8a'];
+function addPart(x,y,vx,vy){parts.push({x,y,vx,vy,r:3+Math.random()*4,c:FXC[Math.floor(Math.random()*FXC.length)],rot:Math.random()*6,vr:(Math.random()-.5)*.35,life:1,sq:Math.random()<.6});}
+function burst(x,y,n,power){if(reduceMotion)return;for(let i=0;i<n;i++){const a=Math.random()*Math.PI*2,s=power*(.35+Math.random()*.8);addPart(x,y,Math.cos(a)*s,Math.sin(a)*s-power*.5);}run();}
+function rain(n){if(reduceMotion)return;for(let i=0;i<n;i++)addPart(Math.random()*innerWidth,-20-Math.random()*innerHeight*.6,(Math.random()-.5)*2,2+Math.random()*3);run();}
+function run(){if(!raf)raf=requestAnimationFrame(tick);}
+function tick(){
+  cx.clearRect(0,0,innerWidth,innerHeight);
+  for(const p of parts){p.vy+=.22;p.vx*=.985;p.x+=p.vx;p.y+=p.vy;p.rot+=p.vr;p.life-=.007;
+    cx.save();cx.globalAlpha=Math.max(0,Math.min(1,p.life*2));cx.translate(p.x,p.y);cx.rotate(p.rot);cx.fillStyle=p.c;
+    if(p.sq)cx.fillRect(-p.r,-p.r/2,p.r*2,p.r);else{cx.beginPath();cx.arc(0,0,p.r*.7,0,7);cx.fill();}cx.restore();}
+  parts=parts.filter(p=>p.life>0&&p.y<innerHeight+40);
+  raf=parts.length?requestAnimationFrame(tick):0;
+}
+function center(el){const r=el.getBoundingClientRect();return [r.left+r.width/2,r.top+r.height/2];}
+function flyPlus(el){
+  const [x,y]=center(el);const [tx,ty]=center($('#tally'));
+  const p=document.createElement('div');p.className='plus';p.textContent='+1';p.style.left=x+'px';p.style.top=(y-20)+'px';document.body.appendChild(p);
+  if(reduceMotion||!p.animate){setTimeout(()=>p.remove(),400);return;}
+  p.animate([{transform:'translate(-50%,0) scale(1.3)',opacity:1},{transform:'translate(-50%,-30px) scale(1.5)',opacity:1,offset:.3},{transform:`translate(calc(-50% + ${tx-x}px),${ty-y+20}px) scale(.6)`,opacity:.3}],{duration:800,easing:'cubic-bezier(.5,0,.6,1)'}).onfinish=()=>{p.remove();renderTally(true);};
+}
+function popText(main,sub,kind){const p=$('#pop');p.innerHTML=`<b>${esc(main)}</b>${sub?`<span>${esc(sub)}</span>`:''}`;p.className='pop';void p.offsetWidth;p.className='pop show '+(kind||'');}
+const PRAISE=['答對了！','好厲害！','快取命中！','零延遲！','CPU 全速運轉！','腦袋超頻中！','正確無誤！','滿分手感！','邏輯滿點！','記憶體寫入成功！'];
+const pickOne=a=>a[Math.floor(Math.random()*a.length)];
+
+// ---------- header ----------
+function renderTally(bump){
+  const d=getDay();
+  $('#tallyNum').textContent=d.correct;$('#tallyLv').textContent='Lv.'+levelOf(d.correct).lv;
+  const [y,m,dd]=d.date.split('-');$('#tallyDate').textContent=(+m)+'/'+(+dd);
+  if(bump){const t=$('#tally');t.classList.remove('bump');void t.offsetWidth;t.classList.add('bump');}
+}
+$('#stuName').value=load('name','');
+$('#stuName').addEventListener('input',e=>save('name',e.target.value));
+$('#tally').onclick=()=>{
+  const d=getDay();const nm=$('#stuName').value.trim();
+  $('#dayTitle').textContent=(nm?nm+' · ':'')+d.date;
+  $('#dayNum').textContent=d.correct;
+  const rate=d.answered?Math.round(d.correct/d.answered*100):0;
+  $('#dayStats').innerHTML=`<div class="stat"><div class="v">${d.answered}</div><div class="l">今日作答次數</div></div>
+    <div class="stat"><div class="v">${d.rounds.length}</div><div class="l">完成回合</div></div>
+    <div class="stat"><div class="v">${rate}%</div><div class="l">答對率</div></div>
+    <div class="stat"><div class="v" style="color:${d.fast?'var(--bad)':'inherit'}">${d.fast}</div><div class="l">2 秒內快速作答</div></div>`;
+  const rounds=d.rounds.length?d.rounds.map(r=>`<div><span>${esc(r.time)}　${esc(r.label)}</span><span>${r.score} 分</span></div>`).join(''):'<div><span>今天還沒有完成的回合</span><span></span></div>';
+  const logs=d.log.slice(-200).reverse().map(x=>{const q=ALLQ[x.id];
+    return `<div style="${x.ms<FAST_MS?'color:var(--bad)':''}"><span>${esc(x.t)}　${q?esc(SRC[q.src].title.replace('第三章 ',''))+' 第'+q.n+'題':''}　${x.ok?'對':'錯'}${x.c?' ＋1':''}</span><span>${(x.ms/1000).toFixed(1)} 秒</span></div>`;}).join('');
+  $('#dayLog').innerHTML=`<b>完成回合</b>${rounds}<b style="margin-top:6px">作答紀錄（最新在上，紅色＝2 秒內作答；＋1＝計入今日答對）</b>${logs||'<div><span>尚無作答</span><span></span></div>'}`;
+  $('#dayModal').hidden=false;$('#dayClose').focus();
+};
+$('#dayClose').onclick=()=>{$('#dayModal').hidden=true;};
+$('#dayModal').addEventListener('click',e=>{if(e.target.id==='dayModal')$('#dayModal').hidden=true;});
+$('#homeBtn').onclick=()=>{if(state.quiz&&!state.quiz.done&&!state.confirmLeave){state.confirmLeave=true;renderQuiz();return;}home();};
+
+// ---------- state ----------
+const state={src:'all',range:'all',quiz:null,showWrong:false,confirmClear:false,confirmLeave:false};
+
+function poolFor(src){return src==='all'?BANK.flatMap(s=>s.qs):SRC[src].qs;}
+function rangesFor(src){
+  const pool=poolFor(src);const r=[];
+  for(let i=0;i<pool.length;i+=25){
+    const part=pool.slice(i,i+25);
+    const lbl=src==='all'?`${SRC[part[0].src].title.replace('第三章 ','')} 第 ${part[0].n}–${part[part.length-1].n} 題`:`第 ${part[0].n}–${part[part.length-1].n} 題`;
+    r.push({id:'b'+i/25,label:lbl,sub:part.length+' 題',ids:part.map(q=>q.id)});
+  }
+  r.push({id:'all',label:'全部練習',sub:pool.length+' 題',ids:pool.map(q=>q.id)});
+  return r;
+}
+
+// ---------- home ----------
+function home(){
+  state.quiz=null;state.confirmLeave=false;
+  const srcs=[...BANK.map(s=>({id:s.id,label:s.title,sub:s.qs.length+' 題'})),{id:'all',label:'兩回全部',sub:'1-3 節＋4-6 節，共 '+BANK.reduce((a,s)=>a+s.qs.length,0)+' 題'}];
+  if(!srcs.some(s=>s.id===state.src))state.src='all';
+  const ranges=rangesFor(state.src);
+  if(!ranges.some(r=>r.id===state.range))state.range='all';
+  const wrong=getWrong();const wids=Object.keys(wrong).filter(id=>ALLQ[id]);
+  const dd=getDay();const lv=levelOf(dd.correct);
+  $('#app').innerHTML=`
+  <section class="panel">
+    <div class="sec-label">今日等級 · 答對越多升得越高</div>
+    <div class="lvcard">
+      <div class="lvbadge" style="--p:${lv.pct}"><b><small>LV</small>${lv.lv}</b></div>
+      <div class="lvmeta"><div class="t">${esc(lv.title)}</div>
+        <p class="hint" style="margin:0">今日答對以「不同題目」計算，同一題一天只算一次。</p>
+        <p>${lv.nextTitle?`今天已答對 ${dd.correct} 題，再答對 <b>${lv.need}</b> 題升到 Lv.${lv.lv+1}「${esc(lv.nextTitle)}」`:`今天已答對 ${dd.correct} 題，已經是最高等級！`}</p>
+        <div class="ladder">${LEVELS.map((l,i)=>`<i class="${i<lv.lv?'on':''}" title="Lv.${i+1} ${esc(l[1])}"></i>`).join('')}</div>
+      </div>
+    </div>
+  </section>
+  <section class="panel">
+    <div class="sec-label">步驟 1 · 題目來源</div>
+    <div class="choices" id="srcList">${srcs.map(s=>`<button class="chip" data-src="${s.id}" aria-pressed="${s.id===state.src}"><b>${esc(s.label)}</b><span>${esc(s.sub)}</span></button>`).join('')}</div>
+    <div class="sec-label">步驟 2 · 練習範圍（每次 25 題，或全部）</div>
+    <div class="choices" id="rangeList">${ranges.map(r=>`<button class="chip" data-range="${r.id}" aria-pressed="${r.id===state.range}"><b>${esc(r.label)}</b><span>${esc(r.sub)}</span></button>`).join('')}</div>
+    <div class="row"><button class="btn primary big" id="startBtn">開始練習</button>
+    <span class="hint">題目與選項都會隨機排列；答錯會看到題解，並在稍後再出一次，全部答對才算完成。</span></div>
+  </section>
+  <section class="panel">
+    <div class="sec-label">個人錯題本</div>
+    <div class="wrongcard">
+      <div class="count">${wids.length}</div>
+      <div class="meta"><b>題待複習</b><p>${wids.length?'在錯題複習中一次就答對，該題就會從錯題本移除。':'目前沒有錯題，繼續保持！'}</p></div>
+      <button class="btn primary" id="wrongBtn" ${wids.length?'':'disabled'}>複習錯題</button>
+    </div>
+    ${wids.length?`<div class="row"><button class="linkbtn" id="toggleW">${state.showWrong?'收合錯題清單':'查看錯題清單'}</button>
+      ${state.confirmClear?`<span class="hint">確定清空全部錯題？</span><button class="linkbtn danger" id="clearYes">確定清空</button><button class="linkbtn" id="clearNo">取消</button>`:`<button class="linkbtn danger" id="clearW">清空錯題本</button>`}</div>`:''}
+    ${state.showWrong&&wids.length?`<div class="wlist">${wids.sort((a,b)=>wrong[b].times-wrong[a].times).map(id=>{const q=ALLQ[id];return `<div class="witem"><div class="src">${esc(SRC[q.src].title)} 第 ${q.n} 題 · <span class="times">錯 ${wrong[id].times} 次</span></div>${esc(q.q)}</div>`;}).join('')}</div>`:''}
+  </section>`;
+  document.querySelectorAll('[data-src]').forEach(b=>b.onclick=()=>{state.src=b.dataset.src;state.range='all';home();});
+  document.querySelectorAll('[data-range]').forEach(b=>b.onclick=()=>{state.range=b.dataset.range;home();});
+  $('#startBtn').onclick=()=>{const r=rangesFor(state.src).find(r=>r.id===state.range);
+    const srcLabel=state.src==='all'?'兩回全部':SRC[state.src].title;
+    const lbl=state.src==='all'?(r.id==='all'?'兩回全部':r.label):srcLabel+' '+(r.id==='all'?'全部':r.label);
+    startQuiz(r.ids,lbl,false);};
+  const wb=$('#wrongBtn');if(wb)wb.onclick=()=>startQuiz(wids,'錯題複習',true);
+  const tw=$('#toggleW');if(tw)tw.onclick=()=>{state.showWrong=!state.showWrong;home();};
+  const cw=$('#clearW');if(cw)cw.onclick=()=>{state.confirmClear=true;home();};
+  const cy=$('#clearYes');if(cy)cy.onclick=()=>{setWrong({});state.confirmClear=false;home();};
+  const cn=$('#clearNo');if(cn)cn.onclick=()=>{state.confirmClear=false;home();};
+  window.scrollTo(0,0);
+}
+
+// ---------- quiz ----------
+function makeItem(id){
+  const order=shuffle([0,1,2,3]);
+  return {id,order,retry:false};
+}
+function startQuiz(ids,label,review){
+  state.quiz={label,review,total:ids.length,queue:shuffle(ids).map(makeItem),firstTry:{},cleared:new Set(),attempts:0,cur:null,answered:null,done:false,combo:0,maxCombo:0,anim:null};
+  next();
+}
+function next(){
+  const z=state.quiz;state.confirmLeave=false;
+  if(!z.queue.length){finish();return;}
+  z.cur=z.queue.shift();z.answered=null;z.anim='enter';z.shownAt=performance.now();renderQuiz();window.scrollTo(0,0);
+}
+function tryNext(){const z=state.quiz;if(!z||z.answered===null)return;if(performance.now()-z.answeredAt<NEXT_LOCK_MS)return;next();}
+function answer(pos){
+  const z=state.quiz;if(z.answered!==null)return;
+  const ms=performance.now()-z.shownAt;if(ms<LOCK_MS)return;
+  const it=z.cur;const q=ALLQ[it.id];const pick=it.order[pos];const ok=pick===q.a;
+  z.answered=pos;z.answeredAt=performance.now();z.attempts++;
+  const first=!(it.id in z.firstTry);
+  if(first)z.firstTry[it.id]=ok;
+  const d=getDay();const lvBefore=levelOf(d.correct).lv;d.answered++;
+  const counted=ok&&!d.seen[it.id];
+  if(counted){d.seen[it.id]=1;d.correct++;}
+  if(ms<FAST_MS)d.fast++;
+  const now=new Date();
+  d.log.push({t:[now.getHours(),now.getMinutes(),now.getSeconds()].map(n=>String(n).padStart(2,'0')).join(':'),id:it.id,ok,c:counted?1:0,ms:Math.round(ms)});
+  setDay(d);
+  z.counted=counted;
+  const lvAfter=levelOf(d.correct);
+  if(ok){z.combo++;z.maxCombo=Math.max(z.maxCombo,z.combo);}else z.combo=0;
+  const w=getWrong();
+  if(ok){
+    z.cleared.add(it.id);
+    // 錯題複習：第一次就答對 → 移除；一般練習：第一次就答對且原本在錯題本 → 也移除
+    if(first&&w[it.id]){delete w[it.id];setWrong(w);z.removed=(z.removed||0)+1;}
+  }else{
+    w[it.id]={times:((w[it.id]&&w[it.id].times)||0)+1,last:todayKey()};setWrong(w);
+    // 再放回佇列：插在 3 題之後（若剩不多就放最後）
+    // 重新亂數選項，且正確答案一定換到不同位置（避免背 ABCD 位置）
+    let again;do{again={...makeItem(it.id),retry:true};}while(again.order.indexOf(q.a)===it.order.indexOf(q.a));
+    const at=Math.min(3,z.queue.length);z.queue.splice(at,0,again);
+  }
+  z.anim=ok?'ok':'bad';
+  renderQuiz();
+  // ---- 特效 ----
+  if(ok){
+    const el=document.querySelector('.opt.right');const [x,y]=center(el);
+    const c=z.combo;
+    burst(x,y,c>=10?110:c>=5?80:c>=3?55:35,c>=5?11:8);
+    if(counted)flyPlus(el);sfx.ok(c);
+    if(lvAfter.lv>lvBefore){
+      setTimeout(()=>{popText('升級！Lv.'+lvAfter.lv,lvAfter.title,'lvl');rain(180);sfx.lvl();},350);
+    }else if(c===3||c===5||c===10||(c>10&&c%5===0)){
+      popText(c+' 連擊！',c>=10?'超頻模式啟動':c>=5?'手感發燙中':'保持下去','combo3');
+      if(c>=5)rain(c>=10?160:90);
+    }else popText(pickOne(PRAISE),it.retry?'再挑戰成功':(counted?'':'這題今天已計分過'), '');
+  }else{
+    sfx.bad();
+  }
+}
+function renderQuiz(){
+  const z=state.quiz;const it=z.cur;const q=ALLQ[it.id];
+  const done=z.cleared.size;const pct=Math.round(done/z.total*100);
+  const ans=z.answered;const picked=ans===null?null:it.order[ans];const ok=picked===q.a;
+  const optsHtml=it.order.map((oi,pos)=>{
+    let cls='opt';
+    if(ans!==null){if(oi===q.a)cls+=' right';else if(pos===ans)cls+=' wrong';else cls+=' dim';
+      if(pos===ans&&(z.anim==='ok'||z.anim==='bad'))cls+=' boom';}
+    return `<button class="${cls}" data-pos="${pos}" ${ans!==null?'disabled':''}><span class="k">${L[pos]}</span><span>${esc(q.o[oi])}</span></button>`;
+  }).join('');
+  const rightPos=it.order.indexOf(q.a);
+  let fb='';
+  if(ans!==null){
+    fb=ok?`<div class="fb ok"><h3>答對了！${z.combo>=2?' 目前 '+z.combo+' 連擊':''}</h3><p>${esc(q.e)}</p></div>`
+        :`<div class="fb bad"><h3>差一點！正確答案是 (${L[rightPos]}) ${esc(q.o[q.a])}</h3><p><b>題解：</b>${esc(q.e)}</p><p class="note">看懂題解後，這題稍後會再出現一次，答對就過關。</p></div>`;
+  }
+  const anim=z.anim;z.anim=null;
+  const comboHtml=z.combo>=2?`<span class="combo ${z.combo>=3?'hot':''} ${anim==='ok'?'pump':''}">連擊 ×${z.combo}</span>`:'';
+  $('#app').innerHTML=`
+  <section class="panel ${anim==='enter'?'enter':anim==='bad'?'shake':''}">
+    <div class="qhead"><span>${esc(z.label)}${z.review?' · 錯題本':''}</span><span class="row" style="gap:10px">${comboHtml}<span>已過關 <b>${done}</b> / <b>${z.total}</b> · 剩 <b>${z.queue.length+(ans===null?1:0)}</b> 題</span></span></div>
+    <div class="bar"><i style="width:${pct}%"></i></div>
+    ${it.retry?'<div class="row" style="gap:6px"><span class="tag retry">再挑戰</span></div>':''}
+    <div class="qtext">${esc(q.q)}</div>
+    <div class="opts">${optsHtml}</div>
+    ${fb}
+    <div class="row">
+      ${ans!==null?`<button class="btn primary big" id="nextBtn">${z.queue.length?'下一題':'看成績'}</button>`:''}
+      <span class="spacer"></span>
+      ${state.confirmLeave?`<span class="hint">結束後本回合不計分，確定？</span><button class="linkbtn danger" id="leaveYes">結束</button><button class="linkbtn" id="leaveNo">繼續作答</button>`:`<button class="linkbtn" id="leaveBtn">結束練習</button>`}
+    </div>
+    <div class="hint">鍵盤：按 1–4 或 A–D 作答，Enter 下一題</div>
+  </section>`;
+  document.querySelectorAll('.opt').forEach(b=>b.onclick=()=>answer(+b.dataset.pos));
+  const nb=$('#nextBtn');if(nb){nb.onclick=tryNext;nb.focus({preventScroll:true});}
+  const lb=$('#leaveBtn');if(lb)lb.onclick=()=>{state.confirmLeave=true;renderQuiz();};
+  const ly=$('#leaveYes');if(ly)ly.onclick=home;
+  const ln=$('#leaveNo');if(ln)ln.onclick=()=>{state.confirmLeave=false;renderQuiz();};
+}
+document.addEventListener('keydown',e=>{
+  if(!$('#dayModal').hidden){if(e.key==='Escape')$('#dayModal').hidden=true;return;}
+  const z=state.quiz;if(!z||z.done||e.target.tagName==='INPUT')return;
+  if(e.repeat){e.preventDefault();return;} // 按住按鍵的自動連發一律忽略
+  const k=e.key.toUpperCase();
+  if(z.answered===null){let p='1234'.indexOf(k);if(p<0)p=L.indexOf(k);if(p>=0&&k.length===1){e.preventDefault();answer(p);}}
+  else if(e.key==='Enter'||e.key===' '){e.preventDefault();tryNext();}
+});
+function finish(){
+  const z=state.quiz;z.done=true;
+  const ids=Object.keys(z.firstTry);const first=ids.filter(id=>z.firstTry[id]).length;
+  const missed=ids.filter(id=>!z.firstTry[id]);
+  // 一般練習：只算第一次就答對。錯題複習：第一次答對得滿分，再挑戰才答對得一半分。
+  const score=z.total?Math.round((z.review?(first+missed.length*0.5):first)/z.total*100):0;
+  const d=getDay();const t=new Date();
+  d.rounds.push({time:String(t.getHours()).padStart(2,'0')+':'+String(t.getMinutes()).padStart(2,'0'),label:z.label,score});setDay(d);
+  const remain=Object.keys(getWrong()).filter(id=>ALLQ[id]).length;
+  const stars=score>=100?3:score>=80?2:score>=60?1:0;
+  const grade=score>=100?'完美通關！全部一次答對':score>=80?'表現優秀！':score>=60?'順利過關，再接再厲！':'全部題目都已攻克，多練幾次分數會更高！';
+  $('#app').innerHTML=`
+  <section class="panel enter">
+    <div class="sec-label">本回合完成 · ${esc(z.label)}</div>
+    <div class="stars">${[0,1,2].map(i=>`<div class="star ${i<stars?'on':''}" style="animation-delay:${.3+i*.25}s"></div>`).join('')}</div>
+    <div class="score"><span class="n" id="scoreN">${score}</span><span class="u">分</span></div>
+    <div class="grade">${grade}</div>
+    <p style="margin:0;color:var(--muted)">${z.review?'錯題複習計分：第一次就答對得滿分，再挑戰才答對得一半分；':'分數以「第一次作答就答對」計算；'}所有題目最後都已答對過關。</p>
+    <div class="stats">
+      <div class="stat"><div class="v">${first} / ${z.total}</div><div class="l">一次就答對</div></div>
+      <div class="stat"><div class="v">${z.maxCombo}</div><div class="l">最高連擊</div></div>
+      <div class="stat"><div class="v">${missed.length}</div><div class="l">曾答錯的題目</div></div>
+      <div class="stat"><div class="v">${z.attempts}</div><div class="l">總作答次數</div></div>
+      ${z.review?`<div class="stat"><div class="v">${z.removed||0}</div><div class="l">移出錯題本</div></div>`:`<div class="stat"><div class="v">${remain}</div><div class="l">錯題本題數</div></div>`}
+    </div>
+    <div class="row">
+      <button class="btn primary" id="againBtn">再練一次</button>
+      ${remain?`<button class="btn" id="goWrong">複習錯題（${remain}）</button>`:''}
+      <button class="btn" id="goHome">回首頁</button>
+    </div>
+  </section>
+  ${missed.length?`<section class="panel"><div class="sec-label">這回合答錯過的題目</div><div class="wlist" style="max-height:none">${missed.map(id=>{const q=ALLQ[id];return `<div class="witem"><div class="src">${esc(SRC[q.src].title)} 第 ${q.n} 題</div><div>${esc(q.q)}</div><div style="margin-top:4px"><b style="color:var(--ok)">答案：${esc(q.o[q.a])}</b></div><div style="color:var(--muted);white-space:pre-line">${esc(q.e)}</div></div>`;}).join('')}</div></section>`:''}`;
+  const allIds=Object.keys(z.firstTry);const lbl=z.label,rv=z.review;
+  $('#againBtn').onclick=()=>{if(rv){const w=Object.keys(getWrong()).filter(id=>ALLQ[id]);if(!w.length){home();return;}startQuiz(w,'錯題複習',true);}else startQuiz(allIds,lbl,false);};
+  const gw=$('#goWrong');if(gw)gw.onclick=()=>startQuiz(Object.keys(getWrong()).filter(id=>ALLQ[id]),'錯題複習',true);
+  $('#goHome').onclick=home;
+  window.scrollTo(0,0);
+  // 分數跳動 + 慶祝
+  const sn=$('#scoreN');
+  if(!reduceMotion&&score>0){
+    sn.textContent='0';const t0=performance.now();
+    const step=t=>{const k=Math.max(0,Math.min(1,(t-t0)/900));sn.textContent=Math.round(score*(1-Math.pow(1-k,3)));if(k<1)requestAnimationFrame(step);};
+    requestAnimationFrame(step);
+    setTimeout(()=>{if(sn.isConnected)sn.textContent=score;},1300); // 動畫被暫停時也一定顯示最終分數
+  }
+  if(score>=60)sfx.win();
+  if(score>=80){setTimeout(()=>rain(score>=100?260:150),300);}
+  if(score>=100){const [x,y]=center(sn);setTimeout(()=>burst(x,y,120,13),900);}
+}
+
+renderMute();renderTally();home();
+</script>
