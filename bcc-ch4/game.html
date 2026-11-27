@@ -1373,7 +1373,10 @@ canvas.confetti { position: fixed; inset: 0; width: 100%; height: 100%; pointer-
     var q = G.qs[G.idx], fb = $('feedback');
     fb.className = 'feedback ' + (ok ? 'good' : 'bad');
     fb.innerHTML = '';
-    var cap = el('div', 'cap-box'); cap.innerHTML = CAPTAIN; fb.appendChild(cap);
+    var solo = G.mode === 'solo';
+    var cap = el('div', 'cap-box'); cap.innerHTML = solo ? avaSVG(G.char) : CAPTAIN;
+    if (solo && ok) cap.classList.add('act');
+    fb.appendChild(cap);
     var tx = el('div', 'txt');
     tx.appendChild(el('b', '', head));
     if (!ok) tx.appendChild(el('span', '', '正確答案：(' + LETTERS[q.correct] + ') ' + q.opts[q.correct]));
