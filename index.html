@@ -239,6 +239,12 @@ body.viewing .logo:hover{opacity:.7}
 .frame-loading.done{opacity:0}
 @media (max-width:860px){.top .wrap{gap:12px}.top nav .pill{padding:6px 12px}}
 
+/* ---------- top bar: always one line ---------- */
+.top .wrap{flex-wrap:nowrap;gap:20px}
+.logo,.meta,.top nav,.top .pill,.crumb{white-space:nowrap}
+.logo,.top nav,.top .pill{flex:none}
+@media (max-width:1700px){.meta{display:none}}
+
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}.reveal{opacity:1;transform:none}}
 </style>
 </head>
