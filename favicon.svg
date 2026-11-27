@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <!-- ears -->
+  <path d="M7 34Q6 18 10 6q1-4 5-2l17 15z" fill="#ec8b5e"/>
+  <path d="M57 34Q58 18 54 6q-1-4-5-2L32 19z" fill="#ec8b5e"/>
+  <path d="M12 25Q12 17 14 11l9 9z" fill="#fbf5ee"/>
+  <path d="M52 25Q52 17 50 11l-9 9z" fill="#fbf5ee"/>
+  <!-- head -->
+  <ellipse cx="32" cy="40" rx="28" ry="23" fill="#ec8b5e"/>
+  <g fill="#c9663f" opacity=".55"><path d="M27 18h3l-1 7h-1z"/><path d="M31 17h2v9h-2z"/><path d="M34 18h3l-1 7h-1z"/></g>
+  <ellipse cx="32" cy="38" rx="23" ry="11" fill="#c9663f" opacity=".28"/>
+  <!-- sleepy eyes -->
+  <path d="M14 36q5 4.5 10 0M40 36q5 4.5 10 0" stroke="#3b2a24" stroke-width="3" stroke-linecap="round" fill="none"/>
+  <!-- nose + mouth -->
+  <path d="M28.5 42h7L32 46z" fill="#3b2a24"/>
+  <path d="M32 46q-2 3.2-5 1.6M32 46q2 3.2 5 1.6" stroke="#3b2a24" stroke-width="1.8" stroke-linecap="round" fill="none"/>
+  <!-- whiskers -->
+  <path d="M17 44 6 42M17 47 7 49M47 44l11-2M47 47l10 2" stroke="#3b2a24" stroke-width="1.5" stroke-linecap="round" opacity=".7"/>
+</svg>
