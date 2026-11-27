@@ -54,7 +54,7 @@ window.PROJECTS = [
   // ---- 升學 ----
   { cat: "path", title: "設計群升學地圖", desc: "多媒體設計科高一必看的升學路線圖。", url: "site/index.html", date: "2026-03-01", tag: "指引" },
   { cat: "path", title: "設計群統測選採科目", desc: "各校系統測選採科目一覽。", url: "site/設計群統測選採科目_1151022.html", date: "2026-03-01", tag: "資料" },
-  { cat: "path", title: "角色設計講者提醒", desc: "設計群升學指引：角色設計重點與提醒。", url: "role.html", date: "2026-03-01", tag: "指引" },
+  { cat: "web", title: "角色設計講者提醒", desc: "角色設計課堂重點：叫 AI 只改一處、用形狀決定角色個性。", url: "role.html", date: "2026-03-01", tag: "講義" },
 
   // ---- 工具 ----
   { cat: "tool", title: "快記行事曆", desc: "打一句「12/5 15:00 看牙醫」就記好行程，資料存在自己的瀏覽器。", url: "https://iamfefe.github.io/ccalendar/", date: "2026-11-25", tag: "小工具" },
