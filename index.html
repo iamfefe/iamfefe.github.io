@@ -426,23 +426,37 @@ body.viewing .logo:hover{opacity:.7}
       el.textContent=n==null?'':'👀 '+n.toLocaleString();
     });
   }
+  // GoatCounter caches the public numbers for a while, so a fresh click isn't in them yet.
+  // Remember what this viewer last saw (for up to 2 hours) so a reload never shows a smaller number.
+  const SEEN_KEY='fefe-seen-counts', SEEN_TTL=2*60*60*1000;
+  let seen={};
+  try{ seen=JSON.parse(localStorage.getItem(SEEN_KEY)||'{}')||{}; }catch(_){ seen={}; }
+  const saveSeen=()=>{ try{ localStorage.setItem(SEEN_KEY,JSON.stringify(seen)); }catch(_){} };
+  function merge(k,fetched){
+    if(fetched==null) return null;
+    const s=seen[k];
+    if(s && Date.now()-s.t<SEEN_TTL && s.n>fetched) return s.n;
+    if(s) delete seen[k];            // server has caught up, or the note expired
+    return fetched;
+  }
   async function loadCounts(){
-    const site=await getCount('TOTAL');
+    const site=merge('TOTAL',await getCount('TOTAL'));
     if(site!=null) document.getElementById('siteViews').textContent='本站瀏覽 '+site.toLocaleString()+' 次';
     const keys=[...new Set(items.map(keyOf))];
     for(let i=0;i<keys.length;i+=5){
       const part=keys.slice(i,i+5);
       const res=await Promise.all(part.map(getCount));
-      part.forEach((k,j)=>counts[k]=res[j]);
+      part.forEach((k,j)=>counts[k]=merge(k,res[j]));
       paintViews();
     }
+    saveSeen();
   }
   // count a click on any material card (split view or new tab)
   document.addEventListener('click',e=>{
     const a=e.target.closest('a.card[data-key]'); if(!a) return;
     const k=a.dataset.key;
     try{ window.goatcounter&&window.goatcounter.count&&window.goatcounter.count({path:k,title:k.slice(6),event:true}); }catch(_){}
-    if(counts[k]!=null){ counts[k]++; paintViews(); }
+    if(counts[k]!=null){ counts[k]++; seen[k]={n:counts[k],t:Date.now()}; saveSeen(); paintViews(); }
   },true);
 
   function card(p){
