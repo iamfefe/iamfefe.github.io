@@ -30,6 +30,8 @@ window.PROJECTS = [
   { cat: "dt", title: "數概第三章進階複習系統", desc: "第三章進階題目，一題一題練到熟。", url: "https://iamfefe.github.io/bcc-ch3-review/", date: "2026-11-27", tag: "複習系統" },
   { cat: "dt", title: "數概第三章必背重點", desc: "Canva 重點整理，考前快速看一遍。", url: "https://canva.link/gropzbjvyvybc24", frame: false, date: "2026-11-27", tag: "重點" },
   { cat: "dt", title: "數概第三章重點記憶卡", desc: "翻卡片背重點，邊玩邊記。", url: "https://iamfefe.github.io/bcc-chp3-mgame/", date: "2026-11-27", tag: "記憶卡" },
+  { cat: "dt", title: "數概第四章教學網頁", desc: "軟體與網路：重點、影片、線上作業系統、CPU 排程與磁碟重組實驗。", url: "bcc-ch4/index.html", date: "2026-11-27", tag: "互動教材" },
+  { cat: "dt", title: "寶箱大冒險：數概第四章", desc: "62 題考題闖關，答對開寶箱，個人挑戰或全班分組對抗。", url: "bcc-ch4/game.html", date: "2026-11-27", tag: "小遊戲" },
 
   { cat: "dt", title: "GoGoBCC 數概複習", desc: "選項亂序、錯題解析與記憶口訣，一路練到全部答對。", url: "https://iamfefe.github.io/GoGoBCC/", date: "2026-10-29", tag: "刷題" },
   { cat: "dt", title: "數概第一章總複習", desc: "影片：第一章重點一次複習。", url: "https://www.youtube.com/watch?v=mnJHcTpqvGc", date: "2026-11-27", tag: "影片" },

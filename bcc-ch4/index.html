@@ -1,0 +1,1355 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<link rel="icon" href="../favicon.svg" type="image/svg+xml">
+<style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px system-ui,-apple-system,"Segoe UI",sans-serif}img{max-width:100%}[hidden]{display:none!important}</style>
+<title>第4章 軟體與網路</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=Space+Grotesk:wght@500;700&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+/* Layout: 一頁式教學站。頂部是「系統平台分層」圖，各小節像一層層往上疊；每節分成 重點／影片／動手玩／教材。 */
+:root {
+  --bg: #f3f5f8;
+  --surface: #ffffff;
+  --ink: #14202e;
+  --muted: #566476;
+  --line: #d8dee7;
+  --accent: #1f5fd1;
+  --accent-soft: #e3ecfb;
+  --lab: #b8590a;
+  --lab-soft: #fbeedd;
+  --ok: #17803d;
+  --bad: #c2312d;
+  --code-bg: #0f1724;
+  --code-ink: #dbe6f5;
+  --l-hw: #5b6b7f; --l-os: #1f5fd1; --l-app: #2a8c7d; --l-net: #7a4fc4; --l-cloud: #b8590a;
+  --f-display: "Space Grotesk", "Noto Sans TC", system-ui, sans-serif;
+  --f-body: "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", system-ui, sans-serif;
+  --f-mono: "JetBrains Mono", ui-monospace, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0e141d; --surface: #161e2a; --ink: #e6ecf4; --muted: #9aa8ba; --line: #2a3546;
+    --accent: #7aa9ff; --accent-soft: #1b2b47; --lab: #f0a35a; --lab-soft: #3a2816;
+    --ok: #5fd08a; --bad: #ff7b74; --code-bg: #080c13; --code-ink: #dbe6f5;
+    --l-hw: #8494a8; --l-os: #7aa9ff; --l-app: #5cc6b4; --l-net: #b391f0; --l-cloud: #f0a35a;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0e141d; --surface: #161e2a; --ink: #e6ecf4; --muted: #9aa8ba; --line: #2a3546;
+  --accent: #7aa9ff; --accent-soft: #1b2b47; --lab: #f0a35a; --lab-soft: #3a2816;
+  --ok: #5fd08a; --bad: #ff7b74; --code-bg: #080c13; --code-ink: #dbe6f5;
+  --l-hw: #8494a8; --l-os: #7aa9ff; --l-app: #5cc6b4; --l-net: #b391f0; --l-cloud: #f0a35a;
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+body { background: var(--bg); color: var(--ink); font-family: var(--f-body); font-size: 16px; line-height: 1.75; }
+a { color: var(--accent); text-underline-offset: 3px; }
+a:focus-visible, button:focus-visible, textarea:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+h1, h2, h3, h4 { font-family: var(--f-display); text-wrap: balance; line-height: 1.3; margin: 0; }
+p { margin: 0; }
+
+.wrap { max-width: 1080px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+
+/* hero */
+.hero { padding-block: 40px 28px; border-bottom: 1px solid var(--line); background: var(--surface); }
+.hero-grid { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: 36px; align-items: center; }
+.eyebrow { font-family: var(--f-display); font-size: .8rem; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
+.hero h1 { font-size: clamp(1.8rem, 4.2vw, 2.7rem); font-weight: 900; margin-block: 6px 12px; }
+.hero p.lead { color: var(--muted); max-width: 34em; }
+.stack { display: grid; gap: 6px; font-size: .92rem; }
+.stack div { border-radius: 6px; padding: 8px 14px; color: #fff; display: flex; justify-content: space-between; gap: 12px; font-weight: 700; }
+.stack div span:last-child { font-weight: 400; opacity: .9; font-size: .82rem; }
+.stack .s-cloud { background: var(--l-cloud); }
+.stack .s-net { background: var(--l-net); }
+.stack .s-app { background: var(--l-app); }
+.stack .s-os { background: var(--l-os); }
+.stack .s-hw { background: var(--l-hw); }
+.stack div { color: var(--surface); }
+.stack-cap { font-size: .8rem; color: var(--muted); margin-top: 6px; }
+
+/* nav */
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--bg); }
+nav.toc { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; background: var(--bg); border-bottom: 1px solid var(--line); }
+nav.toc .wrap { display: flex; gap: 8px; overflow-x: auto; padding-block: 10px; scrollbar-width: thin; }
+nav.toc a { flex: none; text-decoration: none; color: var(--ink); font-size: .9rem; padding: 4px 12px; border: 1px solid var(--line); border-radius: 999px; background: var(--surface); }
+nav.toc a:hover { border-color: var(--accent); color: var(--accent); }
+
+/* sections */
+main { padding-block: 12px 60px; }
+section.chap { padding-block: 36px 8px; scroll-margin-top: 64px; }
+.chap-head { display: flex; align-items: baseline; gap: 14px; flex-wrap: wrap; border-left: 6px solid var(--c, var(--accent)); padding-left: 14px; margin-bottom: 22px; }
+.chap-head .num { font-family: var(--f-display); font-weight: 700; color: var(--c, var(--accent)); font-size: 1.1rem; font-variant-numeric: tabular-nums; }
+.chap-head h2 { font-size: clamp(1.4rem, 3vw, 1.9rem); font-weight: 900; }
+.chap-head p { flex-basis: 100%; color: var(--muted); }
+.topic { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 22px; margin-bottom: 18px; display: grid; gap: 16px; }
+.topic > h3 { font-size: 1.2rem; font-weight: 700; }
+.topic > p, .topic li { max-width: 68ch; }
+.kicker { font-size: .74rem; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); font-family: var(--f-display); font-weight: 700; }
+ul.plain { margin: 0; padding-left: 1.2em; display: grid; gap: 4px; }
+
+.cols { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 12px; }
+.card { border: 1px solid var(--line); border-radius: 8px; padding: 14px 16px; display: grid; gap: 4px; align-content: start; min-width: 0; text-decoration: none; color: var(--ink); background: var(--surface); transition: border-color .15s, transform .15s; }
+a.card:hover { border-color: var(--accent); transform: translateY(-1px); }
+.card .t { font-weight: 700; line-height: 1.45; }
+.card .m { font-size: .84rem; color: var(--muted); }
+.card .go { font-size: .84rem; color: var(--accent); font-weight: 500; }
+.vid .t::before { content: "▶"; display: inline-block; width: 1.5em; height: 1.5em; line-height: 1.5em; text-align: center; border-radius: 4px; background: var(--bad); color: var(--surface); font-size: .7rem; margin-right: 8px; vertical-align: 2px; }
+.tag { display: inline-block; font-size: .72rem; padding: 0 8px; border-radius: 999px; border: 1px solid var(--line); color: var(--muted); margin-right: 4px; }
+.tag.zh { border-color: var(--ok); color: var(--ok); }
+
+.lab { background: var(--lab-soft); border-color: transparent; }
+.lab .kicker { color: var(--lab); }
+a.card.labcard { border-color: color-mix(in srgb, var(--lab) 40%, transparent); }
+a.card.labcard:hover { border-color: var(--lab); }
+.labcard .go { color: var(--lab); }
+ol.steps { margin: 0; padding-left: 1.3em; display: grid; gap: 4px; }
+code, kbd { font-family: var(--f-mono); font-size: .88em; background: var(--accent-soft); padding: 1px 6px; border-radius: 4px; }
+pre.cmd { margin: 0; background: var(--code-bg); color: var(--code-ink); font-family: var(--f-mono); font-size: .86rem; padding: 12px 14px; border-radius: 8px; overflow-x: auto; line-height: 1.6; }
+
+.tbl { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; font-size: .9rem; min-width: 560px; }
+th, td { border-bottom: 1px solid var(--line); padding: 8px 10px; text-align: left; vertical-align: top; }
+th { font-weight: 700; color: var(--muted); font-size: .8rem; letter-spacing: .04em; }
+td.y { color: var(--ok); font-weight: 700; }
+td.n { color: var(--muted); }
+
+/* interpreter playground */
+.play { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); gap: 14px; }
+.editor { background: var(--code-bg); border-radius: 8px; overflow: hidden; display: grid; grid-template-columns: auto minmax(0, 1fr); min-width: 0; }
+.gutter { font-family: var(--f-mono); font-size: .92rem; line-height: 1.7; color: #6b7b92; padding: 12px 8px 12px 12px; text-align: right; user-select: none; white-space: pre; }
+.gutter span { display: block; padding: 0 4px; border-radius: 3px; }
+.gutter span.run { background: #1f5fd1; color: #fff; }
+.gutter span.done { color: #5fd08a; }
+.gutter span.err { background: #c2312d; color: #fff; }
+.gutter span.skip { color: #3c475a; text-decoration: line-through; }
+#code { font-family: var(--f-mono); font-size: .92rem; line-height: 1.7; background: transparent; color: var(--code-ink); border: 0; resize: vertical; min-height: 11em; padding: 12px 12px 12px 4px; white-space: pre; overflow-x: auto; width: 100%; }
+#code:focus { outline: none; }
+.btns { display: flex; flex-wrap: wrap; gap: 8px; }
+button { font-family: var(--f-body); font-size: .92rem; border-radius: 6px; border: 1px solid var(--line); background: var(--surface); color: var(--ink); padding: 6px 14px; cursor: pointer; }
+button:hover { border-color: var(--accent); }
+button.primary { background: var(--accent); border-color: var(--accent); color: var(--surface); font-weight: 700; }
+button.lab-btn { background: var(--lab); border-color: var(--lab); color: var(--surface); font-weight: 700; }
+.console { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 12px 14px; font-family: var(--f-mono); font-size: .84rem; min-height: 11em; overflow: auto; max-height: 22em; min-width: 0; }
+.console .c-h { color: var(--muted); font-family: var(--f-body); font-size: .8rem; margin-bottom: 6px; }
+.console div { white-space: pre-wrap; word-break: break-word; }
+.console .ok { color: var(--ok); }
+.console .bad { color: var(--bad); }
+.console .info { color: var(--muted); }
+
+.modal-bg { position: fixed; inset: 0; background: rgba(10, 16, 26, .45); display: flex; align-items: flex-start; justify-content: center; padding: calc(60px + env(safe-area-inset-top, 0px)) 16px 16px; z-index: 50; }
+.alertbox { background: var(--surface); color: var(--ink); width: min(420px, 100%); border-radius: 10px; box-shadow: 0 18px 50px rgba(0,0,0,.3); padding: 20px 22px 16px; display: grid; gap: 14px; }
+.alertbox .from { font-size: .85rem; color: var(--muted); }
+.alertbox .msg { font-size: 1.05rem; word-break: break-word; white-space: pre-wrap; }
+.alertbox .row { display: flex; justify-content: flex-end; }
+
+/* sorting game */
+.sort-list { display: grid; gap: 8px; }
+.sort-item { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; padding: 10px 12px; border: 1px solid var(--line); border-radius: 8px; }
+.sort-item .name { flex: 1 1 200px; font-weight: 500; min-width: 0; }
+.sort-item .opts { display: flex; gap: 6px; }
+.sort-item .opts button { padding: 3px 10px; font-family: var(--f-display); font-size: .84rem; }
+.sort-item.right { border-color: var(--ok); }
+.sort-item.right .fb { color: var(--ok); }
+.sort-item.wrong { border-color: var(--bad); }
+.sort-item.wrong .fb { color: var(--bad); }
+.fb { flex-basis: 100%; font-size: .84rem; color: var(--muted); }
+.score { font-family: var(--f-display); font-variant-numeric: tabular-nums; color: var(--muted); }
+
+.analogy { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px; }
+.analogy div { border-radius: 8px; padding: 12px 14px; background: var(--accent-soft); }
+.analogy b { font-family: var(--f-display); }
+
+/* OS lab */
+#oslab h3 + p { margin-top: -6px; }
+#disklab { margin-top: 18px; padding-top: 18px; border-top: 1px dashed color-mix(in srgb, var(--lab) 45%, transparent); scroll-margin-top: 70px; }
+.seg { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.seg label { display: inline-flex; align-items: center; gap: 6px; padding: 5px 12px; border: 1px solid var(--line); border-radius: 999px; background: var(--surface); cursor: pointer; font-size: .92rem; }
+.seg label:has(input:checked) { border-color: var(--lab); color: var(--lab); font-weight: 700; }
+.seg label.q { cursor: default; }
+.algo-desc { font-size: .9rem; color: var(--muted); min-height: 3.2em; }
+.seg input[type="number"], .proc-tbl input[type="number"] { width: 4.2em; }
+input[type="number"], input[type="text"], select { font: inherit; font-size: .92rem; padding: 3px 6px; border: 1px solid var(--line); border-radius: 5px; background: var(--surface); color: var(--ink); }
+.proc-tbl { min-width: 420px; background: var(--surface); border-radius: 8px; }
+.proc-tbl td { vertical-align: middle; }
+.proc-tbl input[type="text"] { width: 9em; }
+.swatch { display: inline-block; width: .9em; height: .9em; border-radius: 3px; vertical-align: -1px; margin-right: 6px; }
+.sched-out { display: grid; gap: 10px; background: var(--surface); border-radius: 8px; padding: 14px; border: 1px solid var(--line); }
+.sched-status { font-size: .92rem; min-height: 3.4em; }
+.cpu-board { display: grid; grid-template-columns: 5.5em minmax(0, 1fr) minmax(0, 1.4fr) minmax(0, 1.4fr); gap: 10px; }
+.cpu-board > div { border: 1px solid var(--line); border-radius: 8px; padding: 8px 10px; min-height: 86px; display: grid; align-content: start; gap: 6px; min-width: 0; }
+.cpu-board .cpu { border: 2px solid var(--lab); }
+.clock b { font-family: var(--f-display); font-size: 2.2rem; line-height: 1; font-variant-numeric: tabular-nums; }
+.chips { display: flex; flex-wrap: wrap; gap: 5px; }
+.pchip { display: inline-flex; align-items: baseline; gap: 5px; padding: 2px 9px; border-radius: 999px; color: #0d1520; font-size: .84rem; font-weight: 700; white-space: nowrap; }
+.pchip small { font-weight: 400; font-size: .74rem; }
+.cpu .pchip { font-size: 1rem; padding: 4px 12px; }
+.muted { color: var(--muted); font-size: .86rem; }
+.gantt.anim .fill { transition: width .6s linear; }
+.gantt.anim .cursor { transition: left .6s linear; }
+.gantt .sg .lbl { transition: opacity .25s; }
+.gantt .sg.future .lbl { opacity: 0; }
+.axis span { opacity: .3; }
+.axis span.on { opacity: 1; color: var(--ink); }
+@media (max-width: 640px) {
+  .cpu-board { grid-template-columns: 5em minmax(0, 1fr); }
+  .sched-status { min-height: 5.4em; }
+  .cpu-board .queue, .cpu-board .done { grid-column: 1 / -1; min-height: 78px; }
+}
+.gantt-wrap { overflow-x: auto; }
+.gantt { position: relative; display: flex; height: 46px; border-radius: 6px; overflow: hidden; background: var(--bg); min-width: 360px; }
+.gantt .sg { position: relative; flex-basis: 0; border-right: 2px solid var(--surface); min-width: 0; }
+.gantt .sg .fill { position: absolute; inset: 0 auto 0 0; width: 0; }
+.gantt .sg .lbl { position: relative; display: flex; align-items: center; justify-content: center; height: 100%; font-size: .78rem; font-weight: 700; color: #0d1520; white-space: nowrap; overflow: hidden; padding: 0 2px; }
+.gantt .sg.idle .lbl { color: var(--muted); font-weight: 400; }
+.gantt .cursor { position: absolute; top: 0; bottom: 0; width: 2px; background: var(--ink); left: 0; }
+.axis { position: relative; height: 20px; min-width: 360px; font-family: var(--f-mono); font-size: .72rem; color: var(--muted); font-variant-numeric: tabular-nums; }
+.axis span { position: absolute; transform: translateX(-50%); top: 2px; }
+.cmp { display: grid; gap: 6px; }
+.cmp-row { display: grid; grid-template-columns: 9em minmax(0, 1fr) 5em; gap: 10px; align-items: center; font-size: .88rem; }
+.cmp-bar { height: 14px; border-radius: 3px; background: var(--lab); }
+.cmp-row.best .cmp-bar { background: var(--ok); }
+.cmp-row span:last-child { font-variant-numeric: tabular-nums; text-align: right; }
+.disk { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 4px; max-width: 560px; }
+.disk .blk { aspect-ratio: 1; max-width: 100%; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-family: var(--f-mono); font-size: .8rem; font-weight: 600; color: #0d1520; border: 1px dashed var(--line); background: var(--surface); transition: background-color .15s, transform .15s; }
+.disk .blk.free { color: transparent; }
+.disk .blk.used { border-style: solid; border-color: transparent; }
+.disk .blk.head { outline: 3px solid var(--ink); outline-offset: 1px; transform: scale(1.08); }
+.disk-legend { display: flex; flex-wrap: wrap; gap: 6px 14px; font-size: .84rem; color: var(--muted); }
+.disk-legend b { color: var(--ink); }
+label.sel { display: inline-flex; align-items: center; gap: 6px; font-size: .92rem; }
+@media (max-width: 480px) { .cmp-row { grid-template-columns: 6.5em minmax(0, 1fr) 4.2em; } .disk .blk { font-size: .66rem; } }
+
+footer { border-top: 1px solid var(--line); padding-block: 22px 40px; color: var(--muted); font-size: .84rem; }
+
+@media (max-width: 760px) {
+  .hero-grid, .play { grid-template-columns: minmax(0, 1fr); }
+  .topic { padding: 16px; }
+}
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; scroll-behavior: auto !important; } }
+html { scroll-behavior: smooth; }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap hero-grid">
+    <div>
+      <div class="eyebrow">數位科技概論 · 第 4 章</div>
+      <h1>系統平台的組成架構：軟體與網路</h1>
+      <p class="lead">一台電腦能幫我們做事，靠的是一層一層疊起來的系統：硬體在最底下，作業系統負責指揮，應用軟體提供服務，再透過網路連到雲端。這一頁整理了各小節的重點、影片和可以直接在瀏覽器裡動手玩的實驗。</p>
+    </div>
+    <div aria-label="系統平台分層示意">
+      <div class="stack">
+        <div class="s-cloud"><span>雲端服務</span><span>IaaS · PaaS · SaaS</span></div>
+        <div class="s-net"><span>網路</span><span>LAN · WAN · Internet</span></div>
+        <div class="s-app"><span>應用軟體</span><span>套裝 · 專案開發 · App</span></div>
+        <div class="s-os"><span>系統軟體</span><span>作業系統 · 公用程式 · 翻譯程式</span></div>
+        <div class="s-hw"><span>電腦硬體</span><span>上一章</span></div>
+      </div>
+      <p class="stack-cap">參考課本圖 4-1、圖 4-2：越下層越接近硬體。</p>
+    </div>
+  </div>
+</header>
+
+<nav class="toc" aria-label="章節導覽">
+  <div class="wrap">
+    <a href="#os">4-1.1 作業系統</a>
+    <a href="#oslab">作業系統實驗室</a>
+    <a href="#utility">公用程式</a>
+    <a href="#translator">語言翻譯程式</a>
+    <a href="#app">4-1.2 應用軟體</a>
+    <a href="#network">4-2 網路</a>
+    <a href="#cloud">4-3 雲端服務</a>
+    <a href="#review">複習遊戲</a>
+  </div>
+</nav>
+
+<main class="wrap">
+
+<!-- ============ 4-1.1 系統軟體 ============ -->
+<section class="chap" id="os" style="--c: var(--l-os)">
+  <div class="chap-head">
+    <span class="num">4-1.1</span>
+    <h2>系統軟體</h2>
+    <p>用來控制或維護電腦設備運作的程式，分成作業系統、公用程式、語言翻譯程式三類。</p>
+  </div>
+
+  <div class="topic">
+    <div class="kicker">重點</div>
+    <h3>作業系統（Operating System, OS）</h3>
+    <p>作業系統居中協調、管理電腦的軟硬體資源，是使用者和電腦硬體之間的溝通橋樑。電腦和手機都要裝作業系統。</p>
+    <div class="tbl">
+      <table>
+        <thead><tr><th>作業系統</th><th>開發維護者</th><th>開放原始碼</th><th>適用設備</th><th>一句話記住它</th></tr></thead>
+        <tbody>
+          <tr><td>Windows</td><td>微軟</td><td class="n">否</td><td>電腦、行動裝置</td><td>Windows 10 可跨平台</td></tr>
+          <tr><td>UNIX</td><td>貝爾實驗室</td><td class="n">否（早期有開放）</td><td>電腦</td><td>用 C 語言開發，可攜性佳，常用在大型電腦</td></tr>
+          <tr><td>Linux</td><td>Linux 基金會</td><td class="y">是</td><td>電腦、行動裝置</td><td>Linus Torvalds 以 UNIX 為基礎開發；衍生版有 Red Hat、Fedora、Ubuntu</td></tr>
+          <tr><td>macOS</td><td>蘋果</td><td class="n">否</td><td>電腦</td><td>率先使用圖形使用者介面（GUI），只能在蘋果電腦上用</td></tr>
+          <tr><td>Android</td><td>Google</td><td class="y">是</td><td>行動裝置</td><td>基於 Linux 核心；用 Play 商店要 Google 授權</td></tr>
+          <tr><td>iOS</td><td>蘋果</td><td class="n">否</td><td>行動裝置</td><td>封閉系統，只能從 App Store 下載軟體</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p style="font-size:.88rem;color:var(--muted)">課外閱讀：單人單工（MS-DOS）、單人多工（Windows、macOS、Android、iOS）、多人多工（UNIX、Linux、Windows Server）。</p>
+
+    <div class="kicker">影片</div>
+    <div class="cols">
+      <a class="card vid" href="https://www.youtube.com/watch?v=26QPDBe-NB8" target="_blank" rel="noopener">
+        <span class="t">Operating Systems：Crash Course Computer Science #18</span>
+        <span class="m"><span class="tag">英文</span><span class="tag">可開中文字幕</span>約 13 分鐘</span>
+        <span class="m">作業系統怎麼出現的、多工與記憶體管理。</span>
+        <span class="go">到 YouTube 觀看 ↗</span>
+      </a>
+    </div>
+  </div>
+
+  <div class="topic lab">
+    <div class="kicker">動手玩</div>
+    <h3>在瀏覽器裡開不同的作業系統</h3>
+    <p>不用安裝，打開網頁就是一台模擬出來的電腦。先玩舊版 Windows，再進 Linux 打指令，比較「圖形使用者介面」和「文字命令列」有什麼不同。</p>
+    <div class="cols">
+      <a class="card labcard" href="https://emupedia.net/beta/emuos/" target="_blank" rel="noopener">
+        <span class="t">EmuOS：Windows 95 / 98 / ME</span>
+        <span class="m">一進去先選要用哪一版 Windows，桌面上有小畫家、記事本、踩地雷等程式。</span>
+        <span class="go">開啟 EmuOS ↗</span>
+      </a>
+      <a class="card labcard" href="https://webvm.io/" target="_blank" rel="noopener">
+        <span class="t">WebVM：Debian Linux 終端機</span>
+        <span class="m">在瀏覽器裡跑的 Linux 虛擬機，用文字指令操作。</span>
+        <span class="go">開啟 WebVM ↗</span>
+      </a>
+      <a class="card labcard" href="https://webvm.io/alpine.html" target="_blank" rel="noopener">
+        <span class="t">WebVM：Alpine Linux 圖形桌面</span>
+        <span class="m">同樣是 Linux，但有視窗桌面，證明 Linux 也有 GUI（對應節練習第 2 題）。</span>
+        <span class="go">開啟 Alpine 桌面 ↗</span>
+      </a>
+    </div>
+    <div class="cols">
+      <div class="card">
+        <span class="t">EmuOS 任務</span>
+        <ol class="steps">
+          <li>分別進入 Windows 95 和 Windows ME，比較開始功能表長得一不一樣。</li>
+          <li>同時開啟記事本和小畫家：這是「單人多工」。</li>
+          <li>找到「我的電腦」，看看磁碟機叫什麼名字。</li>
+        </ol>
+      </div>
+      <div class="card">
+        <span class="t">WebVM 任務（在黑色終端機輸入，按 Enter）</span>
+<pre class="cmd">cat /etc/os-release   # 這是哪一個 Linux 版本？
+uname -a              # 看核心（kernel）資訊
+ls /                  # 列出根目錄
+whoami                # 我是哪個使用者？</pre>
+      </div>
+    </div>
+    <p style="font-size:.86rem;color:var(--muted)">還想玩更多版本：<a href="https://copy.sh/v86/" target="_blank" rel="noopener">copy.sh/v86</a>（Windows 98、各種 Linux、FreeDOS）、<a href="https://www.pcjs.org/" target="_blank" rel="noopener">PCjs</a>（MS-DOS、Windows 1.0～3.x 等早期系統）。</p>
+  </div>
+
+  <div class="topic">
+    <div class="kicker">教材與圖片</div>
+    <h3>開放原始碼與作業系統家族</h3>
+    <p>開放原始碼：開放軟體程式碼的授權，讓他人複製、修改、使用，修改後的程式碼也要再公開。</p>
+    <div class="cols">
+      <a class="card" href="https://www.wikipedia.com/wiki/File:Unix_timeline.en.svg" target="_blank" rel="noopener"><span class="t">UNIX 家族演進圖</span><span class="m">Wikimedia Commons，看出 Linux、macOS 和 UNIX 的關係</span><span class="go">看圖 ↗</span></a>
+      <a class="card" href="https://commons.wikimedia.org/wiki/Category:Linux_distro_timeline" target="_blank" rel="noopener"><span class="t">Linux 發行版時間軸</span><span class="m">Red Hat、Fedora、Ubuntu 是怎麼分支出來的</span><span class="go">看圖 ↗</span></a>
+      <a class="card" href="https://gs.statcounter.com/os-market-share" target="_blank" rel="noopener"><span class="t">StatCounter 作業系統市占率</span><span class="m">即時圖表，可以切換桌機與手機</span><span class="go">看圖表 ↗</span></a>
+      <a class="card" href="https://blog.desdelinux.net/zh-TW/%E8%87%AA%E7%94%B1%E8%BB%9F%E4%BB%B6%E5%B0%88%E6%9C%89%E8%BB%9F%E4%BB%B6%E5%92%8C%E9%96%8B%E6%94%BE%E6%BA%90%E4%BB%A3%E7%A2%BC%E4%B9%8B%E9%96%93%E7%9A%84%E5%B7%AE%E7%95%B0/" target="_blank" rel="noopener"><span class="t">自由軟體、專有軟體和開放原始碼的差異</span><span class="m">繁體中文文章</span><span class="go">閱讀 ↗</span></a>
+    </div>
+  </div>
+
+  <!-- OSLab -->
+  <div class="topic lab" id="oslab">
+    <div class="kicker">動手玩 · 作業系統實驗室</div>
+    <h3>實驗一：CPU 排程，誰先用 CPU？</h3>
+    <p>電腦裡同時有好幾個程式在等 CPU，但 CPU 一次只能做一件事。作業系統要決定順序，這就是「分配與管理資源」。調整下面程式的到達時間和需要的時間，選一種排程方法，按「播放」看 CPU 怎麼分配。</p>
+
+    <div class="seg" role="radiogroup" aria-label="排程方法">
+      <label><input type="radio" name="algo" id="algo-fcfs" value="fcfs" checked> 先到先做 FCFS</label>
+      <label><input type="radio" name="algo" id="algo-sjf" value="sjf"> 短的先做 SJF（不搶先）</label>
+      <label><input type="radio" name="algo" id="algo-srtf" value="srtf"> 剩下最短的先做 SRTF（可搶先）</label>
+      <label><input type="radio" name="algo" id="algo-rr" value="rr"> 輪流做 RR</label>
+      <label class="q" id="q-wrap">每次輪到做 <input type="number" id="rr-q" min="1" max="5" value="2"> 單位</label>
+    </div>
+    <p class="algo-desc" id="algo-desc"></p>
+
+    <div class="tbl">
+      <table class="proc-tbl">
+        <thead><tr><th>程式</th><th>幾時到達</th><th>需要 CPU 時間</th><th></th></tr></thead>
+        <tbody id="proc-body"></tbody>
+      </table>
+    </div>
+    <div class="btns">
+      <button type="button" id="proc-add">＋ 加一個程式</button>
+      <button type="button" class="lab-btn" id="sched-play">▶ 播放</button>
+      <button type="button" id="sched-step">下一步 ⏭</button>
+      <button type="button" id="sched-skip">直接看結果</button>
+      <button type="button" id="sched-compare">三種方法一起比較</button>
+    </div>
+
+    <div class="sched-out">
+      <div class="cpu-board">
+        <div class="clock"><span class="kicker">時間</span><b id="clock">0</b></div>
+        <div class="cpu"><span class="kicker">CPU 正在執行</span><div class="chips" id="cpu-now"></div></div>
+        <div class="queue"><span class="kicker">排隊等待</span><div class="chips" id="ready-q"></div></div>
+        <div class="done"><span class="kicker">已完成</span><div class="chips" id="done-q"></div></div>
+      </div>
+      <div class="sched-status" id="sched-status" aria-live="polite">按「播放」開始，或按「下一步」一格一格看。</div>
+      <div class="gantt-wrap">
+        <div class="gantt" id="gantt"></div>
+        <div class="axis" id="axis"></div>
+      </div>
+      <div class="tbl" id="sched-result"></div>
+      <div id="sched-compare-out"></div>
+    </div>
+
+    <div class="card">
+      <span class="t">觀察任務</span>
+      <ol class="steps">
+        <li>三種方法各播一次，哪一種的「平均等待時間」最短？</li>
+        <li>把 Chrome 的需要時間改成 12，再用 FCFS 播放。後面的程式要等多久？</li>
+        <li>用 RR 播放，看看是不是每個程式都很快就輪到。這就是為什麼我們覺得電腦能「同時」開好幾個程式（單人多工）。</li>
+      </ol>
+    </div>
+
+    <h3 id="disklab">實驗二：磁碟重組，檔案為什麼會變慢？</h3>
+    <p>下面每一格是磁碟上的一個磁區。檔案刪掉後會留下空洞，新檔案只好拆開來塞進空洞，這就是「磁碟碎片」。讀取碎片化的檔案時，讀寫頭要跳來跳去，所以會變慢。試試「讀取檔案」，再按「重組並最佳化」比較看看。</p>
+    <div class="disk" id="disk" aria-label="磁碟磁區示意圖"></div>
+    <div class="disk-legend" id="disk-legend"></div>
+    <div class="sched-status" id="disk-status" aria-live="polite"></div>
+    <div class="btns">
+      <label class="sel">檔案 <select id="disk-file"></select></label>
+      <button type="button" class="lab-btn" id="disk-read">讀取這個檔案</button>
+      <button type="button" id="disk-del">刪除這個檔案</button>
+      <button type="button" id="disk-add">＋ 存入新檔案</button>
+      <button type="button" class="primary" id="disk-defrag">重組並最佳化磁碟機</button>
+      <button type="button" id="disk-reset">回到一開始</button>
+    </div>
+    <div class="card">
+      <span class="t">觀察任務</span>
+      <ol class="steps">
+        <li>讀取「F」，讀寫頭跳了幾次？記下來。</li>
+        <li>按「重組並最佳化磁碟機」，再讀取一次 F，跳躍次數變成多少？</li>
+        <li>刪掉幾個檔案、再存新檔案，看碎片怎麼又出現。這就是 Windows 每週自動最佳化磁碟的原因。</li>
+      </ol>
+    </div>
+  </div>
+
+  <!-- 公用程式 -->
+  <div class="topic" id="utility">
+    <div class="kicker">重點</div>
+    <h3>公用程式（工具程式）</h3>
+    <p>用來維護及支援電腦運作。常考的配對：</p>
+    <div class="tbl">
+      <table>
+        <thead><tr><th>公用程式</th><th>做什麼</th></tr></thead>
+        <tbody>
+          <tr><td>磁碟清理</td><td>清除資源回收筒、暫存檔等不需長期保存的檔案</td></tr>
+          <tr><td>磁碟檢查錯誤</td><td>檢查磁區是否損毀並自動修復</td></tr>
+          <tr><td>修復磁碟機</td><td>備份系統檔，電腦故障時還原到建立的時間點</td></tr>
+          <tr><td>重組並最佳化磁碟機</td><td>把分散的資料存到連續磁區，加快存取速度（112 商管群考過）</td></tr>
+          <tr><td>磁碟格式化</td><td>清除資料並分割磁碟</td></tr>
+          <tr><td>系統還原</td><td>回到先前運作正常的狀態</td></tr>
+          <tr><td>驅動程式</td><td>讓作業系統能辨識、管理與操控硬體</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="cols">
+      <a class="card" href="https://support.microsoft.com/zh-TW/Windows/Experience/Storage-FileManagement/defragment-optimize-your-data-drives-in-windows" target="_blank" rel="noopener"><span class="t">Microsoft：重組並最佳化磁碟機</span><span class="m">官方繁中操作說明</span><span class="go">閱讀 ↗</span></a>
+      <a class="card labcard" href="#disklab"><span class="t">先玩「磁碟重組」實驗</span><span class="m">在上面的作業系統實驗室，看碎片怎麼產生、重組後為什麼變快。</span><span class="go">前往實驗二 ↑</span></a>
+      <div class="card"><span class="t">教室電腦實作</span><span class="m">在 Windows 搜尋列輸入 <code>defrag</code>、<code>cleanmgr</code>、<code>裝置管理員</code>，各自打開看看是哪一個公用程式。補充：SSD 不需要重組，Windows 會改用 TRIM 最佳化。</span></div>
+    </div>
+  </div>
+
+  <!-- 語言翻譯程式 -->
+  <div class="topic" id="translator">
+    <div class="kicker">重點</div>
+    <h3>語言翻譯程式：編譯器與直譯器</h3>
+    <p>電腦只看得懂機器語言。我們寫的程式要經過語言翻譯程式轉成機器語言，電腦才能執行。</p>
+    <div class="analogy">
+      <div><b>編譯器（Compiler）</b><br>像把整本書翻譯好再出版。先檢查、翻譯整個程式，有錯就一行都不執行。例：GCC 把 C 語言翻成機器語言。</div>
+      <div><b>直譯器（Interpreter）</b><br>像即席口譯，翻一句、說一句。一行一行執行，遇到錯誤才停下來。例：瀏覽器執行 JavaScript、Python。</div>
+    </div>
+    <div class="kicker">影片</div>
+    <div class="cols">
+      <a class="card vid" href="https://www.youtube.com/watch?v=RU1u-js7db8" target="_blank" rel="noopener">
+        <span class="t">The First Programming Languages：Crash Course Computer Science #11</span>
+        <span class="m"><span class="tag">英文</span><span class="tag">可開中文字幕</span>從機器語言、組合語言到 Grace Hopper 發明的編譯器</span>
+        <span class="go">到 YouTube 觀看 ↗</span>
+      </a>
+      <a class="card vid" href="https://www.youtube.com/watch?v=6rvTlvbTpHE" target="_blank" rel="noopener">
+        <span class="t">Compiler Vs Interpreter（Intellipaat）</span>
+        <span class="m"><span class="tag">英文</span>編譯器和直譯器的差別，附比較表</span>
+        <span class="go">到 YouTube 觀看 ↗</span>
+      </a>
+    </div>
+  </div>
+
+  <div class="topic lab">
+    <div class="kicker">動手玩</div>
+    <h3>直譯器實驗：<code>alert("fefe");</code></h3>
+    <p>JavaScript 是由瀏覽器裡的直譯器一行一行執行的。先按「直譯執行」看看會跳出什麼，再改改看程式。左邊的行號會顯示目前執行到哪一行。</p>
+    <div class="btns" role="group" aria-label="範例程式">
+      <button type="button" data-ex="0">範例 1：alert("fefe")</button>
+      <button type="button" data-ex="1">範例 2：打錯字</button>
+      <button type="button" data-ex="2">範例 3：變數與計算</button>
+    </div>
+    <div class="play">
+      <div class="editor">
+        <div class="gutter" id="gutter" aria-hidden="true"></div>
+        <textarea id="code" spellcheck="false" aria-label="程式碼編輯區" rows="7">alert("fefe");</textarea>
+      </div>
+      <div class="console" id="console" aria-live="polite">
+        <div class="c-h">執行結果</div>
+        <div class="info">按下「直譯執行」或「編譯執行」開始。</div>
+      </div>
+    </div>
+    <div class="btns">
+      <button type="button" class="lab-btn" id="run-interp">▶ 直譯執行（一行一行）</button>
+      <button type="button" class="primary" id="run-compile">⚙ 編譯執行（先全部檢查）</button>
+      <button type="button" id="reset">清除</button>
+    </div>
+    <div class="cols">
+      <div class="card">
+        <span class="t">觀察任務</span>
+        <ol class="steps">
+          <li>把 <code>"fefe"</code> 改成自己的名字，再執行一次。</li>
+          <li>載入「範例 2」，分別按「直譯執行」和「編譯執行」。哪一種有跳出前兩個視窗？為什麼？</li>
+          <li>把 <code>aler</code> 改回 <code>alert</code>，再試一次。</li>
+        </ol>
+      </div>
+      <div class="card">
+        <span class="t">在真正的瀏覽器裡玩</span>
+        <span class="m">在電腦上的 Chrome 或 Edge 開任一個網頁，按 <kbd>F12</kbd>（或 <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>J</kbd>）打開「主控台 Console」，輸入下面這行後按 Enter，就會跳出瀏覽器真正的提示視窗：</span>
+        <pre class="cmd">alert("fefe");</pre>
+        <span class="m">第一次貼上程式碼時，Chrome 可能會要求先輸入 <code>allow pasting</code>，自己打字輸入就不需要。</span>
+      </div>
+    </div>
+    <p style="font-size:.86rem;color:var(--muted)">這個練習區支援 <code>alert(...)</code>、<code>console.log(...)</code>、<code>let 變數 = ...</code> 與加減乘除，是為了上課示範做的簡化版直譯器。進階挑戰：到 <a href="https://webvm.io/" target="_blank" rel="noopener">WebVM</a> 用 GCC 編譯 C 程式（如果映像檔有內建 gcc）：</p>
+    <pre class="cmd">printf '#include &lt;stdio.h&gt;\nint main(){ puts("fefe"); return 0; }\n' &gt; hi.c
+gcc hi.c -o hi     # 編譯：把 C 翻成機器語言
+./hi               # 執行翻好的程式</pre>
+  </div>
+</section>
+
+<!-- ============ 4-1.2 應用軟體 ============ -->
+<section class="chap" id="app" style="--c: var(--l-app)">
+  <div class="chap-head">
+    <span class="num">4-1.2</span>
+    <h2>應用軟體</h2>
+    <p>為了處理或解決特定問題而開發的軟體，分成套裝軟體和專案開發軟體；裝在手機上的叫 App。</p>
+  </div>
+  <div class="topic">
+    <div class="cols">
+      <div class="card"><span class="t">套裝軟體</span><span class="m">針對大多數使用者的需求設計。例：威力導演、Photoshop、CorelDRAW、Microsoft Office、OpenOffice。</span></div>
+      <div class="card"><span class="t">專案開發軟體</span><span class="m">針對特定機構的個別需求設計。例：餐廳點菜系統、校務行政系統、台灣高鐵網路訂位系統。</span></div>
+      <div class="card"><span class="t">手機應用軟體（App）</span><span class="m">從 Play 商店或 App Store 下載。例：翻譯程式、Pokémon Go、Google 地圖。</span></div>
+    </div>
+    <div class="kicker">動手看看</div>
+    <div class="cols">
+      <a class="card" href="https://irs.thsrc.com.tw/IMINT" target="_blank" rel="noopener"><span class="t">台灣高鐵網路訂票（課本圖 4-5）</span><span class="m">專案開發軟體的例子。只看介面，不要送出訂單。</span><span class="go">開啟 ↗</span></a>
+      <a class="card" href="https://pixlr.com/" target="_blank" rel="noopener"><span class="t">Pixlr 線上修圖（課外閱讀）</span><span class="m">不用安裝就能用的雲端應用軟體，下一節的 SaaS 就是這種。</span><span class="go">開啟 ↗</span></a>
+    </div>
+    <p style="font-size:.9rem;color:var(--muted)">討論：家族企業要記錄進出貨，最符合需求的是哪一種軟體？（習題第 20 題：請程式設計公司寫專案開發軟體）</p>
+  </div>
+</section>
+
+<!-- ============ 4-2 網路 ============ -->
+<section class="chap" id="network" style="--c: var(--l-net)">
+  <div class="chap-head">
+    <span class="num">4-2</span>
+    <h2>網路</h2>
+    <p>依涵蓋範圍分成區域網路（LAN）和廣域網路（WAN）；網際網路（Internet）是橫跨全世界的超大型廣域網路。</p>
+  </div>
+  <div class="topic">
+    <div class="cols">
+      <div class="card"><span class="t">區域網路 LAN</span><span class="m">限定範圍內：公司、學校電腦教室、同一棟大樓。</span></div>
+      <div class="card"><span class="t">廣域網路 WAN</span><span class="m">廣闊地理範圍：各地戶政機關的網路、跨國企業連各地分公司。</span></div>
+      <div class="card"><span class="t">網際網路 Internet</span><span class="m">全球各地的網路連在一起，任何連上的電腦或手機都能互相溝通。</span></div>
+    </div>
+    <div class="kicker">影片：Code.org「網際網路如何運作」系列（Google 工程師講解）</div>
+    <div class="cols">
+      <a class="card vid" href="https://www.youtube.com/watch?v=Dxcc6ycZ73M" target="_blank" rel="noopener"><span class="t">What is the Internet?</span><span class="m"><span class="tag">英文</span><span class="tag">可開中文字幕</span>網際網路是什麼、誰發明的</span><span class="go">到 YouTube 觀看 ↗</span></a>
+      <a class="card vid" href="https://www.youtube.com/watch?v=ZhEf7e4kopM" target="_blank" rel="noopener"><span class="t">The Internet: Wires, Cables &amp; Wifi</span><span class="m"><span class="tag">英文</span><span class="tag">可開中文字幕</span>網路線、光纖、Wi-Fi 怎麼傳資料</span><span class="go">到 YouTube 觀看 ↗</span></a>
+      <a class="card vid" href="https://www.youtube.com/watch?v=5o8CwafCxnU" target="_blank" rel="noopener"><span class="t">The Internet: IP Addresses &amp; DNS</span><span class="m"><span class="tag">英文</span><span class="tag">可開中文字幕</span>每台裝置的網路地址</span><span class="go">到 YouTube 觀看 ↗</span></a>
+      <a class="card vid" href="https://www.youtube.com/watch?v=AYdF7b3nMto" target="_blank" rel="noopener"><span class="t">The Internet: Packets, Routing &amp; Reliability</span><span class="m"><span class="tag">英文</span><span class="tag">可開中文字幕</span>資料切成封包傳送</span><span class="go">到 YouTube 觀看 ↗</span></a>
+    </div>
+    <div class="kicker">延伸影片</div>
+    <div class="cols">
+      <a class="card vid" href="https://www.youtube.com/watch?v=3QhU9jd03a0" target="_blank" rel="noopener"><span class="t">Computer Networks：Crash Course CS #28</span><span class="m"><span class="tag">英文</span>區域網路與乙太網路</span><span class="go">到 YouTube 觀看 ↗</span></a>
+      <a class="card vid" href="https://www.youtube.com/watch?v=AEaKrq3SpW8" target="_blank" rel="noopener"><span class="t">The Internet：Crash Course CS #29</span><span class="m"><span class="tag">英文</span>從家裡的網路連到全世界</span><span class="go">到 YouTube 觀看 ↗</span></a>
+    </div>
+  </div>
+  <div class="topic lab">
+    <div class="kicker">動手玩</div>
+    <h3>找出連接台灣的海底電纜</h3>
+    <p>網際網路不是飄在空中的，跨國資料大多走海底光纖。打開互動地圖，找找有哪些電纜在台灣上岸。</p>
+    <div class="cols">
+      <a class="card labcard" href="https://www.submarinecablemap.com/" target="_blank" rel="noopener"><span class="t">Submarine Cable Map（海底電纜地圖）</span><span class="m">點任一條電纜可看長度、擁有者和登陸點。</span><span class="go">開啟地圖 ↗</span></a>
+      <div class="card"><span class="t">任務</span><ol class="steps"><li>找出 2 條在台灣登陸的電纜，記下名稱和連到哪些國家。</li><li>想一想：興建海底電纜屬於雲端資源的哪一層？（習題第 17 題）</li></ol></div>
+    </div>
+  </div>
+  <div class="topic">
+    <div class="kicker">教材</div>
+    <div class="cols">
+      <a class="card" href="https://global.code.org/videos" target="_blank" rel="noopener"><span class="t">Code.org 教育影片總表</span><span class="m">整個系列都可以免費用在課堂</span><span class="go">開啟 ↗</span></a>
+      <a class="card" href="https://ithelp.ithome.com.tw/articles/10284175" target="_blank" rel="noopener"><span class="t">iT 邦幫忙：網路通訊與網際網路</span><span class="m">繁中文章，LAN／WAN 基本概念</span><span class="go">閱讀 ↗</span></a>
+      <a class="card" href="https://www.edb.gov.hk/attachment/en/curriculum-development/kla/technology-edu/resources/computer-edu/Session1.pdf" target="_blank" rel="noopener"><span class="t">香港教育局：電腦網絡講義</span><span class="m">繁中 PDF，LAN、MAN、WAN</span><span class="go">開啟 ↗</span></a>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 4-3 雲端服務 ============ -->
+<section class="chap" id="cloud" style="--c: var(--l-cloud)">
+  <div class="chap-head">
+    <span class="num">4-3</span>
+    <h2>雲端服務</h2>
+    <p>透過網路從遠端取用系統平台提供的服務。工程師畫圖時常用雲朵代表網路，所以叫「雲端」。</p>
+  </div>
+  <div class="topic">
+    <div class="kicker">重點</div>
+    <h3>使用者端與雲端；雲端資源的三層架構</h3>
+    <div class="cols">
+      <div class="card"><span class="t">IaaS　基礎建設即服務</span><span class="m">出租儲存設備、伺服器、網路建設、資安設備。例：Google 機房、中華電信、AT&amp;T、租用雲端儲存空間。</span></div>
+      <div class="card"><span class="t">PaaS　平台即服務</span><span class="m">出租開發、測試與執行程式的平台（作業系統、開發工具、資料庫）。例：Oracle Cloud、Microsoft Azure、AWS。</span></div>
+      <div class="card"><span class="t">SaaS　軟體即服務</span><span class="m">線上直接使用的應用軟體，運算多在雲端完成。例：Gmail、LINE、YouTube、Google 地圖。</span></div>
+    </div>
+    <div class="kicker">影片</div>
+    <div class="cols">
+      <a class="card vid" href="https://www.youtube.com/watch?v=1IhwmLaVyKk" target="_blank" rel="noopener"><span class="t">雲端服務怎麼選？一次分清 IaaS、PaaS 與 SaaS｜熊熊來解答 #2</span><span class="m"><span class="tag zh">中文</span>數位通國際 eASPNet Taiwan</span><span class="go">到 YouTube 觀看 ↗</span></a>
+      <a class="card vid" href="https://www.youtube.com/watch?v=zDAYZU4A3w0" target="_blank" rel="noopener"><span class="t">Google Data Center 360° Tour</span><span class="m"><span class="tag">英文</span><span class="tag">360° 影片</span>用滑鼠或轉動手機看機房：雲端其實是一排排伺服器</span><span class="go">到 YouTube 觀看 ↗</span></a>
+      <a class="card vid" href="https://www.youtube.com/watch?v=36zducUX16w" target="_blank" rel="noopener"><span class="t">Cloud Computing Service Models：IaaS PaaS SaaS Explained</span><span class="m"><span class="tag">英文</span>三種服務模式的比較</span><span class="go">到 YouTube 觀看 ↗</span></a>
+    </div>
+    <div class="kicker">比喻：披薩即服務</div>
+    <div class="analogy">
+      <div><b>自己在家做</b><br>麵團、烤箱、餐桌全自己來（自己買設備）</div>
+      <div><b>IaaS</b><br>租廚房和烤箱，披薩自己做</div>
+      <div><b>PaaS</b><br>買好現成餅皮和醬料，自己加料烤</div>
+      <div><b>SaaS</b><br>叫外送，打開就吃</div>
+    </div>
+  </div>
+
+  <div class="topic lab">
+    <div class="kicker">動手玩</div>
+    <h3>分類大挑戰：這是 IaaS、PaaS 還是 SaaS？</h3>
+    <p>點選每一項的答案，馬上知道對不對。<span class="score" id="score">0 / 0</span></p>
+    <div class="sort-list" id="sort"></div>
+    <div class="btns"><button type="button" id="sort-reset">重新作答</button></div>
+  </div>
+
+  <div class="topic">
+    <div class="kicker">教材</div>
+    <div class="cols">
+      <a class="card" href="https://azure.microsoft.com/zh-tw/resources/cloud-computing-dictionary/what-are-iaas-paas-and-saas" target="_blank" rel="noopener"><span class="t">Microsoft Azure：什麼是 IaaS、PaaS 和 SaaS</span><span class="m">繁中官方說明</span><span class="go">閱讀 ↗</span></a>
+      <a class="card" href="https://cloud.google.com/learn/paas-vs-iaas-vs-saas?hl=zh-tw" target="_blank" rel="noopener"><span class="t">Google Cloud：PaaS、IaaS、SaaS 有何不同</span><span class="m">繁中官方說明</span><span class="go">閱讀 ↗</span></a>
+      <a class="card" href="https://www.inside.com.tw/feature/ai/9730-cloud-computing" target="_blank" rel="noopener"><span class="t">INSIDE：雲端運算會如何改變生活</span><span class="m">生活化的繁中文章</span><span class="go">閱讀 ↗</span></a>
+      <a class="card" href="https://one.google.com/about/plans" target="_blank" rel="noopener"><span class="t">Google One 雲端空間方案</span><span class="m">多元練習題：查 3 種雲端空間方案，比較容量、期間、費用</span><span class="go">開啟 ↗</span></a>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 複習 ============ -->
+<section class="chap" id="review" style="--c: var(--lab)">
+  <div class="chap-head">
+    <span class="num">複習</span>
+    <h2>寶箱大冒險：第 4 章考題闖關</h2>
+    <p>62 題考題做成闖關遊戲，答對就能開寶箱拿金幣，每題都附解析。</p>
+  </div>
+  <div class="topic lab">
+    <div class="cols">
+      <a class="card labcard" href="https://iamfefe.github.io/bcc-ch4/game.html" target="_blank" rel="noopener">
+        <span class="t">開始玩寶箱大冒險</span>
+        <span class="m">個人挑戰：每人一台裝置，結束後可以只重練答錯的題目。<br>班級對抗：老師投影，分組比賽搶金幣。</span>
+        <span class="go">開啟遊戲 ↗</span>
+      </a>
+      <div class="card">
+        <span class="t">考前特別注意</span>
+        <ul class="plain">
+          <li>驅動程式、磁碟工具、編譯器、iOS 都是<b>系統軟體</b>。</li>
+          <li>校務行政、銀行、報稅、會計系統是<b>應用軟體</b>。</li>
+          <li>沒有「多人單工」；iOS 是單人多工。</li>
+          <li>範圍小到大：LAN &lt; MAN &lt; WAN &lt; Internet。</li>
+          <li>SaaS 不能離線用，伺服器越遠傳輸越慢。</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">依據《數位科技概論》第 4 章課文整理。外部影片與網站內容屬各原作者所有，連結於 2026 年 11 月確認可開啟。</div>
+</footer>
+
+<div class="modal-bg" id="modal" hidden>
+  <div class="alertbox" role="alertdialog" aria-modal="true" aria-labelledby="alert-from" aria-describedby="alert-msg">
+    <div class="from" id="alert-from">這個網頁顯示</div>
+    <div class="msg" id="alert-msg"></div>
+    <div class="row"><button type="button" class="primary" id="alert-ok">確定</button></div>
+  </div>
+</div>
+
+<script>
+(function () {
+  /* ---------- 簡化版 JavaScript 直譯器（只支援上課用的語法） ---------- */
+  var EXAMPLES = [
+    'alert("fefe");',
+    'alert("fefe");\nalert("第二行");\naler("打錯字了");\nalert("這行會不會執行？");',
+    'let name = "fefe";\nlet score = 80 + 15;\nalert("哈囉，" + name);\nconsole.log("分數是 " + score);\nalert(score * 2);'
+  ];
+  var codeEl = document.getElementById('code');
+  var gutter = document.getElementById('gutter');
+  var con = document.getElementById('console');
+  var modal = document.getElementById('modal');
+  var running = false;
+
+  function lines() { return codeEl.value.split('\n'); }
+  function drawGutter(states) {
+    var n = lines().length, h = '';
+    for (var i = 0; i < n; i++) h += '<span class="' + ((states && states[i]) || '') + '">' + (i + 1) + '</span>';
+    gutter.innerHTML = h;
+  }
+  function log(text, cls) {
+    var d = document.createElement('div');
+    d.className = cls || '';
+    d.textContent = text;
+    con.appendChild(d);
+    con.scrollTop = con.scrollHeight;
+  }
+  function clearConsole() { con.innerHTML = '<div class="c-h">執行結果</div>'; }
+
+  function tokenize(src) {
+    var t = [], i = 0;
+    while (i < src.length) {
+      var c = src[i];
+      if (/\s/.test(c)) { i++; continue; }
+      if (c === '/' && src[i + 1] === '/') break;
+      if (c === '"' || c === "'") {
+        var q = c, s = '', j = i + 1, closed = false;
+        while (j < src.length) {
+          if (src[j] === '\\' && j + 1 < src.length) { var e = src[j + 1]; s += e === 'n' ? '\n' : e; j += 2; continue; }
+          if (src[j] === q) { closed = true; break; }
+          s += src[j]; j++;
+        }
+        if (!closed) throw new SyntaxError('字串少了結尾的引號 ' + q);
+        t.push({ k: 'str', v: s }); i = j + 1; continue;
+      }
+      if (/[0-9]/.test(c)) { var m = src.slice(i).match(/^[0-9]+(\.[0-9]+)?/); t.push({ k: 'num', v: parseFloat(m[0]) }); i += m[0].length; continue; }
+      if (/[A-Za-z_$一-鿿]/.test(c)) { var w = src.slice(i).match(/^[A-Za-z_$0-9一-鿿]+/)[0]; t.push({ k: 'id', v: w }); i += w.length; continue; }
+      if ('()+-*/%=;.,'.indexOf(c) >= 0) { t.push({ k: 'op', v: c }); i++; continue; }
+      if ('（）；＂“”'.indexOf(c) >= 0) throw new SyntaxError('出現全形符號「' + c + '」，程式要用半形（英文輸入法）');
+      throw new SyntaxError('看不懂的符號「' + c + '」');
+    }
+    return t;
+  }
+
+  // 解析一行，回傳語法樹；declared 用來在編譯時檢查變數
+  function parseLine(src) {
+    var t = tokenize(src), p = 0;
+    if (!t.length) return null;
+    function peek(v) { return t[p] && t[p].v === v; }
+    function eat(v) { if (!peek(v)) throw new SyntaxError(t[p] ? '這裡應該是「' + v + '」，卻看到「' + t[p].v + '」' : '這一行還沒寫完，少了「' + v + '」'); p++; }
+    function expr() { var n = term(); while (peek('+') || peek('-')) { var o = t[p++].v; n = { k: 'bin', o: o, a: n, b: term() }; } return n; }
+    function term() { var n = factor(); while (peek('*') || peek('/') || peek('%')) { var o = t[p++].v; n = { k: 'bin', o: o, a: n, b: factor() }; } return n; }
+    function factor() {
+      var x = t[p];
+      if (!x) throw new SyntaxError('這一行還沒寫完');
+      if (x.v === '(') { p++; var n = expr(); eat(')'); return n; }
+      if (x.v === '-') { p++; return { k: 'neg', a: factor() }; }
+      p++;
+      if (x.k === 'str' || x.k === 'num') return { k: 'lit', v: x.v };
+      if (x.k === 'id') return { k: 'var', v: x.v };
+      throw new SyntaxError('這裡不應該出現「' + x.v + '」');
+    }
+    var node;
+    if (t[0].k === 'id' && /^(let|const|var)$/.test(t[0].v)) {
+      p = 1;
+      if (!t[p] || t[p].k !== 'id') throw new SyntaxError(t[0].v + ' 後面要接變數名稱');
+      var name = t[p++].v; eat('=');
+      node = { k: 'decl', name: name, e: expr() };
+    } else if (t[0].k === 'id' && t[1] && t[1].v === '=') {
+      p = 2; node = { k: 'assign', name: t[0].v, e: expr() };
+    } else if (t[0].k === 'id') {
+      var fn = t[p++].v;
+      if (peek('.')) { p++; if (!t[p]) throw new SyntaxError('「.」後面少了名稱'); fn += '.' + t[p++].v; }
+      if (!peek('(')) throw new SyntaxError('「' + fn + '」後面要接小括號 ( )');
+      p++;
+      var arg = peek(')') ? { k: 'lit', v: '' } : expr();
+      eat(')');
+      node = { k: 'call', fn: fn, e: arg };
+    } else {
+      throw new SyntaxError('一行的開頭不應該是「' + t[0].v + '」');
+    }
+    if (peek(';')) p++;
+    if (p < t.length) throw new SyntaxError('多出了「' + t[p].v + '」');
+    return node;
+  }
+
+  var FUNCS = { 'alert': 1, 'console.log': 1 };
+  function checkNames(node, vars) {
+    if (!node) return;
+    if (node.k === 'call' && !FUNCS[node.fn]) throw new ReferenceError(node.fn + ' is not defined（沒有「' + node.fn + '」這個指令，是不是打錯字？）');
+    if (node.k === 'var' && !(node.v in vars)) throw new ReferenceError(node.v + ' is not defined（變數「' + node.v + '」還沒宣告）');
+    if (node.k === 'assign' && !(node.name in vars)) throw new ReferenceError(node.name + ' is not defined（變數「' + node.name + '」還沒宣告）');
+    if (node.e) checkNames(node.e, vars);
+    if (node.a) checkNames(node.a, vars);
+    if (node.b) checkNames(node.b, vars);
+    if (node.k === 'decl') vars[node.name] = 1;
+  }
+  function evalE(n, vars) {
+    if (n.k === 'lit') return n.v;
+    if (n.k === 'var') { if (!(n.v in vars)) throw new ReferenceError(n.v + ' is not defined（變數「' + n.v + '」還沒宣告）'); return vars[n.v]; }
+    if (n.k === 'neg') return -evalE(n.a, vars);
+    var a = evalE(n.a, vars), b = evalE(n.b, vars);
+    if (n.o === '+') return a + b;
+    if (n.o === '-') return a - b;
+    if (n.o === '*') return a * b;
+    if (n.o === '/') return a / b;
+    return a % b;
+  }
+  function showAlert(msg) {
+    return new Promise(function (res) {
+      document.getElementById('alert-msg').textContent = String(msg);
+      modal.hidden = false;
+      var ok = document.getElementById('alert-ok');
+      ok.focus();
+      function done() { modal.hidden = true; ok.removeEventListener('click', done); document.removeEventListener('keydown', key); res(); }
+      function key(e) { if (e.key === 'Enter' || e.key === 'Escape') { e.preventDefault(); done(); } }
+      ok.addEventListener('click', done);
+      document.addEventListener('keydown', key);
+    });
+  }
+  function wait(ms) { return new Promise(function (r) { setTimeout(r, ms); }); }
+
+  async function exec(node, vars) {
+    if (node.k === 'decl') { vars[node.name] = evalE(node.e, vars); return; }
+    if (node.k === 'assign') { if (!(node.name in vars)) throw new ReferenceError(node.name + ' is not defined'); vars[node.name] = evalE(node.e, vars); return; }
+    if (!FUNCS[node.fn]) throw new ReferenceError(node.fn + ' is not defined（沒有「' + node.fn + '」這個指令，是不是打錯字？）');
+    var v = evalE(node.e, vars);
+    if (node.fn === 'alert') { log('alert → 跳出視窗：' + v, 'ok'); await showAlert(v); }
+    else log('console.log → ' + v, 'ok');
+  }
+
+  async function runInterpreter() {
+    if (running) return; running = true;
+    clearConsole();
+    var L = lines(), st = [], vars = {};
+    log('【直譯器】從第 1 行開始，翻譯一行、執行一行…', 'info');
+    for (var i = 0; i < L.length; i++) {
+      st[i] = 'run'; drawGutter(st);
+      await wait(350);
+      try {
+        var node = parseLine(L[i]);
+        if (node) await exec(node, vars);
+        st[i] = 'done';
+      } catch (e) {
+        st[i] = 'err';
+        for (var j = i + 1; j < L.length; j++) if (L[j].trim()) st[j] = 'skip';
+        drawGutter(st);
+        log('第 ' + (i + 1) + ' 行錯誤：' + e.message, 'bad');
+        log('直譯器在這裡停下來，第 ' + (i + 1) + ' 行之前的程式「已經執行」了。', 'info');
+        running = false; return;
+      }
+      drawGutter(st);
+    }
+    log('全部 ' + L.length + ' 行執行完畢。', 'info');
+    running = false;
+  }
+
+  async function runCompiler() {
+    if (running) return; running = true;
+    clearConsole();
+    var L = lines(), st = [], nodes = [], vars = {};
+    log('【編譯器】先把整個程式全部檢查、翻譯一遍…', 'info');
+    for (var i = 0; i < L.length; i++) {
+      try { nodes[i] = parseLine(L[i]); checkNames(nodes[i], vars); }
+      catch (e) {
+        for (var j = 0; j < L.length; j++) st[j] = j === i ? 'err' : (L[j].trim() ? 'skip' : '');
+        drawGutter(st);
+        log('編譯失敗！第 ' + (i + 1) + ' 行：' + e.message, 'bad');
+        log('因為有錯誤，整個程式一行都沒有執行。', 'info');
+        running = false; return;
+      }
+    }
+    log('編譯成功，沒有錯誤，開始執行。', 'info');
+    vars = {};
+    for (var k = 0; k < L.length; k++) {
+      st[k] = 'run'; drawGutter(st);
+      await wait(200);
+      try { if (nodes[k]) await exec(nodes[k], vars); st[k] = 'done'; }
+      catch (e) { st[k] = 'err'; drawGutter(st); log('第 ' + (k + 1) + ' 行執行錯誤：' + e.message, 'bad'); running = false; return; }
+      drawGutter(st);
+    }
+    log('全部執行完畢。', 'info');
+    running = false;
+  }
+
+  document.getElementById('run-interp').addEventListener('click', runInterpreter);
+  document.getElementById('run-compile').addEventListener('click', runCompiler);
+  document.getElementById('reset').addEventListener('click', function () {
+    if (running) return;
+    clearConsole(); log('按下「直譯執行」或「編譯執行」開始。', 'info'); drawGutter();
+  });
+  document.querySelectorAll('[data-ex]').forEach(function (b) {
+    b.addEventListener('click', function () {
+      if (running) return;
+      codeEl.value = EXAMPLES[+b.getAttribute('data-ex')];
+      codeEl.rows = Math.max(7, lines().length + 1);
+      drawGutter(); clearConsole(); log('已載入範例，按下執行看看。', 'info');
+    });
+  });
+  codeEl.addEventListener('input', function () { drawGutter(); });
+  codeEl.addEventListener('keydown', function (e) {
+    if (e.key === 'Tab') { e.preventDefault(); var s = codeEl.selectionStart; codeEl.setRangeText('  ', s, codeEl.selectionEnd, 'end'); drawGutter(); }
+  });
+  drawGutter();
+
+  /* ---------- 分類大挑戰 ---------- */
+  var ITEMS = [
+    ['Gmail', 'SaaS', '直接在線上使用的應用軟體。'],
+    ['Google 地圖', 'SaaS', '規劃路線的運算在雲端完成（111 商管群）。'],
+    ['LINE', 'SaaS', '透過 App 連上雲端使用的應用軟體。'],
+    ['YouTube', 'SaaS', '線上使用的應用軟體。'],
+    ['Oracle Cloud', 'PaaS', '甲骨文的開發平台，可裝作業系統和 Java 開發工具。'],
+    ['Microsoft Azure', 'PaaS', '微軟的開發平台。'],
+    ['向 Google 租用雲端儲存空間', 'IaaS', '租的是儲存設備這種基礎建設（課本圖 4-12）。'],
+    ['興建海底光纖電纜', 'IaaS', '網路建設屬於基礎建設（習題第 17 題）。'],
+    ['Google 在全球設置的機房', 'IaaS', '機房裡的伺服器、儲存與網路設備都是基礎建設。'],
+    ['租用平台來開發自己的 App 遊戲', 'PaaS', '不用自己買開發軟體和環境（習題第 18 題）。']
+  ];
+  var sortEl = document.getElementById('sort'), scoreEl = document.getElementById('score');
+  var answered = {};
+  function renderSort() {
+    sortEl.innerHTML = '';
+    ITEMS.forEach(function (it, idx) {
+      var row = document.createElement('div');
+      row.className = 'sort-item';
+      var name = document.createElement('span'); name.className = 'name'; name.textContent = it[0];
+      var opts = document.createElement('span'); opts.className = 'opts';
+      var fb = document.createElement('span'); fb.className = 'fb'; fb.hidden = true;
+      ['IaaS', 'PaaS', 'SaaS'].forEach(function (c) {
+        var b = document.createElement('button'); b.type = 'button'; b.textContent = c;
+        b.addEventListener('click', function () {
+          var right = c === it[1];
+          answered[idx] = right;
+          row.className = 'sort-item ' + (right ? 'right' : 'wrong');
+          fb.hidden = false;
+          fb.textContent = (right ? '答對！' : '再想想：答案是 ' + it[1] + '。') + it[2];
+          updateScore();
+        });
+        opts.appendChild(b);
+      });
+      row.appendChild(name); row.appendChild(opts); row.appendChild(fb);
+      sortEl.appendChild(row);
+    });
+    updateScore();
+  }
+  function updateScore() {
+    var keys = Object.keys(answered), ok = keys.filter(function (k) { return answered[k]; }).length;
+    scoreEl.textContent = '　答對 ' + ok + ' / 已作答 ' + keys.length + ' / 共 ' + ITEMS.length + ' 題';
+  }
+  document.getElementById('sort-reset').addEventListener('click', function () { answered = {}; renderSort(); });
+  renderSort();
+
+  /* ---------- 作業系統實驗室：顏色 ---------- */
+  var COLORS = ['#5b95f5', '#f2a03f', '#46bd8f', '#e07399', '#a184ec', '#e3c73f', '#4bbcd6', '#f07a68', '#9fc35a', '#c99a6b'];
+
+  /* ---------- 實驗一：CPU 排程 ---------- */
+  var procs = [
+    { name: 'Chrome', arr: 0, burst: 6 },
+    { name: 'PowerPoint', arr: 1, burst: 3 },
+    { name: '音樂播放器', arr: 2, burst: 1 },
+    { name: '記事本', arr: 3, burst: 2 }
+  ];
+  var EXTRA = ['小算盤', '小畫家', 'LINE', '防毒軟體'];
+  var bodyEl = document.getElementById('proc-body');
+  var ganttEl = document.getElementById('gantt'), axisEl = document.getElementById('axis');
+  var statusEl = document.getElementById('sched-status'), resultEl = document.getElementById('sched-result');
+  var cmpEl = document.getElementById('sched-compare-out');
+  var timer = null, plan = null;
+
+  function algo() { return document.querySelector('input[name="algo"]:checked').value; }
+  function quantum() { var q = parseInt(document.getElementById('rr-q').value, 10); return q >= 1 ? Math.min(q, 10) : 1; }
+  var ALGO_NAME = { fcfs: '先到先做 FCFS', sjf: '短的先做 SJF', srtf: '剩下最短的先做 SRTF', rr: '輪流做 RR' };
+  var ALGO_DESC = {
+    fcfs: '誰先到誰先用 CPU，用完才換下一個，就像排隊買飲料。',
+    sjf: 'CPU 空下來時，從排隊的程式裡挑需要時間最短的。不搶先：正在執行的程式一定做完才換，新來的程式再短也要等。',
+    srtf: '每當有新程式到達，就重新比較「還剩多少時間」。新來的比較短，就把 CPU 搶過來，原本的程式回去排隊（可搶先，Preemptive）。',
+    rr: '每個程式輪流用 CPU 固定的時間，時間到還沒做完就回到隊伍最後面。'
+  };
+
+  function renderProcs() {
+    bodyEl.innerHTML = '';
+    procs.forEach(function (p, i) {
+      var tr = document.createElement('tr');
+      tr.innerHTML =
+        '<td><span class="swatch" style="background:' + COLORS[i % COLORS.length] + '"></span><input type="text" id="proc-name-' + i + '" aria-label="程式名稱"></td>' +
+        '<td><input type="number" id="proc-arr-' + i + '" min="0" max="20" aria-label="到達時間"></td>' +
+        '<td><input type="number" id="proc-burst-' + i + '" min="1" max="15" aria-label="需要時間"></td>' +
+        '<td>' + (procs.length > 2 ? '<button type="button" data-del="' + i + '" aria-label="移除">移除</button>' : '') + '</td>';
+      bodyEl.appendChild(tr);
+      tr.querySelector('#proc-name-' + i).value = p.name;
+      tr.querySelector('#proc-arr-' + i).value = p.arr;
+      tr.querySelector('#proc-burst-' + i).value = p.burst;
+    });
+    document.getElementById('proc-add').disabled = procs.length >= 8;
+  }
+  bodyEl.addEventListener('input', function (e) {
+    var m = e.target.id.match(/^proc-(name|arr|burst)-(\d+)$/);
+    if (!m) return;
+    var p = procs[+m[2]];
+    if (m[1] === 'name') p.name = e.target.value || ('P' + (+m[2] + 1));
+    else {
+      var v = parseInt(e.target.value, 10);
+      if (isNaN(v)) return;
+      p[m[1]] = m[1] === 'arr' ? Math.max(0, Math.min(20, v)) : Math.max(1, Math.min(15, v));
+    }
+    resetSched();
+  });
+  bodyEl.addEventListener('click', function (e) {
+    var d = e.target.getAttribute && e.target.getAttribute('data-del');
+    if (d === null || d === undefined) return;
+    procs.splice(+d, 1); renderProcs(); resetSched();
+  });
+  document.getElementById('proc-add').addEventListener('click', function () {
+    var last = procs.reduce(function (m, p) { return Math.max(m, p.arr); }, 0);
+    procs.push({ name: EXTRA[procs.length % EXTRA.length], arr: Math.min(20, last + 1), burst: 2 + (procs.length % 3) });
+    renderProcs(); resetSched();
+  });
+  document.querySelectorAll('input[name="algo"]').forEach(function (r) { r.addEventListener('change', function () { syncQ(); resetSched(); }); });
+  document.getElementById('rr-q').addEventListener('input', resetSched);
+  function syncQ() {
+    document.getElementById('q-wrap').hidden = algo() !== 'rr';
+    document.getElementById('algo-desc').textContent = ALGO_DESC[algo()];
+  }
+
+  // 計算排程，回傳時間片段
+  function schedule(kind, q) {
+    var P = procs.map(function (p, i) { return { i: i, arr: p.arr, burst: p.burst, rem: p.burst }; });
+    var segs = [], t = 0, done = 0, n = P.length;
+    function push(i, s, e) {
+      var last = segs[segs.length - 1];
+      if (last && last.i === i && last.e === s) last.e = e; else segs.push({ i: i, s: s, e: e });
+    }
+    if (kind === 'srtf') {
+      // 每次前進 1 單位，每一刻都重新挑「剩下時間最短」的程式
+      while (done < n) {
+        var rdy = P.filter(function (p) { return p.rem > 0 && p.arr <= t; });
+        if (!rdy.length) {
+          var na2 = Math.min.apply(null, P.filter(function (p) { return p.rem > 0; }).map(function (p) { return p.arr; }));
+          push(-1, t, na2); t = na2; continue;
+        }
+        rdy.sort(function (a, b) { return a.rem - b.rem || a.arr - b.arr || a.i - b.i; });
+        var r = rdy[0];
+        push(r.i, t, t + 1); t += 1; r.rem -= 1;
+        if (r.rem === 0) { r.end = t; done++; }
+      }
+    } else if (kind === 'fcfs' || kind === 'sjf') {
+      while (done < n) {
+        var ready = P.filter(function (p) { return p.rem > 0 && p.arr <= t; });
+        if (!ready.length) {
+          var nxt = Math.min.apply(null, P.filter(function (p) { return p.rem > 0; }).map(function (p) { return p.arr; }));
+          push(-1, t, nxt); t = nxt; continue;
+        }
+        ready.sort(kind === 'fcfs'
+          ? function (a, b) { return a.arr - b.arr || a.i - b.i; }
+          : function (a, b) { return a.burst - b.burst || a.arr - b.arr || a.i - b.i; });
+        var p = ready[0];
+        push(p.i, t, t + p.rem); t += p.rem; p.rem = 0; p.end = t; done++;
+      }
+    } else {
+      var order = P.slice().sort(function (a, b) { return a.arr - b.arr || a.i - b.i; });
+      var queue = [], k = 0;
+      function admit(upTo) { while (k < order.length && order[k].arr <= upTo) queue.push(order[k++]); }
+      admit(0);
+      while (done < n) {
+        if (!queue.length) { var na = order[k].arr; push(-1, t, na); t = na; admit(t); continue; }
+        var cur = queue.shift();
+        var run = Math.min(q, cur.rem);
+        segs.push({ i: cur.i, s: t, e: t + run, q: queue.map(function (x) { return x.i; }) });
+        t += run; cur.rem -= run;
+        admit(t);
+        if (cur.rem > 0) queue.push(cur); else { cur.end = t; done++; }
+      }
+    }
+    var stats = P.map(function (p) {
+      var tat = p.end - p.arr;
+      return { i: p.i, end: p.end, wait: tat - p.burst };
+    });
+    var avg = stats.reduce(function (s, x) { return s + x.wait; }, 0) / n;
+    return { segs: segs, total: t, stats: stats, avg: avg };
+  }
+
+  function drawPlan(p) {
+    ganttEl.innerHTML = ''; axisEl.innerHTML = '';
+    var ticks = {};
+    p.segs.forEach(function (s, idx) {
+      var d = document.createElement('div');
+      d.className = 'sg' + (s.i < 0 ? ' idle' : '');
+      d.style.flexGrow = s.e - s.s;
+      var fill = document.createElement('div'); fill.className = 'fill';
+      fill.style.background = s.i < 0 ? 'transparent' : COLORS[s.i % COLORS.length];
+      var lbl = document.createElement('div'); lbl.className = 'lbl';
+      lbl.textContent = s.i < 0 ? '閒置' : procs[s.i].name;
+      d.appendChild(fill); d.appendChild(lbl);
+      ganttEl.appendChild(d);
+      ticks[s.s] = 1; ticks[s.e] = 1;
+    });
+    var cur = document.createElement('div'); cur.className = 'cursor'; cur.id = 'gantt-cursor';
+    ganttEl.appendChild(cur);
+    Object.keys(ticks).forEach(function (k) {
+      var sp = document.createElement('span');
+      sp.style.left = (k / p.total * 100) + '%';
+      sp.textContent = k;
+      sp.setAttribute('data-t', k);
+      axisEl.appendChild(sp);
+    });
+  }
+  // 時間 t 這一刻的狀態：誰在用 CPU、誰在排隊、誰做完了
+  function stateAt(p, t) {
+    var exec = procs.map(function () { return 0; });
+    p.segs.forEach(function (s) { if (s.i >= 0) exec[s.i] += Math.max(0, Math.min(t, s.e) - s.s); });
+    var seg = null;
+    p.segs.forEach(function (s) { if (t >= s.s && t < s.e) seg = s; });
+    var running = seg && seg.i >= 0 ? seg.i : null;
+    var all = procs.map(function (x, i) { return i; });
+    var done = all.filter(function (i) { return exec[i] >= procs[i].burst; })
+      .sort(function (a, b) { return p.stats[a].end - p.stats[b].end; });
+    var isWaiting = function (i) { return i !== running && procs[i].arr <= t && exec[i] < procs[i].burst; };
+    var waiting;
+    var kind = algo();
+    if (kind === 'rr' && seg && seg.q) {
+      waiting = seg.q.filter(isWaiting);
+      all.filter(function (i) { return isWaiting(i) && waiting.indexOf(i) < 0; })
+        .sort(function (a, b) { return procs[a].arr - procs[b].arr || a - b; })
+        .forEach(function (i) { waiting.push(i); });
+    } else {
+      var remOf = function (i) { return procs[i].burst - exec[i]; };
+      waiting = all.filter(isWaiting).sort(
+        kind === 'sjf' ? function (a, b) { return procs[a].burst - procs[b].burst || procs[a].arr - procs[b].arr || a - b; }
+        : kind === 'srtf' ? function (a, b) { return remOf(a) - remOf(b) || procs[a].arr - procs[b].arr || a - b; }
+        : function (a, b) { return procs[a].arr - procs[b].arr || a - b; });
+    }
+    return { running: running, waiting: waiting, done: done, exec: exec };
+  }
+  function x_arrivedAt(i, t) { return procs[i].arr === t; }
+  function chip(i, extra) {
+    return '<span class="pchip" style="background:' + COLORS[i % COLORS.length] + '">' + esc(procs[i].name) + (extra ? '<small>' + extra + '</small>' : '') + '</span>';
+  }
+  function paint(p, t, animate) {
+    ganttEl.classList.toggle('anim', !!animate);
+    var fills = ganttEl.querySelectorAll('.fill'), sgs = ganttEl.querySelectorAll('.sg');
+    p.segs.forEach(function (s, idx) {
+      var r = Math.max(0, Math.min(1, (t - s.s) / (s.e - s.s)));
+      fills[idx].style.width = (r * 100) + '%';
+      sgs[idx].classList.toggle('future', t < s.s);
+    });
+    var c = document.getElementById('gantt-cursor');
+    if (c) c.style.left = 'calc(' + (t / p.total * 100) + '% - 1px)';
+    axisEl.querySelectorAll('span').forEach(function (sp) { sp.classList.toggle('on', +sp.getAttribute('data-t') <= t); });
+
+    var st = stateAt(p, t);
+    document.getElementById('clock').textContent = t;
+    var rem = function (i) { return '剩 ' + (procs[i].burst - st.exec[i]); };
+    document.getElementById('cpu-now').innerHTML = t >= p.total ? '<span class="muted">全部做完了</span>'
+      : (st.running === null ? '<span class="muted">閒置（沒有程式要做）</span>' : chip(st.running, rem(st.running)));
+    document.getElementById('ready-q').innerHTML = st.waiting.length ? st.waiting.map(function (i) { return chip(i, rem(i)); }).join('') : '<span class="muted">沒有</span>';
+    document.getElementById('done-q').innerHTML = st.done.length ? st.done.map(function (i) { return chip(i, '等了 ' + p.stats[i].wait); }).join('') : '<span class="muted">還沒有</span>';
+
+    // 這一步發生了什麼事
+    var msg = [];
+    if (t === 0) {
+      var a0 = procs.map(function (x, i) { return i; }).filter(function (i) { return procs[i].arr === 0; });
+      if (a0.length) msg.push(a0.map(function (i) { return esc(procs[i].name); }).join('、') + ' 到達');
+    } else {
+      var prev = stateAt(p, t - 1);
+      st.done.forEach(function (i) { if (prev.done.indexOf(i) < 0) msg.push('<b>' + esc(procs[i].name) + '</b> 做完了'); });
+      procs.forEach(function (x, i) { if (x.arr === t) msg.push(esc(x.name) + (i === st.running ? ' 到達' : ' 到達，開始排隊')); });
+      if (st.running !== null && st.running !== prev.running) {
+        if (prev.running !== null && st.done.indexOf(prev.running) < 0) {
+          if (algo() === 'srtf') msg.push('<b>' + esc(procs[st.running].name) + '</b> 只剩 ' + (procs[st.running].burst - st.exec[st.running]) + '，比 <b>' + esc(procs[prev.running].name) + '</b> 剩的 ' + (procs[prev.running].burst - st.exec[prev.running]) + ' 短，<b>搶走 CPU</b>，' + esc(procs[prev.running].name) + ' 回去排隊');
+          else msg.push('<b>' + esc(procs[prev.running].name) + '</b> 時間到，回去排隊');
+        }
+      }
+      if (algo() === 'sjf' && st.running !== null && st.running === prev.running) {
+        var shorter = procs.map(function (x, i) { return i; }).filter(function (i) { return x_arrivedAt(i, t) && procs[i].burst < procs[st.running].burst - st.exec[st.running]; });
+        if (shorter.length) msg.push(shorter.map(function (i) { return esc(procs[i].name); }).join('、') + ' 比較短，但 SJF 不搶先，要等 <b>' + esc(procs[st.running].name) + '</b> 做完');
+      }
+    }
+    var preempted = msg.some(function (m) { return m.indexOf('搶走 CPU') >= 0; });
+    if (!preempted && t < p.total && st.running !== null && (t === 0 || stateAt(p, t - 1).running !== st.running)) msg.push('輪到 <b>' + esc(procs[st.running].name) + '</b> 使用 CPU');
+    if (t >= p.total) msg.push('全部程式都做完了，看下面的等待時間表');
+    statusEl.innerHTML = '時間 <b>' + t + '</b>：' + (msg.length ? msg.join('；') : '<b>' + esc(st.running === null ? '' : procs[st.running].name) + '</b> 繼續使用 CPU') + '。';
+  }
+  function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
+  function showResult(p) {
+    var rows = p.stats.map(function (s) {
+      var pr = procs[s.i];
+      return '<tr><td><span class="swatch" style="background:' + COLORS[s.i % COLORS.length] + '"></span>' + esc(pr.name) + '</td><td>' + pr.arr + '</td><td>' + pr.burst + '</td><td>' + s.end + '</td><td><b>' + s.wait + '</b></td></tr>';
+    }).join('');
+    resultEl.innerHTML = '<table><thead><tr><th>程式</th><th>到達</th><th>需要</th><th>完成時間</th><th>等待時間</th></tr></thead><tbody>' + rows +
+      '</tbody><tfoot><tr><td colspan="4"><b>' + ALGO_NAME[algo()] + '　平均等待時間</b></td><td><b>' + fmt(p.avg) + '</b></td></tr></tfoot></table>';
+  }
+  function fmt(x) { return (Math.round(x * 100) / 100).toString(); }
+  var curT = 0, playBtn = document.getElementById('sched-play');
+  function stop() { if (timer) { clearInterval(timer); timer = null; } }
+  function resetSched() {
+    stop();
+    plan = schedule(algo(), quantum());
+    curT = 0;
+    drawPlan(plan); paint(plan, 0, false);
+    statusEl.textContent = '按「播放」開始，或按「下一步」一格一格看。';
+    resultEl.innerHTML = ''; cmpEl.innerHTML = '';
+    playBtn.textContent = '▶ 播放';
+  }
+  function finish() { stop(); showResult(plan); playBtn.textContent = '▶ 重新播放'; }
+  function tick() {
+    if (curT >= plan.total) { finish(); return; }
+    curT++;
+    paint(plan, curT, true);
+    if (curT >= plan.total) finish();
+  }
+  playBtn.addEventListener('click', function () {
+    if (timer) { stop(); playBtn.textContent = '▶ 繼續'; return; }
+    if (curT >= plan.total) resetSched();
+    playBtn.textContent = '⏸ 暫停';
+    timer = setInterval(tick, 750);
+  });
+  document.getElementById('sched-step').addEventListener('click', function () {
+    stop();
+    if (curT >= plan.total) resetSched();
+    tick();
+    if (curT < plan.total) playBtn.textContent = '▶ 繼續';
+  });
+  document.getElementById('sched-skip').addEventListener('click', function () {
+    stop(); curT = plan.total; paint(plan, curT, false); finish();
+  });
+  document.getElementById('sched-compare').addEventListener('click', function () {
+    var q = quantum();
+    var res = ['fcfs', 'sjf', 'srtf', 'rr'].map(function (k) { return { k: k, avg: schedule(k, q).avg }; });
+    var max = Math.max.apply(null, res.map(function (r) { return r.avg; })) || 1;
+    var min = Math.min.apply(null, res.map(function (r) { return r.avg; }));
+    cmpEl.innerHTML = '<div class="kicker" style="margin-bottom:6px">平均等待時間比較（越短越好）</div><div class="cmp">' + res.map(function (r) {
+      return '<div class="cmp-row' + (r.avg === min ? ' best' : '') + '"><span>' + ALGO_NAME[r.k] + (r.k === 'rr' ? '（' + q + '）' : '') + '</span><div class="cmp-bar" style="width:' + Math.max(2, r.avg / max * 100) + '%"></div><span>' + fmt(r.avg) + '</span></div>';
+    }).join('') + '</div>';
+  });
+  renderProcs(); syncQ(); resetSched();
+
+  /* ---------- 實驗二：磁碟重組 ---------- */
+  var N = 48, disk, files, nextCode, diskBusy = false;
+  var NAMES = ['報告.docx', '照片.jpg', '音樂.mp3', '簡報.pptx', '筆記.txt', '影片.mp4', '表格.xlsx', '遊戲存檔', '作業.pdf', '圖片.png', '程式.c', '日記.txt'];
+  var diskEl = document.getElementById('disk'), legendEl = document.getElementById('disk-legend');
+  var dStatus = document.getElementById('disk-status'), fileSel = document.getElementById('disk-file');
+  var cells = [];
+  for (var c = 0; c < N; c++) { var b = document.createElement('div'); b.className = 'blk'; diskEl.appendChild(b); cells.push(b); }
+
+  function alloc(code, size, name) {
+    var free = [];
+    for (var i = 0; i < N; i++) if (!disk[i]) free.push(i);
+    if (free.length < size) return false;
+    var color = COLORS[(code.charCodeAt(0) - 65) % COLORS.length];
+    files[code] = { size: size, name: name, color: color };
+    for (var k = 0; k < size; k++) disk[free[k]] = { f: code, p: k };
+    return true;
+  }
+  function remove(code) { for (var i = 0; i < N; i++) if (disk[i] && disk[i].f === code) disk[i] = null; delete files[code]; }
+  function positions(code) {
+    var pos = [];
+    for (var i = 0; i < N; i++) if (disk[i] && disk[i].f === code) pos[disk[i].p] = i;
+    return pos;
+  }
+  function jumps(code) { var p = positions(code), j = 0; for (var i = 1; i < p.length; i++) if (p[i] !== p[i - 1] + 1) j++; return j; }
+  function initDisk() {
+    disk = new Array(N).fill(null); files = {}; nextCode = 0;
+    [['A', 5], ['B', 4], ['C', 6], ['D', 3], ['E', 5]].forEach(function (x, i) { alloc(x[0], x[1], NAMES[i]); });
+    remove('B'); remove('D');
+    alloc('F', 9, NAMES[5]);
+    nextCode = 6;
+    dStatus.textContent = '報告、音樂、影片…存了又刪，檔案 F（影片.mp4）已經被拆成好幾段了。';
+  }
+  function renderDisk(head) {
+    for (var i = 0; i < N; i++) {
+      var b = disk[i], el = cells[i];
+      el.className = 'blk ' + (b ? 'used' : 'free') + (i === head ? ' head' : '');
+      el.style.background = b ? files[b.f].color : '';
+      el.textContent = b ? b.f : '';
+      el.title = b ? files[b.f].name + ' 第 ' + (b.p + 1) + ' 段' : '空的磁區';
+    }
+    var codes = Object.keys(files).sort();
+    var fragged = codes.filter(function (k) { return jumps(k) > 0; });
+    var totalJ = codes.reduce(function (s, k) { return s + jumps(k); }, 0);
+    var used = disk.filter(Boolean).length;
+    legendEl.innerHTML = codes.map(function (k) {
+      var j = jumps(k);
+      return '<span><span class="swatch" style="background:' + files[k].color + '"></span><b>' + k + '</b> ' + esc(files[k].name) + '・' + files[k].size + ' 格' + (j ? '・<b style="color:var(--bad)">碎成 ' + (j + 1) + ' 段</b>' : '・連續') + '</span>';
+    }).join('') + '<span>已用 ' + used + ' / ' + N + ' 格・碎片化檔案 <b>' + fragged.length + '</b> 個・讀完全部檔案要多跳 <b>' + totalJ + '</b> 次</span>';
+    var prev = fileSel.value;
+    fileSel.innerHTML = codes.map(function (k) { return '<option value="' + k + '">' + k + '　' + esc(files[k].name) + '</option>'; }).join('');
+    if (files[prev]) fileSel.value = prev; else if (files.F) fileSel.value = 'F';
+    ['disk-read', 'disk-del'].forEach(function (id) { document.getElementById(id).disabled = diskBusy || !codes.length; });
+    ['disk-add', 'disk-defrag', 'disk-reset'].forEach(function (id) { document.getElementById(id).disabled = diskBusy; });
+  }
+  function sleep(ms) { return new Promise(function (r) { setTimeout(r, ms); }); }
+
+  document.getElementById('disk-read').addEventListener('click', async function () {
+    var code = fileSel.value; if (!files[code] || diskBusy) return;
+    diskBusy = true;
+    var pos = positions(code), j = 0, dist = 0;
+    for (var i = 0; i < pos.length; i++) {
+      if (i > 0) { dist += Math.abs(pos[i] - pos[i - 1]); if (pos[i] !== pos[i - 1] + 1) j++; }
+      renderDisk(pos[i]);
+      dStatus.innerHTML = '讀取 <b>' + code + '</b>：第 ' + (i + 1) + ' / ' + pos.length + ' 段，讀寫頭跳了 <b>' + j + '</b> 次';
+      await sleep(i > 0 && pos[i] !== pos[i - 1] + 1 ? 520 : 220);
+    }
+    diskBusy = false; renderDisk();
+    dStatus.innerHTML = '讀完 <b>' + code + '</b>（' + esc(files[code].name) + '）：讀寫頭跳了 <b>' + j + '</b> 次，總共移動 <b>' + dist + '</b> 格。' + (j ? '檔案是分散的，所以比較慢。' : '檔案是連續的，一路讀到底最快。');
+  });
+  document.getElementById('disk-del').addEventListener('click', function () {
+    var code = fileSel.value; if (!files[code] || diskBusy) return;
+    var nm = files[code].name; remove(code); renderDisk();
+    dStatus.innerHTML = '刪除了 <b>' + code + '</b>（' + esc(nm) + '），磁碟上多了空洞。';
+  });
+  document.getElementById('disk-add').addEventListener('click', function () {
+    if (diskBusy) return;
+    var code = null;
+    for (var t = 0; t < 26; t++) { var cc = String.fromCharCode(65 + ((nextCode + t) % 26)); if (!files[cc]) { code = cc; nextCode = nextCode + t + 1; break; } }
+    var size = 3 + Math.floor(Math.random() * 5);
+    var name = NAMES[(code.charCodeAt(0) - 65) % NAMES.length];
+    if (!alloc(code, size, name)) { dStatus.textContent = '磁碟空間不夠放 ' + size + ' 格的新檔案，先刪掉一些檔案吧。'; return; }
+    renderDisk();
+    dStatus.innerHTML = '存入 <b>' + code + '</b>（' + esc(name) + '，' + size + ' 格）。作業系統從最前面的空位開始放' + (jumps(code) ? '，空洞不夠大，<b>只好拆開放</b>。' : '，剛好放得下。');
+  });
+  document.getElementById('disk-defrag').addEventListener('click', async function () {
+    if (diskBusy) return;
+    diskBusy = true;
+    var target = [];
+    Object.keys(files).sort().forEach(function (k) { for (var p = 0; p < files[k].size; p++) target.push({ f: k, p: p }); });
+    while (target.length < N) target.push(null);
+    var moves = 0;
+    for (var i = 0; i < N; i++) {
+      var want = target[i], j = i;
+      while (j < N && !(want === null ? disk[j] === null : (disk[j] && disk[j].f === want.f && disk[j].p === want.p))) j++;
+      if (j !== i && j < N) {
+        var tmp = disk[i]; disk[i] = disk[j]; disk[j] = tmp; moves++;
+        renderDisk(i);
+        dStatus.innerHTML = '重組中…已搬移 <b>' + moves + '</b> 個磁區';
+        await sleep(90);
+      }
+    }
+    diskBusy = false; renderDisk();
+    dStatus.innerHTML = '重組完成！搬移了 <b>' + moves + '</b> 個磁區，每個檔案都放在連續的磁區，空位集中到後面。再讀取一次看看。';
+  });
+  document.getElementById('disk-reset').addEventListener('click', function () { if (diskBusy) return; initDisk(); renderDisk(); });
+  initDisk(); renderDisk();
+})();
+</script>
+
+</body>
+</html>
