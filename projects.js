@@ -32,6 +32,10 @@ window.PROJECTS = [
   { cat: "dt", title: "數概第三章重點記憶卡", desc: "翻卡片背重點，邊玩邊記。", url: "https://iamfefe.github.io/bcc-chp3-mgame/", date: "2026-11-27", tag: "記憶卡" },
 
   { cat: "dt", title: "GoGoBCC 數概複習", desc: "選項亂序、錯題解析與記憶口訣，一路練到全部答對。", url: "https://iamfefe.github.io/GoGoBCC/", date: "2026-10-29", tag: "刷題" },
+  { cat: "dt", title: "數概第一章總複習", desc: "影片：第一章重點一次複習。", url: "https://www.youtube.com/watch?v=mnJHcTpqvGc", date: "2026-11-27", tag: "影片" },
+  { cat: "dt", title: "數概第二章總複習", desc: "影片：第二章重點一次複習。", url: "https://www.youtube.com/watch?v=IkaaMXUL1mY", date: "2026-11-27", tag: "影片" },
+  { cat: "dt", title: "電腦時間單位", desc: "影片：電腦常用的時間單位與換算。", url: "https://youtu.be/WLRC0O2cqeU", date: "2026-11-27", tag: "影片" },
+  { cat: "dt", title: "時脈頻率", desc: "影片：時脈與頻率的觀念說明。", url: "https://youtu.be/hz6nymgWgBU", date: "2026-11-27", tag: "影片" },
 
   // ---- 數應 ----
   { cat: "da", title: "數應二段複習系統", desc: "二段範圍的線上複習系統。", url: "https://iamfefe.github.io/bcc-app47-review/", date: "2026-11-27", tag: "複習系統" },

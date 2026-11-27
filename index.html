@@ -401,6 +401,10 @@ body.viewing .logo:hover{opacity:.7}
   // frame:false in projects.js = site refuses to be embedded (e.g. Canva) -> new tab.
   // An http:// link can't be embedded once this site is served over https.
   const canEmbed=p=>p.frame!==false && !(location.protocol==='https:' && /^http:/.test(p.url));
+  // YouTube: watch / youtu.be / shorts links can't be framed directly, so the split view uses the embed player
+  const ytId=u=>{const m=String(u).match(/(?:youtube\.com\/watch\?(?:.*&)?v=|youtu\.be\/|youtube\.com\/shorts\/)([\w-]{11})/);return m&&m[1];};
+  const embedSrc=u=>{const id=ytId(u);return id?'https://www.youtube.com/embed/'+id+'?rel=0':u;};
+  const PLAY=`<svg viewBox="0 0 64 64">${SH}<rect x="8" y="12" width="48" height="38" rx="10" fill="${C.br}"/><path d="M27 22v18l15-9z" fill="${C.cr}"/>${HL('M13 18v3M51 42v3')}</svg>`;
   const esc=s=>String(s).replace(/[&<>"]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m]));
   document.getElementById('countMeta').textContent=items.length+' Items';
   document.getElementById('yr').textContent=new Date().getFullYear();
@@ -466,7 +470,7 @@ body.viewing .logo:hover{opacity:.7}
     const key=esc(keyOf(p));
     return `<a class="card" href="${emb?'#view='+encodeURIComponent(p.url):esc(p.url)}"${tgt} data-key="${key}">
       <div class="thumb" style="background:${c.color}">
-        <span class="badge">${esc(p.tag||c.name)}</span><span class="big">${c.char}</span>${ICONS[c.icon]}
+        <span class="badge">${esc(p.tag||c.name)}</span><span class="big">${c.char}</span>${ytId(p.url)?PLAY:ICONS[c.icon]}
       </div>
       <div class="body"><h3>${esc(p.title)}${emb?'':'<span class="ext">新分頁 ↗</span>'}</h3><p>${esc(p.desc||'')}</p>
       <div class="foot"><span>${c.name} · ${esc(p.date||'')}</span><span class="fr"><span class="views" data-key="${key}" title="點擊次數"></span><span class="arrow">→</span></span></div></div></a>`;
@@ -523,7 +527,7 @@ body.viewing .logo:hover{opacity:.7}
       if(!document.body.classList.contains('viewing')) homeScroll=scrollY;
       document.body.classList.add('viewing'); viewer.hidden=false;
       crumb.textContent=p.title; openNew.href=p.url; document.title=p.title+'｜Fefe 教學網站';
-      if(curUrl!==url){ curUrl=url; loading.classList.remove('done'); frame.src=p.url; window.fefeAnnotate&&window.fefeAnnotate.clear(); }
+      if(curUrl!==url){ curUrl=url; loading.classList.remove('done'); frame.src=embedSrc(p.url); window.fefeAnnotate&&window.fefeAnnotate.clear(); }
     }else if(document.body.classList.contains('viewing')){
       document.body.classList.remove('viewing'); viewer.hidden=true;
       frame.src='about:blank'; curUrl=null; document.title='Fefe 教學網站 / Hack fefe 教材';
